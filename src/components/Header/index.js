@@ -1,9 +1,10 @@
 import React from 'react'
+import { TitleContainer } from './styles'
 
 export const Header = () => {
-  return (
-    <div>
-        <h1>Marga2</h1>
-    </div>
-  )
+    return (
+        <TitleContainer>
+            <h1>Marga2</h1>
+        </TitleContainer>
+    )
 }

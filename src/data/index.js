@@ -1,22 +1,306 @@
+
 export const data = {
-    "H": ["hidrogen", [1, -1], false, "hidrur"],
-    "Li": ["liti", [1], true],
-    "Na": ["sodi", [1], true],
-    "K": ["potassi", [1], true],
-    "Rb": ["rubidi", [1], true],
-    "Cs": ["cesi", [1], true],
-    "Be": ["beril·li", [2], true],
-    "Mg": ["magnesi", [2], true],
-    "Fe": ["ferro", [2, 3], true],
-    "O": ["oxigen", [-2], false, "oxid"],
-    "Cl": ["clor", [-1, 1, 3, 5, 7], false, "clorur"]
+    "H": {
+        "name": "hidrogen",
+        "valences": [1, -1],
+        "isMetall": false,
+        "plusUrName": "hidrur",
+        "oxoAcidNames": ["hídric"]
+    },
+    "Li": {
+        "name": "liti",
+        "valences": [1],
+        "isMetall": true,
+        "plusUrName": ""
+    },
+    "Na": {
+        "name": "sodi",
+        "valences": [1],
+        "isMetall": true,
+        "plusUrName": ""
+    },
+    "K": {
+        "name": "potassi",
+        "valences": [1],
+        "isMetall": true,
+        "plusUrName": ""
+    },
+    "Rb": {
+        "name": "rubidi",
+        "valences": [1],
+        "isMetall": true,
+        "plusUrName": ""
+    },
+    "Cs": {
+        "name": "cesi",
+        "valences": [1],
+        "isMetall": true,
+        "plusUrName": ""
+    },
+    "Be": {
+        "name": "beril·li",
+        "valences": [2],
+        "isMetall": true,
+        "plusUrName": ""
+    },
+    "Mg": {
+        "name": "magnesi",
+        "valences": [2],
+        "isMetall": true,
+        "plusUrName": ""
+    },
+    "Ca": {
+        "name": "calci",
+        "valences": [2],
+        "isMetall": true,
+        "plusUrName": ""
+    },
+    "Sr": {
+        "name": "estronci",
+        "valences": [2],
+        "isMetall": true,
+        "plusUrName": ""
+    },
+    "Ba": {
+        "name": "bari",
+        "valences": [2],
+        "isMetall": true,
+        "plusUrName": ""
+    },
+    "Sc": {
+        "name": "escandi",
+        "valences": [3],
+        "isMetall": true,
+        "plusUrName": ""
+    },
+    "Ti": {
+        "name": "titani",
+        "valences": [2, 3, 4],
+        "isMetall": true,
+        "plusUrName": ""
+    },
+    "Cr": {
+        "name": "crom",
+        "valences": [2, 3, 6],
+        "isMetall": true,
+        "plusUrName": ""
+    },
+    "Mn": {
+        "name": "manganèn",
+        "valences": [2, 3, 4, 6, 7],
+        "isMetall": true,
+        "plusUrName": ""
+    },
+    "Fe": {
+        "name": "ferro",
+        "valences": [2, 3],
+        "isMetall": true,
+        "plusUrName": ""
+    },
+    "Co": {
+        "name": "Cobalt",
+        "valences": [2, 3],
+        "isMetall": true,
+        "plusUrName": ""
+    },
+    "Ni": {
+        "name": "níquel",
+        "valences": [2, 3],
+        "isMetall": true,
+        "plusUrName": ""
+    },
+    "Pt": {
+        "name": "Platí",
+        "valences": [2, 4],
+        "isMetall": true,
+        "plusUrName": ""
+    },
+    "Cu": {
+        "name": "coure",
+        "valences": [1, 2],
+        "isMetall": true,
+        "plusUrName": ""
+    },
+    "Ag": {
+        "name": "plata",
+        "valences": [1, 2],
+        "isMetall": true,
+        "plusUrName": ""
+    },
+    "Au": {
+        "name": "or",
+        "valences": [1, 3],
+        "isMetall": true,
+        "plusUrName": ""
+    },
+    "Zn": {
+        "name": "zinc",
+        "valences": [2],
+        "isMetall": true,
+        "plusUrName": ""
+    },
+    "Cd": {
+        "name": "cadmi",
+        "valences": [2],
+        "isMetall": true,
+        "plusUrName": ""
+    },
+    "Hg": {
+        "name": "mercuri",
+        "valences": [1, 2],
+        "isMetall": true,
+        "plusUrName": ""
+    },
+    "B": {
+        "name": "bor",
+        "valences": [-3, 3],
+        "isMetall": false,
+        "plusUrName": "borur",
+        "oxoAcidNames": ["bròmic"]
+    },
+    "Al": {
+        "name": "alumini",
+        "valences": [3],
+        "isMetall": true,
+        "plusUrName": ""
+    },
+    "Ga": {
+        "name": "gal·li",
+        "valences": [3],
+        "isMetall": true,
+        "plusUrName": ""
+    },
+    "In": {
+        "name": "indi",
+        "valences": [3],
+        "isMetall": true,
+        "plusUrName": ""
+    },
+    "C": {
+        "name": "carboni",
+        "valences": [-4, 2, 4],
+        "isMetall": false,
+        "plusUrName": "carbur",
+        "oxoAcidNames": ["carbonós", "carbònic"]
+    },
+    "Si": {
+        "name": "silici",
+        "valences": [-4, 2, 4],
+        "isMetall": false,
+        "plusUrName": "silicur",
+        "oxoAcidNames": ["", "silícic"]
+    },
+    "Ge": {
+        "name": "germani",
+        "valences": [2, 4],
+        "isMetall": true,
+        "plusUrName": ""
+    },
+    "Sn": {
+        "name": "Estany",
+        "valences": [2, 4],
+        "isMetall": true,
+        "plusUrName": ""
+    },
+    "Pb": {
+        "name": "plom",
+        "valences": [2, 4],
+        "isMetall": true,
+        "plusUrName": ""
+    },
+    "N": {
+        "name": "nitrogen",
+        "valences": [-3, 2, 5],
+        "isMetall": false,
+        "plusUrName": "nitrur",
+        "oxoAcidNames": ["nitros", "nítric"]
+    },
+    "P": {
+        "name": "fòsfor",
+        "valences": [-3, 3, 5],
+        "isMetall": false,
+        "plusUrName": "fosfur",
+        "oxoAcidNames": ["fosforós", "fosfòric"]
+    },
+    "As": {
+        "name": "arsènic",
+        "valences": [-3, 3, 5],
+        "isMetall": false,
+        "plusUrName": "arseniur",
+        "oxoAcidNames": ["arseniós", "arsènic"]
+    },
+    "Sb": {
+        "name": "antimoni",
+        "valences": [3, 5],
+        "isMetall": true,
+        "plusUrName": ""
+    },
+    "Bi": {
+        "name": "bismut",
+        "valences": [3, 5],
+        "isMetall": true,
+        "plusUrName": ""
+    },
+    "O": {
+        "name": "oxigen",
+        "valences": [-2],
+        "isMetall": false,
+        "plusUrName": "oxid"
+    },
+    "S": {
+        "name": "sofre",
+        "valences": [-2, 4, 6],
+        "isMetall": false,
+        "plusUrName": "sulfur",
+        "oxoAcidNames": ["sulfurós", "sulfúric"]
+    },
+    "Se": {
+        "name": "seleni",
+        "valences": [-2, 4, 6],
+        "isMetall": false,
+        "plusUrName": "selenur"
+    },
+    "Te": {
+        "name": "tel·luri",
+        "valences": [-2, 4, 6],
+        "isMetall": false,
+        "plusUrName": "telurur"
+    },
+    "F": {
+        "name": "fluor",
+        "valences": [-1],
+        "isMetall": false,
+        "plusUrName": "fluorur"
+    },
+    "Cl": {
+        "name": "clor",
+        "valences": [-1, 1, 3, 5, 7],
+        "isMetall": false,
+        "plusUrName": "clorur",
+        "oxoAcidNames": ["hipoclorós", "clorós", "clòric", "perclòric"]
+    },
+    "Br": {
+        "name": "brom",
+        "valences": [-1, 1, 3, 5, 7],
+        "isMetall": false,
+        "plusUrName": "bromur"
+    },
+    "I": {
+        "name": "iode",
+        "valences": [-1, 1, 3, 5, 7],
+        "isMetall": false,
+        "plusUrName": "iodur"
+    },
 }
 
-export const data2 = {
-    "H": {
-        name: "hidrogen",
-        valence: [1, -1],
-        isMetall: false,
-        plusUrName: "hidrur",
-    }
+export const exceptions = {
+    "CH4": "Metà",
+    "BH3": "Borà",
+    "PH3": "Fosfà",
+    "SbH3": "Estibà",
+    "SiH4": "Silà",
+    "NH3": "Amoníac",
+    "AsH3": "Arsà",
+    "H2O": "Aigua",
+    "H2O2": "Peròxid d'hidrogen (aigua oxigenada)"
 }
