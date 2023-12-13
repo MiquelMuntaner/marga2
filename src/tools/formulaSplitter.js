@@ -1,6 +1,8 @@
 import { data } from "../data"
 
 export const splitFormula = (s) => {
+    if (s === "") { return {} }
+
     let buffer = ["", 1]
     let splitedFormula = []
     let currentParenthesis = false

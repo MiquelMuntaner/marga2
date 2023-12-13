@@ -283,13 +283,15 @@ export const data = {
         "name": "brom",
         "valences": [-1, 1, 3, 5, 7],
         "isMetall": false,
-        "plusUrName": "bromur"
+        "plusUrName": "bromur",
+        "oxoAcidNames": ["hipobromós", "bromós", "bròmic", "perbromic"]
     },
     "I": {
         "name": "iode",
         "valences": [-1, 1, 3, 5, 7],
         "isMetall": false,
-        "plusUrName": "iodur"
+        "plusUrName": "iodur",
+        "oxoAcidNames": ["hipoiodós", "iodós", "iòdic", "periòdic"]
     },
 }
 

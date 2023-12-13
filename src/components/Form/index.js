@@ -1,54 +1,39 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { exceptions } from '../../data'
-import { ContainerDiv, StyledForm, InputText, TopText, TextCursor } from './styles'
+import { ContainerDiv, StyledForm } from './styles'
 import { intToRoman } from '../../tools/intToRoman'
 import { splitFormula } from '../../tools/formulaSplitter'
+import { FormulaInput } from '../FormulaInput'
 
 export const Form = () => {
-    const [result, setResult] = useState("")
+    const [result, setResult] = useState([])
     const inputText = useRef()
-    const [showTextCursor, setShowTextCursor] = useState(false)
-
-    /*
-    useEffect(() => {
-        if (document.activeElement === inputText.current) {
-            while (document.activeElement === inputText.current) {
-                console.log("h")
-            }
-        }
-    }, [inputText])
-    */
-
-    const onTextInputChange = (e) => {
-        let finalHtmlText = ""
-        const currentInputValue = e.target.value
-        const hasNumber = /\d/;
-        for (let i = 0; i < currentInputValue.length; i++) {
-            if (hasNumber.test(currentInputValue[i])) {
-                finalHtmlText = `${finalHtmlText}<sub>${currentInputValue[i]}</sub>`
-            } else {
-                finalHtmlText = `${finalHtmlText}${currentInputValue[i]}`
-            }
-        }
-        document.getElementById("textFiller").innerHTML = `${finalHtmlText}`
-    }
 
     const handleSubmit = (e) => {
-        let processedFormula = splitFormula(e.target[0].value)
-
         e.preventDefault()
-        if (e.target[0].value in exceptions) {
-            setResult(exceptions[e.target[0].value])
-        } else if (processedFormula[0].letters == "H" && processedFormula[2].letters == "O") {
-            setResult(calcOxoacids(processedFormula))
+        let processedFormula = splitFormula(e.target[0].value)
+        console.log(e.target[0].value)
+
+        if (e.target[0].value === "") {
+            setResult([])
+        } else if (e.target[0].value in exceptions) {
+            // Excepcions
+            setResult([exceptions[e.target[0].value]])
+        } else if (processedFormula[0].letters == "H" && processedFormula[2]?.letters == "O") {
+            // Oxoacids
+            setResult([calcOxoacids(processedFormula)])
         } else if (e.target[0].value.includes("OH")) {
-            setResult(calcHidroxids(processedFormula))
+            // Hidroxids
+            setResult([calcHidroxids(processedFormula)])
         } else if ((processedFormula[0].isMetall === true && processedFormula[1].isMetall === false)) {
-            setResult(calcNombreOxidacio(processedFormula, e.target[0].value))
+            // Sals binaries, no metall + metall
+            setResult([calcNombreOxidacio(processedFormula, e.target[0].value)])
         } else if ((processedFormula[0].name === "hidrogen" && processedFormula[1].isMetall === false)) {
-            setResult(calcHidrursNoMetalics(processedFormula))
+            // Hidrurs no metalics
+            setResult([calcHidrursNoMetalics(processedFormula)])
         } else if (processedFormula[0].isMetall === false && processedFormula[1].isMetall === false) {
-            setResult(calcPrefixosMultiplicadors(processedFormula))
+            // Combinacions de no metalls
+            setResult([`Prefixos: ${calcPrefixosMultiplicadors(processedFormula)}`, `Stock: ${calcNombreOxidacio(processedFormula)}`])
         }
     }
 
@@ -118,11 +103,10 @@ export const Form = () => {
         <ContainerDiv>
             <StyledForm onSubmit={handleSubmit}>
                 <label htmlFor="formula" className='form_label'>Formula</label>
-                <InputText name='formula' type="text" className='inputText' onChange={onTextInputChange} ref={inputText} />
-                <TopText id="topText" className='topText'><div id="textFiller"></div><TextCursor /></TopText>
+                <FormulaInput inputText={inputText} />
                 <input type="submit" value="Executar" />
             </StyledForm>
-            {result == "" ? null : <div>Resultat: <span>{result.charAt(0).toUpperCase() + result.slice(1)}</span></div>}
+            {result == [] ? null : result.map((i, key) => (<div key={key}>Resultat: <span>{i.charAt(0).toUpperCase() + i.slice(1)}</span></div>))}
         </ContainerDiv>
     )
 }
