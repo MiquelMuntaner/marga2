@@ -1,31 +1,32 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { InputText, TopText, TextCursor } from './styles'
 
 
 export const FormulaInput = ({ inputText }) => {
-    const [cursorPosition, setCursorPosition] = useState(0)
-    const [focused, setFocused] = React.useState(false)
+    const [focused, setFocused] = useState(false)
 
     const onFocus = () => {
-        console.log("focus")
+        window.addEventListener("click", onClick)
         setFocused(true)
+        setTimeout(function () {
+            let inputLength = inputText.current.value.length
+            inputText.current.setSelectionRange(inputLength, inputLength)
+        }, 1);
+    }
+
+    const onBlur = () => {
+        setFocused(false)
+        window.removeEventListener("click", onClick)
+    }
+
+    const onClick = () => {
         let inputLength = inputText.current.value.length
         inputText.current.setSelectionRange(inputLength, inputLength)
     }
-    const onBlur = () => setFocused(false)
-
-    /*
-    useEffect(() => {
-        console.log("holala")
-        setCursorPosition(inputText.current.selectionStart)
-        console.log("fff", inputText.current.selectionStart)
-    }, [inputText])
-    */
 
     const handleKeyUp = (e) => {
         let inputLength = inputText.current.value.length
         inputText.current.setSelectionRange(inputLength, inputLength)
-        console.log("hola", cursorPosition)
     }
 
     const onTextInputChange = (e) => {

@@ -83,10 +83,11 @@ export const data = {
         "name": "crom",
         "valences": [2, 3, 6],
         "isMetall": true,
-        "plusUrName": ""
+        "plusUrName": "",
+        "oxoAcidNames": ["hipocromós", "cromós", "cròmic"]
     },
     "Mn": {
-        "name": "manganèn",
+        "name": "manganès",
         "valences": [2, 3, 4, 6, 7],
         "isMetall": true,
         "plusUrName": ""
@@ -122,8 +123,8 @@ export const data = {
         "plusUrName": ""
     },
     "Ag": {
-        "name": "plata",
-        "valences": [1, 2],
+        "name": "argent",
+        "valences": [1],
         "isMetall": true,
         "plusUrName": ""
     },
@@ -156,7 +157,7 @@ export const data = {
         "valences": [-3, 3],
         "isMetall": false,
         "plusUrName": "borur",
-        "oxoAcidNames": ["bròmic"]
+        "oxoAcidNames": ["bòric"]
     },
     "Al": {
         "name": "alumini",
@@ -188,7 +189,7 @@ export const data = {
         "valences": [-4, 2, 4],
         "isMetall": false,
         "plusUrName": "silicur",
-        "oxoAcidNames": ["", "silícic"]
+        "oxoAcidNames": ["siliciós", "silícic"]
     },
     "Ge": {
         "name": "germani",
@@ -213,7 +214,7 @@ export const data = {
         "valences": [-3, 2, 5],
         "isMetall": false,
         "plusUrName": "nitrur",
-        "oxoAcidNames": ["nitros", "nítric"]
+        "oxoAcidNames": ["nitrós", "nítric"]
     },
     "P": {
         "name": "fòsfor",
@@ -233,7 +234,8 @@ export const data = {
         "name": "antimoni",
         "valences": [3, 5],
         "isMetall": true,
-        "plusUrName": ""
+        "plusUrName": "",
+        "oxoAcidNames": ["antimoniós", "antimònic"]
     },
     "Bi": {
         "name": "bismut",
@@ -249,22 +251,24 @@ export const data = {
     },
     "S": {
         "name": "sofre",
-        "valences": [-2, 4, 6],
+        "valences": [-2, 2, 4, 6],
         "isMetall": false,
         "plusUrName": "sulfur",
-        "oxoAcidNames": ["sulfurós", "sulfúric"]
+        "oxoAcidNames": ["hiposulfurós", "sulfurós", "sulfúric"]
     },
     "Se": {
         "name": "seleni",
-        "valences": [-2, 4, 6],
+        "valences": [-2, 2, 4, 6],
         "isMetall": false,
-        "plusUrName": "selenur"
+        "plusUrName": "selenur",
+        "oxoAcidNames": ["hiposelenós", "selenós", "selènic"]
     },
     "Te": {
         "name": "tel·luri",
-        "valences": [-2, 4, 6],
+        "valences": [-2, 2, 4, 6],
         "isMetall": false,
-        "plusUrName": "telurur"
+        "plusUrName": "telurur",
+        "oxoAcidNames": ["hipotel·lurós", "tel·lurós", "tel·lúric"]
     },
     "F": {
         "name": "fluor",

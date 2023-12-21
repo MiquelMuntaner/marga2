@@ -74,5 +74,6 @@ const addData = (formula, numOfMolecules = 1) => {
             elements.push(addData(formula[i][0], formula[i][1]))
         }
     }
+    elements.push({ "numOfMolecules": numOfMolecules })
     return elements
 }
