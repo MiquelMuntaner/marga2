@@ -281,7 +281,8 @@ export const data = {
         "valences": [-1, 1, 3, 5, 7],
         "isMetall": false,
         "plusUrName": "clorur",
-        "oxoAcidNames": ["hipoclorós", "clorós", "clòric", "perclòric"]
+        "oxoAcidNames": ["hipoclorós", "clorós", "clòric", "perclòric"],
+        "oxoSalNames": ["hipoclorit", "clorit", "clorat", "perclorat"]
     },
     "Br": {
         "name": "brom",

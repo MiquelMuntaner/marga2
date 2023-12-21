@@ -14,7 +14,6 @@ export const Form = () => {
         let processedFormula = splitFormula(e.target[0].value)
         console.log(e.target[0].value)
 
-        console.log("som qui")
         if (e.target[0].value === "") {
             setResult([])
         } else if (e.target[0].value in exceptions) {
@@ -107,6 +106,7 @@ export const Form = () => {
             if (x !== undefined) { return x }
         })
 
+
         for (let i in formula[1].valences) {
             if (formula[1].valences[i] > 0) {
                 //Afegim oxigens
@@ -136,8 +136,13 @@ export const Form = () => {
                     }
 
                     // Afegim 3(H2O)
-                    atomCountException[0] = 6
-                    atomCountException[2] = atomCountException[2] + 3
+                    if (formula[1].letters == "Si") {
+                        atomCountException[0] = 4
+                        atomCountException[2] = atomCountException[2] + 2
+                    } else {
+                        atomCountException[0] = 6
+                        atomCountException[2] = atomCountException[2] + 3
+                    }
 
                     if (atomCountException[2] % 2 === 0 && atomCountException[1] % 2 === 0 && atomCountException[0] % 2 === 0 && atomCountException[2] !== 1) {
                         atomCountException = [atomCountException[0] / 2, 1, atomCountException[2] / 2]
@@ -153,45 +158,42 @@ export const Form = () => {
             }
         }
 
+        console.log("oxigens", possibleAtomCountOxigen)
+
         if (["B", "P", "As", "Sb", "Si"].includes(formula[1].letters) && possibleAtomCountOxigen.includes(formula[2].atomCount) === false) {
-            let hidrogenAtomCount = possibleAtomCountHidrogenException[possibleAtomCountHidrogenException.indexOf(formula[2].atomCount)] * valenceMultiplier / valenceDivider
+            let hidrogenAtomCount = possibleAtomCountHidrogenException[possibleAtomCountOxigenException.indexOf(formula[2].atomCount)] * valenceMultiplier / valenceDivider
             let oxoAcidName = formula[1].oxoAcidNames[possibleAtomCountOxigenException.indexOf(formula[2].atomCount)]
 
-            if (oxoAcidName.substr((oxoAcidName.length - 4), (oxoAcidName.length - 2)).includes("ur")) {
-                oxoAcidName = oxoAcidName.replace("urós", "it")
-                oxoAcidName = oxoAcidName.replace("uric", "at")
-                oxoAcidName = oxoAcidName.replace("òric", "at")
-                oxoAcidName = oxoAcidName.replace("orós", "it")
-            } else {
-                oxoAcidName = oxoAcidName.replace("urós", "it")
-                oxoAcidName = oxoAcidName.replace("uric", "at")
-                oxoAcidName = oxoAcidName.replace("òric", "at")
-                oxoAcidName = oxoAcidName.replace("orós", "it")
+            oxoAcidName = oxoAcidName.replace("urós", "it")
+            oxoAcidName = oxoAcidName.replace("uric", "at")
+            oxoAcidName = oxoAcidName.replace("òric", "at")
+            oxoAcidName = oxoAcidName.replace("orós", "it")
+
+            if (["ós", "ic"].includes(oxoAcidName.slice(-2))) {
                 oxoAcidName = oxoAcidName.replace("ós", "it").replace("ic", "at")
             }
 
             if (valenciesSenseNegatiu.length === 1) {
                 return `${oxoAcidName} de ${formula[0].name}`
             } else {
-                return `${oxoAcidName} de ${formula[0].name} (${intToRoman(hidrogenAtomCount.toString())})`
+                return `${oxoAcidName} de ${formula[0].name}(${intToRoman(hidrogenAtomCount.toString())})`
             }
         }
 
         let hidrogenAtomCount = possibleAtomCountHidrogen[possibleAtomCountOxigen.indexOf(formula[2].atomCount)] * valenceMultiplier / valenceDivider
         let oxoAcidName = formula[1].oxoAcidNames[possibleAtomCountOxigen.indexOf(formula[2].atomCount)]
 
-        if (oxoAcidName.substr((oxoAcidName.length - 4), (oxoAcidName.length - 2)).includes("ur")) {
-            console.log(oxoAcidName)
-            oxoAcidName = oxoAcidName.replace("urós", "it")
-            oxoAcidName = oxoAcidName.replace("uric", "at")
-            oxoAcidName = oxoAcidName.replace("orós", "it")
-            oxoAcidName = oxoAcidName.replace("òric", "at")
-        } else {
-            oxoAcidName = oxoAcidName.replace("urós", "it")
-            oxoAcidName = oxoAcidName.replace("uric", "at")
-            oxoAcidName = oxoAcidName.replace("òric", "at")
-            oxoAcidName = oxoAcidName.replace("orós", "it")
-            oxoAcidName = oxoAcidName.replace("ós", "it").replace("ic", "at")
+        oxoAcidName = oxoAcidName.replace("urós", "it")
+        oxoAcidName = oxoAcidName.replace("uric", "at")
+        oxoAcidName = oxoAcidName.replace("òric", "at")
+        oxoAcidName = oxoAcidName.replace("orós", "it")
+
+        if (["ós", "ic"].includes(oxoAcidName.slice(-2))) {
+            oxoAcidName = `${oxoAcidName.slice(0, -2)}${oxoAcidName.slice(-2).replace("ós", "it").replace("ic", "at")}`
+        }
+
+        if ("oxoSalNames" in formula[1]) {
+            oxoAcidName = formula[1].oxoSalNames[possibleAtomCountOxigen.indexOf(formula[2].atomCount)]
         }
 
         if (valenciesSenseNegatiu.length === 1) {
@@ -202,9 +204,9 @@ export const Form = () => {
             }
         } else {
             if (["B", "P", "As", "Sb", "Si"].includes(formula[1].letters)) {
-                return `meta${oxoAcidName} de ${formula[0].name} (${intToRoman(hidrogenAtomCount.toString())})`
+                return `meta${oxoAcidName} de ${formula[0].name}(${intToRoman(hidrogenAtomCount.toString())})`
             } else {
-                return `${oxoAcidName} de ${formula[0].name} (${intToRoman(hidrogenAtomCount.toString())})`
+                return `${oxoAcidName} de ${formula[0].name}(${intToRoman(hidrogenAtomCount.toString())})`
             }
         }
     }
