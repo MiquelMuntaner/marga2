@@ -22,6 +22,9 @@ export const Form = () => {
         } else if (e.target[0].value.includes("OH")) {
             // Hidroxids
             setResult([calcHidroxids(processedFormula)])
+        } else if (processedFormula[1].letters == "H" && processedFormula[3]?.letters == "O") {
+            // Sals àcides
+            setResult([calcOxosals(processedFormula)])
         } else if (processedFormula[0].letters == "H" && processedFormula[2]?.letters == "O") {
             // Oxoacids
             setResult([calcOxoacids(processedFormula)])
@@ -86,19 +89,29 @@ export const Form = () => {
 
     const calcOxosals = (formula) => {
         console.log(formula)
+        console.log("holaa")
         let possibleAtomCountOxigen = []
         let possibleAtomCountHidrogen = []
         let possibleAtomCountHidrogenException = []
         let possibleAtomCountOxigenException = []
         let valenceMultiplier = 1
         let valenceDivider = formula[0].atomCount
+        const prefixos = ["", "di", "tri", "tetra", "penta", "hexa", "hepta", "octa", "nona", "deca"]
 
         if (Object.prototype.toString.call(formula[1]) === '[object Array]') {
-            valenceMultiplier = formula[1][2].numOfMolecules
-            formula = [formula[0], formula[1][0], formula[1][1]]
+            if (formula[1].length === 4) {
+                valenceMultiplier = formula[1][3].numOfMolecules
+                formula = [formula[0], formula[1][0], formula[1][1], formula[1][2], formula[2]]
+                formula[3].atomCount = formula[3].atomCount / valenceMultiplier
+            } else {
+                valenceMultiplier = formula[1][2].numOfMolecules
+                formula = [formula[0], formula[1][0], formula[1][1]]
+            }
             formula[1].atomCount = formula[1].atomCount / valenceMultiplier
             formula[2].atomCount = formula[2].atomCount / valenceMultiplier
+            console.log("new formula", formula)
         }
+        console.log("length", formula.length)
 
         let valenciesSenseNegatiu = formula[0].valences.map((x) => {
             if (x >= 0) { return x }
@@ -106,15 +119,21 @@ export const Form = () => {
             if (x !== undefined) { return x }
         })
 
+        if (formula.length === 5) {
+            console.log("ACID MOLT ACIDa")
+        }
+        let usedValences = (formula.length === 5 ? formula[2].valences : formula[1].valences)
 
-        for (let i in formula[1].valences) {
-            if (formula[1].valences[i] > 0) {
-                //Afegim oxigens
-                let atomCountNewOxoacid = [0, 2, formula[1].valences[i]]
+
+        for (let i in usedValences) {
+            if (usedValences[i] > 0) {
+                //Afegim oxigens i tenim en compte sals
+
+                let atomCountNewOxoacid = [0, 2, usedValences[i]]
 
                 // Simplificam
                 if (atomCountNewOxoacid[2] % 2 === 0) {
-                    atomCountNewOxoacid = [0, 1, formula[1].valences[i] / 2]
+                    atomCountNewOxoacid = [0, 1, usedValences[i] / 2]
                 }
 
                 // Afegim H2O
@@ -124,15 +143,15 @@ export const Form = () => {
                 // Simplificam
                 if (atomCountNewOxoacid[2] % 2 === 0 && atomCountNewOxoacid[1] % 2 === 0 && atomCountNewOxoacid[0] % 2 === 0 && atomCountNewOxoacid[2] !== 1) {
                     console.log("merda")
-                    atomCountNewOxoacid = [1, 1, (formula[1].valences[i] + 1) / 2]
+                    atomCountNewOxoacid = [1, 1, (usedValences[i] + 1) / 2]
                 }
 
-                if (["B", "P", "As", "Sb", "Si"].includes(formula[1].letters)) {
-                    let atomCountException = [0, 2, formula[1].valences[i]]
+                if (["B", "P", "As", "Sb", "Si"].includes((formula.length === 5 ? formula[2].letters : formula[1].letters))) {
+                    let atomCountException = [0, 2, usedValences[i]]
 
                     // Simplificam
                     if (atomCountException[2] % 2 === 0) {
-                        atomCountException = [0, 1, formula[1].valences[i] / 2]
+                        atomCountException = [0, 1, usedValences[i] / 2]
                     }
 
                     // Afegim 3(H2O)
@@ -160,12 +179,29 @@ export const Form = () => {
 
         console.log("oxigens", possibleAtomCountOxigen)
 
-        if (["B", "P", "As", "Sb", "Si"].includes(formula[1].letters) && possibleAtomCountOxigen.includes(formula[2].atomCount) === false) {
-            let hidrogenAtomCount = possibleAtomCountHidrogenException[possibleAtomCountOxigenException.indexOf(formula[2].atomCount)] * valenceMultiplier / valenceDivider
-            let oxoAcidName = formula[1].oxoAcidNames[possibleAtomCountOxigenException.indexOf(formula[2].atomCount)]
+        let hidrogenAtomCount = 0
+        let oxoAcidName = ""
+
+        // Canviant formula per tenir en compte sals àcides
+        let usedFormula = (formula.length === 5 ? [formula[0], formula[2], formula[3]] : formula)
+
+        if (["B", "P", "As", "Sb", "Si"].includes(usedFormula[1].letters) && possibleAtomCountOxigen.includes(usedFormula[2].atomCount) === false) {
+            console.log("EXCEPCIO", possibleAtomCountOxigenException)
+            // Acids dimeritzats
+            if (usedFormula[1].atomCount === 2) {
+                hidrogenAtomCount = possibleAtomCountHidrogenException[possibleAtomCountOxigenException.indexOf((usedFormula[2].atomCount + 1) / 2)] * valenceMultiplier / valenceDivider
+                oxoAcidName = usedFormula[1].oxoAcidNames[possibleAtomCountOxigenException.indexOf((usedFormula[2].atomCount + 1) / 2)]
+            } else {
+                hidrogenAtomCount = possibleAtomCountHidrogenException[possibleAtomCountOxigenException.indexOf(usedFormula[2].atomCount)] * valenceMultiplier / valenceDivider
+                oxoAcidName = usedFormula[1].oxoAcidNames[possibleAtomCountOxigenException.indexOf(usedFormula[2].atomCount)]
+            }
+
+            hidrogenAtomCount = (formula.length === 5 ? hidrogenAtomCount - formula[1] : hidrogenAtomCount)
 
             oxoAcidName = oxoAcidName.replace("urós", "it")
             oxoAcidName = oxoAcidName.replace("uric", "at")
+            oxoAcidName = oxoAcidName.replace("úros", "it")
+            oxoAcidName = oxoAcidName.replace("úric", "at")
             oxoAcidName = oxoAcidName.replace("òric", "at")
             oxoAcidName = oxoAcidName.replace("orós", "it")
 
@@ -173,18 +209,29 @@ export const Form = () => {
                 oxoAcidName = oxoAcidName.replace("ós", "it").replace("ic", "at")
             }
 
+            console.log("atomcount", formula[2].atomCount)
             if (valenciesSenseNegatiu.length === 1) {
-                return `${oxoAcidName} de ${formula[0].name}`
+                return (formula.length === 5 ? `${prefixos[formula[1].atomCount - 1]}hidrogen` : "") + `${oxoAcidName} de ${usedFormula[0].name}`
             } else {
-                return `${oxoAcidName} de ${formula[0].name}(${intToRoman(hidrogenAtomCount.toString())})`
+                return (formula.length === 5 ? `${prefixos[formula[1].atomCount - 1]}hidrogen` : "") + `${oxoAcidName} de ${usedFormula[0].name}(${intToRoman(hidrogenAtomCount.toString())})`
             }
         }
 
-        let hidrogenAtomCount = possibleAtomCountHidrogen[possibleAtomCountOxigen.indexOf(formula[2].atomCount)] * valenceMultiplier / valenceDivider
-        let oxoAcidName = formula[1].oxoAcidNames[possibleAtomCountOxigen.indexOf(formula[2].atomCount)]
+        // Acids dimeritzats
+        if (usedFormula[1].atomCount === 2) {
+            hidrogenAtomCount = possibleAtomCountHidrogen[possibleAtomCountOxigen.indexOf((usedFormula[2].atomCount + 1) / 2)] * valenceMultiplier / valenceDivider
+            oxoAcidName = usedFormula[1].oxoAcidNames[possibleAtomCountOxigen.indexOf((usedFormula[2].atomCount + 1) / 2)]
+        } else {
+            hidrogenAtomCount = possibleAtomCountHidrogen[possibleAtomCountOxigen.indexOf(usedFormula[2].atomCount)] * valenceMultiplier / valenceDivider
+            oxoAcidName = usedFormula[1].oxoAcidNames[possibleAtomCountOxigen.indexOf(usedFormula[2].atomCount)]
+        }
+
+        hidrogenAtomCount = (formula.length === 5 ? hidrogenAtomCount - formula[1] : hidrogenAtomCount)
 
         oxoAcidName = oxoAcidName.replace("urós", "it")
         oxoAcidName = oxoAcidName.replace("uric", "at")
+        oxoAcidName = oxoAcidName.replace("úros", "it")
+        oxoAcidName = oxoAcidName.replace("úric", "at")
         oxoAcidName = oxoAcidName.replace("òric", "at")
         oxoAcidName = oxoAcidName.replace("orós", "it")
 
@@ -192,23 +239,16 @@ export const Form = () => {
             oxoAcidName = `${oxoAcidName.slice(0, -2)}${oxoAcidName.slice(-2).replace("ós", "it").replace("ic", "at")}`
         }
 
-        if ("oxoSalNames" in formula[1]) {
-            oxoAcidName = formula[1].oxoSalNames[possibleAtomCountOxigen.indexOf(formula[2].atomCount)]
+        if ("oxoSalNames" in usedFormula[1]) {
+            oxoAcidName = usedFormula[1].oxoSalNames[possibleAtomCountOxigen.indexOf(usedFormula[2].atomCount)]
         }
 
-        if (valenciesSenseNegatiu.length === 1) {
-            if (["B", "P", "As", "Sb", "Si"].includes(formula[1].letters)) {
-                return `meta${oxoAcidName} de ${formula[0].name}`
-            } else {
-                return `${oxoAcidName} de ${formula[0].name}`
-            }
-        } else {
-            if (["B", "P", "As", "Sb", "Si"].includes(formula[1].letters)) {
-                return `meta${oxoAcidName} de ${formula[0].name}(${intToRoman(hidrogenAtomCount.toString())})`
-            } else {
-                return `${oxoAcidName} de ${formula[0].name}(${intToRoman(hidrogenAtomCount.toString())})`
-            }
-        }
+        return (formula.length === 5 ? `${prefixos[formula[1].atomCount - 1]}hidrogen` : "")
+            + (usedFormula[1].atomCount === 2 ? "di" : "")
+            + (["B", "P", "As", "Sb", "Si"].includes(usedFormula[1].letters) ? "meta" : "")
+            + `${oxoAcidName} de ${usedFormula[0].name}`
+            + (valenciesSenseNegatiu.length !== 1 ? `(${intToRoman(hidrogenAtomCount.toString())})` : "")
+
     }
 
     const calcHidrursNoMetalics = (formula) => {
