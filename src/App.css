@@ -1,9 +1,15 @@
+#root {
+    height: 100%;
+}
+
 .App {
+    color: white;
     text-align: center;
     display: flex;
-    height: 100vh;
+    height: 100%;
     width: 100vw;
-    background-color: #222222;
+    /*background-color: #222222;*/
+    background-color: #0F0F0F;
     align-items: center;
     justify-content: center;
     flex-direction: column;

@@ -1,12 +1,14 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { InputText, TopText, TextCursor } from './styles'
 
 
-export const FormulaInput = ({ inputText }) => {
+export const FormulaInput = ({ labelRef }) => {
     const [focused, setFocused] = useState(false)
+    const inputText = useRef()
 
     const onFocus = () => {
         window.addEventListener("click", onClick)
+        labelRef.current.style.color = "white"
         setFocused(true)
         setTimeout(function () {
             let inputLength = inputText.current.value.length
@@ -15,13 +17,17 @@ export const FormulaInput = ({ inputText }) => {
     }
 
     const onBlur = () => {
+        window.addEventListener("click", onClick)
+        labelRef.current.style.color = "#9b9b9b"
         setFocused(false)
         window.removeEventListener("click", onClick)
     }
 
     const onClick = () => {
-        let inputLength = inputText.current.value.length
-        inputText.current.setSelectionRange(inputLength, inputLength)
+        if (inputText.current !== null) {
+            let inputLength = inputText.current.value.length
+            inputText.current.setSelectionRange(inputLength, inputLength)
+        }
     }
 
     const handleKeyUp = (e) => {

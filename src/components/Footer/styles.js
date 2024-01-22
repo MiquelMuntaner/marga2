@@ -4,12 +4,13 @@ export const FooterDiv = styled.div`
     color: white;
     width: 100%;
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     position: absolute;
     bottom: 0;
     font-weight: 700;
 
     & > p {
-        margin: 0 20px 20px 0;
+        text-align: right;
+        margin: 0 20px 20px 20px;
     }
 `
