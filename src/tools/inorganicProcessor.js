@@ -57,6 +57,7 @@ export const calcOxoacids = (formula) => {
 }
 
 export const calcOxosals = (formula) => {
+    console.log("formulaa", formula)
     let possibleAtomCountOxigen = []
     let possibleAtomCountHidrogen = []
     let possibleAtomCountHidrogenException = []
@@ -169,9 +170,9 @@ export const calcOxosals = (formula) => {
             oxoAcidName = oxoAcidName.replace("ós", "it").replace("ic", "at")
         }
 
-        return (formula.length === 5 ? `${prefixos[formula[1].atomCount - 1]}hidrogen` : "") +
-            `${oxoAcidName} de ${usedFormula[0].name}` +
-            (valenciesSenseNegatiu.length === 1 ? "" : `(${intToRoman(hidrogenAtomCount.toString())})`)
+        return (formula.length === 5 ? `${prefixos[formula[1].atomCount - 1]}hidrogen` : "")
+            + `${oxoAcidName} de ${usedFormula[0].name}`
+            + (valenciesSenseNegatiu.length === 1 ? "" : `(${intToRoman(hidrogenAtomCount.toString())})`)
 
     }
 

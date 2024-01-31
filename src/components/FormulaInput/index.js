@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { InputText, TopText, TextCursor } from './styles'
+import { InputText, TopText, TextCursor, Placeholder } from './styles'
 
 
-export const FormulaInput = ({ labelRef }) => {
+export const FormulaInput = ({ labelRef, doFormula, inputText }) => {
     const [focused, setFocused] = useState(false)
-    const inputText = useRef()
+
 
     const onFocus = () => {
         window.addEventListener("click", onClick)
@@ -53,7 +53,11 @@ export const FormulaInput = ({ labelRef }) => {
     return (
         <>
             <InputText onFocus={onFocus} onBlur={onBlur} onKeyUp={handleKeyUp} name='formula' type="text" className='inputText' onChange={onTextInputChange} ref={inputText} />
-            <TopText id="topText" className='topText'><div id="textFiller"></div>{focused == true ? <TextCursor /> : null}</TopText>
+            {
+                inputText.current?.value === "" && focused == false || inputText.current === undefined ?
+                    <Placeholder>{doFormula ? <>Ca(H<sub>2</sub>PO<sub>4</sub>)<sub>2</sub></> : "Àcid perclòric"}</Placeholder> :
+                    <TopText id="topText" className='topText'><div id="textFiller"></div>{focused == true ? <TextCursor /> : null}</TopText>
+            }
         </>
     )
 }

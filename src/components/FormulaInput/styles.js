@@ -79,3 +79,12 @@ export const TextCursor = styled.div`
         100% {background-color: white}
     }
 `
+
+export const Placeholder = styled.div`
+    position: absolute;
+    display: block;
+    top: 22px;
+    font-size: 1.3rem;
+    color: #fff;
+    opacity: 30%;
+`

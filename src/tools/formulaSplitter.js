@@ -57,7 +57,6 @@ export const splitFormula = (s) => {
         }
     }
     let processedFormula = addData(finalFormula)
-    console.log(processedFormula)
     return processedFormula
 }
 
@@ -75,5 +74,6 @@ const addData = (formula, numOfMolecules = 1) => {
         }
     }
     elements.push({ "numOfMolecules": numOfMolecules })
+    console.log("elements", elements)
     return elements
 }

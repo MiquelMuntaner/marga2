@@ -334,7 +334,7 @@ export const data = {
         "valences": [-1, 1, 3, 5, 7],
         "isMetall": false,
         "plusUrName": "bromur",
-        "oxoAcidNames": ["hipobromós", "bromós", "bròmic", "perbromic"],
+        "oxoAcidNames": ["hipobromós", "bromós", "bròmic", "perbròmic"],
         "molarMass": 79.904
     },
     "I": {

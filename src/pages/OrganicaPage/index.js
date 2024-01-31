@@ -1,10 +1,13 @@
 import React from 'react'
 import { PageLayout } from '../../components/PageLayout'
+import { ContainerDiv } from './styles'
 
 export const OrganicaPage = () => {
     return (
         <PageLayout>
-            Pàgina en procés
+            <ContainerDiv>
+                Pàgina en procés...
+            </ContainerDiv>
         </PageLayout>
     )
 }

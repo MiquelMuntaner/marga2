@@ -26,7 +26,7 @@ export const ContainerDiv = styled.div`
         display: flex;
         align-items: center;
         padding-bottom: 59px;
-
+        position: relative;
     }
 
     & > div > span {
@@ -85,7 +85,7 @@ export const StyledForm = styled.form`
 export const TempResult = styled.span`
     display: block;
     // min-height: 98px;
-    min-height: 137px;
+    height: calc(137px +  24px + 15px);
 `
 
 export const QuestionMarkButton = styled.button`
@@ -114,8 +114,8 @@ export const QuestionMarkButton = styled.button`
 
 export const MoleculalMassDiv = styled.div` 
     position: absolute;
-    left: calc(25% + 250.33px - 127px);
-    margin-top: 145px;
+    left: 135px;
+    top: 30px;
     & > div:nth-child(1) {
         width: 100%;
         display: flex;

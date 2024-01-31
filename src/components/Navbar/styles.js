@@ -20,11 +20,13 @@ export const NavbarContainer = styled.div`
         }
     }
 
+
     & > ul > li {
         list-style: none;
     }
     
     & > ul > li > a {
+        position: relative;
         color: white;
         display: block;
         padding: 20px 15px 20px 15px;
@@ -32,8 +34,24 @@ export const NavbarContainer = styled.div`
         text-decoration: none;
     }
 
+    & > ul > li > a::after {
+        content: "";
+        position: absolute;
+        width: 0;
+        margin: 0 4px;
+        height: 3px;
+        left: 0;
+        bottom: 5px;
+        background-color: #38ef7d;
+        transition: all 0.5s ease;
+    }
+
     & > ul > li > a:hover {
         color: #38ef7d;
+    }
+    
+    & > ul > li > a:hover::after {
+        width: calc(100% - 8px);
     }
 
     .active {

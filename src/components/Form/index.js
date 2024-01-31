@@ -14,6 +14,7 @@ import { calcNombreOxidacio } from '../../tools/inorganicProcessor'
 import { calcOxoacids } from '../../tools/inorganicProcessor'
 import { calcOxosals } from '../../tools/inorganicProcessor'
 import { calcPrefixosMultiplicadors } from '../../tools/inorganicProcessor'
+import { romanToInt } from '../../tools/romanToInt'
 
 
 export const Form = () => {
@@ -22,6 +23,8 @@ export const Form = () => {
     const [doFormula, setDoFormula] = useState(true)
     const [formulaSplitted, setFormulaSplitted] = useState([])
     const [showMolecularMassDiv, setShowMolecularMassDiv] = useState(false)
+    const [typeOfFormula, setTypeOfFormula] = useState("")
+    const inputText = useRef()
     const labelRef = useRef()
 
     const handleImgClick = (e) => {
@@ -30,61 +33,155 @@ export const Form = () => {
         setResult([])
         setShowMolecularMassDiv(false)
         setMolarMass(0)
+        setTypeOfFormula("")
+        inputText.current.value = ""
     }
 
     const handleSubmit = (e) => {
         e.preventDefault()
         setShowMolecularMassDiv(false)
+
         if (doFormula) {
             let processedFormula = splitFormula(e.target[0].value)
-            setFormulaSplitted(processedFormula)
+            let tempElement = {}
+            console.log("processed formula", processedFormula)
+
+            let formulaWithoutParentheses = []
+            for (let i in processedFormula) {
+                if (Object.prototype.toString.call(processedFormula[i]) === '[object Array]') {
+                    for (let k in processedFormula[i]) {
+                        if (k !== processedFormula[i].length - 1) {
+                            // No estic segur de perquè aixó funciona, pero multiplica es nombre de molecules per es nombre d'atoms
+                            tempElement = { ...processedFormula[i][k] }
+                            formulaWithoutParentheses.push(tempElement)
+                        }
+                    }
+                } else {
+                    formulaWithoutParentheses.push(processedFormula[i])
+                }
+            }
+
+            setFormulaSplitted(formulaWithoutParentheses)
             if (e.target[0].value === "") {
                 setResult([])
             } else if (e.target[0].value in exceptions) {
                 // Excepcions
                 setResult([exceptions[e.target[0].value]])
+                setTypeOfFormula("Excepció")
+
             } else if (e.target[0].value.includes("OH")) {
                 // Hidroxids
                 setResult([calcHidroxids(processedFormula)])
-            } else if (processedFormula[1].letters == "H" && processedFormula[3]?.letters == "O") {
+                setTypeOfFormula("Hidròxid (la nomenclatura preferent és la dels nombres d'oxidació)")
+
+            } else if (formulaWithoutParentheses[1].letters == "H" && formulaWithoutParentheses[3]?.letters == "O") {
                 // Sals àcides
+                console.log("holaa")
                 setResult([calcOxosals(processedFormula)])
+                setTypeOfFormula("Sal àcida")
+
             } else if (processedFormula[0].letters == "H" && processedFormula[2]?.letters == "O") {
                 // Oxoacids
                 setResult([calcOxoacids(processedFormula)])
-            } else if (processedFormula[2].letters = "O" && processedFormula.length >= 4) {
+                setTypeOfFormula("Oxoàcid")
+
+            } else if (formulaWithoutParentheses[2].letters == "O" && formulaWithoutParentheses.length >= 4) {
                 // Oxosals
                 setResult([calcOxosals(processedFormula)])
+                setTypeOfFormula("Oxisal")
+
             } else if ((processedFormula[0].isMetall === true && processedFormula[1].isMetall === false)) {
                 // Sals binaries, no metall + metall
                 setResult([calcNombreOxidacio(processedFormula, e.target[0].value)])
+                setTypeOfFormula("Sal binària (la nomenclatura preferent és la dels nombres d'oxidació)")
+
             } else if ((processedFormula[0].name === "hidrogen" && processedFormula[1].isMetall === false)) {
                 // Hidrurs no metalics
                 setResult([calcHidrursNoMetalics(processedFormula)])
+                setTypeOfFormula("Hidrur no-metàl·lic")
+
             } else if (processedFormula[0].isMetall === false && processedFormula[1].isMetall === false) {
                 // Combinacions de no metalls
                 // setResult([`Prefixos: ${calcPrefixosMultiplicadors(processedFormula)}`, `Stock: ${calcNombreOxidacio(processedFormula)}`])
                 setResult([calcPrefixosMultiplicadors(processedFormula)])
+                setTypeOfFormula("Combinació entre no-metalls (la nomenclatura preferent és la dels prefixos multiplicadors)")
             }
-            setMolarMass(calcMassaMolar(processedFormula))
-        } else {
-            // nameSplitter(e.target[0].value)
-            let splitedName = e.target[0].value.toLowerCase().split(" ")
 
+            let massaMolar = calcMassaMolar(formulaWithoutParentheses)
+            if (massaMolar <= 99) { massaMolar = "0" + massaMolar }
+
+            setMolarMass(massaMolar)
+        } else {
+            nameSplitter(e.target[0].value)
+            let splitedName = e.target[0].value.toLowerCase().split("'").join(" ").split(" ")
+            let valence = 0
+
+            // Seperant els nombres romans de la darrera paraula
+            if (splitedName[splitedName.length - 1].split("(").length !== 1) {
+                let lastElement = splitedName.pop()
+                splitedName.push(lastElement.split("(")[0])
+                valence = romanToInt(lastElement.split("(")[1].substring(0, lastElement.split("(")[1].length - 1).toUpperCase())
+            }
+
+            let finalHtmlText = ""
+            let currentValue = ""
+            // Simple codi per els oxoacids
             if (splitedName[0] == "àcid") {
-                let finalHtmlText = ""
-                const currentValue = calcOxoacisFormula(splitedName)
-                const hasNumber = /\d/;
-                for (let i = 0; i < currentValue.length; i++) {
-                    if (hasNumber.test(currentValue[i])) {
-                        finalHtmlText = `${finalHtmlText}<sub>${currentValue[i]}</sub>`
-                    } else {
-                        finalHtmlText = `${finalHtmlText}${currentValue[i]}`
+                currentValue = calcOxoacisFormula(splitedName)
+
+            } else {
+                for (let i in data) {
+                    // Sal binaria, combinacio metall + no metall
+                    if (data[i].plusUrName.toLowerCase() === splitedName[0].toLowerCase() && valence !== 0) {
+                        console.log("sal binaria aqui:", splitedName)
+                        console.log("valence", valence)
+                        currentValue = calcNombreOxidacioFormula(splitedName, valence)
                     }
                 }
-                setResult([finalHtmlText])
+            }
+
+            // Creant els nombres en subindex
+            const hasNumber = /\d/;
+            for (let i = 0; i < currentValue.length; i++) {
+                if (hasNumber.test(currentValue[i])) {
+                    finalHtmlText = `${finalHtmlText}<sub>${currentValue[i]}</sub>`
+                } else {
+                    finalHtmlText = `${finalHtmlText}${currentValue[i]}`
+                }
+            }
+            setResult([finalHtmlText])
+        }
+    }
+
+    const calcNombreOxidacioFormula = (splitedName, valence) => {
+        let firstAtom = {}
+        let secondAtom = {}
+
+        // Extreim la informació de cada uns del atoms
+        for (let i in data) {
+            if (data[i].plusUrName.toLowerCase() === splitedName[0].toLowerCase()) {
+                secondAtom = data[i]
+                secondAtom["letters"] = i
+            }
+
+            if (data[i].name.toLowerCase() === splitedName[2].toLowerCase()) {
+                firstAtom = data[i]
+                firstAtom["letters"] = i
             }
         }
+
+        // Asignam les valencies
+        let atomCount = [secondAtom.valences[0], valence]
+
+        // Simplificam
+        if (atomCount[0] % 2 === 0 && atomCount[1] % 2 === 0) {
+            atomCount = [atomCount[0] / 2, atomCount[1] / 2]
+        }
+
+        return firstAtom.letters
+            + (atomCount[0] !== 1 ? atomCount[0] : "")
+            + secondAtom.letters
+            + (atomCount[1] !== 1 ? atomCount[1] : "")
     }
 
     const calcOxoacisFormula = (splitedName) => {
@@ -92,7 +189,6 @@ export const Form = () => {
         let letter = ""
         let containsMeta = false
 
-        console.log(splitedName[1].substring(0, 4))
 
         if (splitedName[1].substring(0, 4) == "meta") {
             containsMeta = true
@@ -166,14 +262,15 @@ export const Form = () => {
             <StyledForm id="form" onSubmit={handleSubmit}>
                 <label htmlFor="formula" className='form_label' id='inorganica_label' ref={labelRef}>{doFormula ? "Fórmula" : "Nom"}</label>
                 <img src="./assets/icono-rotar.png" alt="" onClick={handleImgClick} />
-                <FormulaInput labelRef={labelRef} />
+                <FormulaInput labelRef={labelRef} doFormula={doFormula} inputText={inputText} />
                 <input type="submit" value="Executar" />
             </StyledForm>
             {result.length === 0 ? (<TempResult />) : result.map((i, key) => (<div key={key}>Resultat:&nbsp;<span>{parse(i.charAt(0).toUpperCase() + i.slice(1))}</span></div>))}
+            {typeOfFormula !== "" ? <div>Tipus: <span>{typeOfFormula}</span></div> : ""}
             {
                 molarMass !== 0 ?
                     <div>
-                        Massa molar:&nbsp; <span>{molarMass}u</span>
+                        Massa molar:&nbsp; <span>{molarMass.toString().replace(".", ",")}</span>
                         <QuestionMarkButton onClick={handleQuestionMarkButtonClick}>?</QuestionMarkButton>
                         {showMolecularMassDiv ?
                             <MoleculalMassDiv>
