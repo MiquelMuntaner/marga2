@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const ContainerDiv = styled.div`
     display: flex;
-    height: calc(100% - 59px);
+    height: calc(100% - 69px);
     width: 50vw;
     margin: 0 25% 10% 25%;
     align-items: center;
@@ -25,12 +25,18 @@ export const ContainerDiv = styled.div`
     & > div:nth-last-child(1) {
         display: flex;
         align-items: center;
-        padding-bottom: 59px;
+        padding-bottom: 69px;
         position: relative;
     }
 
     & > div > span {
         font-weight: 700;
+    }
+
+    & > div > span > sub {
+        vertical-align: baseline;
+        position: relative;
+        top: 0.25rem;
     }
 `
 
@@ -62,7 +68,7 @@ export const StyledForm = styled.form`
         top: 0;
         display: block;
         transition: 0.2s;
-        font-size: 1rem;
+        font-size: 1.15rem;
         color: #9b9b9b;
     }
 
@@ -78,14 +84,14 @@ export const StyledForm = styled.form`
     & > input[type="submit"]:hover {
         border-image-slice: 1;
         border-image-source: linear-gradient(#11998e, #38ef7d);
-        color: white;
+        color: rgba(255, 255, 255, 0.8);
     }
 `
 
 export const TempResult = styled.span`
     display: block;
     // min-height: 98px;
-    height: calc(137px +  24px + 15px);
+    height: 177px;
 `
 
 export const QuestionMarkButton = styled.button`
@@ -114,7 +120,7 @@ export const QuestionMarkButton = styled.button`
 
 export const MoleculalMassDiv = styled.div` 
     position: absolute;
-    left: 135px;
+    left: 110px;
     top: 30px;
     & > div:nth-child(1) {
         width: 100%;
@@ -135,8 +141,9 @@ export const MoleculalMassDiv = styled.div`
 
     & > div:nth-child(2) {
         display: flex;
+        border-radius: 10px;
         flex-direction: column;
-        width: 200px;
+        width: 170px;
         align-items: center;
         justify-content: center;
         gap: 0;
@@ -144,7 +151,19 @@ export const MoleculalMassDiv = styled.div`
         padding: 15px;
     }
 
-    & > div:nth-child(2) > p {
+    & > div:nth-child(2) > div {
+        margin: 0 15% 0 15%;
+        width: 70%;
+        display: flex;
+        justify-content: space-between;
+        align-content: space-around;
+    }
+
+    & > div:nth-child(2) > div > p {
         margin: 0;
+    }
+
+    & > div:nth-child(2) > div > p:nth-child(1) {
+        font-weight: bold;
     }
 `

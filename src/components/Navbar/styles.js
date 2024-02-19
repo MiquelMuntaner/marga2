@@ -3,17 +3,35 @@ import styled from "styled-components";
 export const NavbarContainer = styled.div`
     margin: 0;
     padding: 0;
-    color: white;
     font-weight: bold;
+    font-size: 1.1921rem;
+    width: 100vw;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    padding-top: 10px;
 
+    & > div {
+        min-height: 100%;
+        display: flex;
+        align-items: center;
+    }
+
+    & > div > p {
+        padding-left: 40px;
+        font-weight: 1000;
+        margin: 0;
+        font-size: 30px;
+        color: white;
+        opacity: 90%;
+    }
 
     & > ul {
+        color: rgba(255, 255, 255, 0.75);
         margin: 0;
         padding: 0;
+        padding-right: 40px;
         display: flex;
-        justify-content: flex-start;
-        margin-left: 20px;
-        margin-right: 20px;
 
         @media only screen and (max-width: 480px) {
             justify-content: center;

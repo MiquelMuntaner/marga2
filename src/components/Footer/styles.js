@@ -10,7 +10,8 @@ export const FooterDiv = styled.div`
     font-weight: 700;
 
     & > p {
-        text-align: right;
-        margin: 0 20px 20px 20px;
+        text-align: left;
+        opacity: 80%;
+        margin: 0 20px 30px 40px;
     }
 `

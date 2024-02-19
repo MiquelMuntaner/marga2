@@ -12,6 +12,15 @@ export const calcMassaMolar = (formula) => {
     return round(finalMolarMass, 4)
 }
 
+export const calcEntitatHomoatomica = (formula) => {
+    const prefixos = ["", "di", "tri", "tetra", "penta", "hexa", "hepta", "octa", "nona", "deca"]
+
+    return (
+        prefixos[formula[0].atomCount - 1]
+        + formula[0].name
+    )
+}
+
 export const calcOxoacids = (formula) => {
     let valenceMiddleElement = -(formula[0].atomCount + (formula[2].atomCount * -2))
 

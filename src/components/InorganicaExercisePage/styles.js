@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const ExerciseContainer = styled.div`
-    height: calc(100% - 59px);
+    height: calc(100% - 69px);
 
     & > p {
         text-align: center;
@@ -60,7 +60,7 @@ export const ExerciseContainer = styled.div`
 `
 
 export const QuestionDiv = styled.div`
-    height: calc(100% - 24px - 24px - 24px - 24px - 59px);
+    height: calc(100% - 24px - 24px - 24px - 24px - 69px);
     display: flex;
     gap: 30px;
     justify-content: center;

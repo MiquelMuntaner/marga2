@@ -40,9 +40,24 @@ export const FormulaInput = ({ labelRef, doFormula, inputText }) => {
         const currentInputValue = e.target.value
         const hasNumber = /\d/;
         for (let i = 0; i < currentInputValue.length; i++) {
-            if (hasNumber.test(currentInputValue[i])) {
+            if (
+                hasNumber.test(currentInputValue[i])
+                && (["-", "+"].includes(currentInputValue[i + 1]) == false || currentInputValue[i + 2] === "a")
+                && currentInputValue[i - 1] !== "("
+                && currentInputValue[i - 1] !== "/"
+            ) {
                 finalHtmlText = `${finalHtmlText}<sub>${currentInputValue[i]}</sub>`
-            } else {
+            } else if (
+                hasNumber.test(currentInputValue[i])
+                && ["-", "+"].includes(currentInputValue[i + 1]) == true
+                && currentInputValue[i + 2] !== "a"
+            ) {
+                finalHtmlText = `${finalHtmlText}<sup>${currentInputValue[i] + currentInputValue[i + 1]}</sup>`
+            } else if (
+                ["-", "+"].includes(currentInputValue[i]) == false
+                || hasNumber.test(currentInputValue[i - 1]) == false
+                || currentInputValue[i + 1] === "a"
+            ) {
                 finalHtmlText = `${finalHtmlText}${currentInputValue[i]}`
             }
         }

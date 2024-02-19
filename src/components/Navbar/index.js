@@ -5,6 +5,9 @@ import { NavLink } from 'react-router-dom'
 export const Navbar = () => {
     return (
         <NavbarContainer>
+            <div>
+                <p>N</p>
+            </div>
             <ul>
                 <li>
                     <NavLink activeClassName="active" to="/inorganica">

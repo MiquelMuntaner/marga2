@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const SelectStudySessionDiv = styled.div`
-    height: calc(100% - 59px);
+    height: calc(100% - 69px);
     width: 100%;
 
     & > p {
@@ -17,12 +17,12 @@ export const SelectStudySessionDiv = styled.div`
         align-items: center;
         justify-content: center;
         gap: 40px;
-        height: calc(100% - 59px - 115px);
+        height: calc(100% - 69px - 115px);
     }
 `
 
 export const InorganicaFormContainer = styled.div`
-    height: calc(100% - 59px);
+    height: calc(100% - 69px);
 
     & > p {
         margin: 0;
@@ -35,7 +35,7 @@ export const InorganicaFormContainer = styled.div`
         display: flex;
         align-items: center;
         justify-content: center;
-        height: calc(100% - 59px - 115px);
+        height: calc(100% - 69px - 115px);
     }
 
     & > div > form {
@@ -114,7 +114,7 @@ export const InorganicaFormContainer = styled.div`
 
 export const FinishScreenContainer = styled.div`
     display: flex;
-    height: calc(100% - 59px);
+    height: calc(100% - 69px);
     justify-content: center;
     align-content: center;
     flex-direction: column;
