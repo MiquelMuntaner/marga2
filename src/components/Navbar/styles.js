@@ -76,3 +76,56 @@ export const NavbarContainer = styled.div`
         color: #d3d3d3;
     }
 `
+
+export const ToggleDarkMode = styled.input`
+    position: relative;
+    appearance: none;
+    outline: none;
+    width: 55px;
+    height: 25px;
+    margin-top: 17px;
+    border-radius: 20px;
+    background: #c3c3c3;
+    box-shadow: none;
+    cursor: pointer;
+    overflow: hidden;
+    transition: 0.3s ease-in-out;
+
+    &:checked {
+        background: #8000c9;
+    }
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 5px;
+        left: 5px;
+        border-radius: inherit;
+        width: 15px;
+        height: 15px;
+        background: #ffff00;
+        transition: inherit;
+    }
+
+    &::after {
+        content: '';
+        position: absolute;
+        top: -1px;
+        right: calc(100% + 36px);
+        border-radius: inherit;
+        width: 15px;
+        height: 15px;
+        background: #c3c3c3;
+        transition: inherit;
+    }
+
+    &:checked::before {
+        left: calc(100% - 21px);
+        background: #cccccc;
+    }
+
+    &:checked::after {
+        right: 12px;
+        background: #8000c9;
+    }
+`

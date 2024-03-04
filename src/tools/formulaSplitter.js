@@ -7,6 +7,13 @@ export const splitFormula = (s) => {
     let splitedFormula = []
     let currentParenthesis = false
     let parenthesisBufer = []
+    let hidratat = 0
+
+    if (s.includes("·") || s.includes("*")) {
+        let dividedFormula = s.split((s.includes("·") ? "·" : "*"))
+        s = dividedFormula[0]
+        hidratat = parseInt(dividedFormula[1].slice(0, 2))
+    }
 
     for (let i in s) {
         if (s[i] === "(") {
@@ -57,7 +64,7 @@ export const splitFormula = (s) => {
         }
     }
     let processedFormula = addData(finalFormula)
-    return processedFormula
+    return [processedFormula, hidratat]
 }
 
 const addData = (formula, numOfMolecules = 1) => {
@@ -65,15 +72,16 @@ const addData = (formula, numOfMolecules = 1) => {
     let bufferDict = {}
     for (let i in formula) {
         if (!Array.isArray(formula[i][0])) {
+            bufferDict = {}
             bufferDict = Object.assign({}, data[formula[i][0]])
             bufferDict["letters"] = formula[i][0]
-            bufferDict["atomCount"] = formula[i][1] * numOfMolecules
+            bufferDict["atomCount"] = formula[i][1]
+            console.log("buffer dict", bufferDict)
             elements.push(bufferDict)
         } else {
             elements.push(addData(formula[i][0], formula[i][1]))
         }
     }
     elements.push({ "numOfMolecules": numOfMolecules })
-    console.log("elements", elements)
     return elements
 }

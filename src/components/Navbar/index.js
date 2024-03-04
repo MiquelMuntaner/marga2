@@ -1,8 +1,14 @@
-import React from 'react'
-import { NavbarContainer } from './styles'
+import React, { useEffect, useRef, useState } from 'react'
+import { NavbarContainer, ToggleDarkMode } from './styles'
 import { NavLink } from 'react-router-dom'
 
-export const Navbar = () => {
+export const Navbar = ({ setDarkMode }) => {
+    const checkboxRef = useRef()
+
+    const handleCheckboxChange = (e) => {
+        setDarkMode(checkboxRef.current.checked)
+    }
+
     return (
         <NavbarContainer>
             <div>
@@ -23,6 +29,15 @@ export const Navbar = () => {
                     <NavLink activeClassName="active" to="/exercicis">
                         Exercicis
                     </NavLink>
+                </li>
+                <li>
+                    <ToggleDarkMode
+                        className='light_theme'
+                        type='checkbox'
+                        ref={checkboxRef}
+                        onChange={handleCheckboxChange}
+                        defaultChecked={true}
+                    ></ToggleDarkMode>
                 </li>
             </ul>
         </NavbarContainer>

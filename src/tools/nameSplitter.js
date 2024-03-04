@@ -28,7 +28,6 @@ export const nameSplitter = (formulaName) => {
 
 
     // Eliminam els prefixos multiplicados i guardam l'informació per finalment inserir-le
-    console.log("plited", splitedName)
     const prefixos = ["mon", "di", "tri", "tetra", "penta", "hexa", "hepta", "octa", "nona", "deca"]
     let atomCountData = []
 
@@ -37,7 +36,6 @@ export const nameSplitter = (formulaName) => {
             if (splitedName[i].slice(0, prefixos[j].length) === prefixos[j]) {
                 atomCountData.push(parseInt(j) + 1)
                 splitedName[i] = splitedName[i].slice(prefixos[j].length)
-                console.log("slice", splitedName[i])
             }
         }
 

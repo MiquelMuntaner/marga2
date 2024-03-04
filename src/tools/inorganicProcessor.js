@@ -66,7 +66,6 @@ export const calcOxoacids = (formula) => {
 }
 
 export const calcOxosals = (formula) => {
-    console.log("formulaa", formula)
     let possibleAtomCountOxigen = []
     let possibleAtomCountHidrogen = []
     let possibleAtomCountHidrogenException = []
