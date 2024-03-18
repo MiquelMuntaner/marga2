@@ -11,6 +11,7 @@ export const NavbarContainer = styled.div`
     flex-direction: row;
     padding-top: 10px;
 
+
     & > div {
         min-height: 100%;
         display: flex;
@@ -74,6 +75,22 @@ export const NavbarContainer = styled.div`
 
     .active {
         color: #d3d3d3;
+    }
+
+    @media only screen and (max-width: 480px) {
+        margin: 0;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        & > ul {
+            padding: 0;
+        }
+
+        & > div {
+            display: none;
+        }
     }
 `
 

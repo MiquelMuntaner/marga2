@@ -5,7 +5,7 @@ import { SelectStudyButton } from '../../components/SelectStudyButton'
 import { InorganicaExercisePage } from '../../components/InorganicaExercisePage'
 import { FinishStudyModal } from '../../components/FinishStudyModal'
 
-export const ExercicisPage = () => {
+export const ExercicisPage = ({ setDarkMode }) => {
     const [screen, setScreen] = useState(1)
     const [showModal, setShowModal] = useState(false)
     const [correctQuestions, setCorrectQuestions] = useState([])
@@ -52,7 +52,7 @@ export const ExercicisPage = () => {
     }
 
     return (
-        <PageLayout>
+        <PageLayout setDarkMode={setDarkMode}>
             {showModal ? <FinishStudyModal setShowModal={setShowModal} onModalClick={onModalClick} /> : ""}
             {screen === 1 ?
                 <SelectStudySessionDiv>

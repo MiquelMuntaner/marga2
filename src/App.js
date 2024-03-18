@@ -35,9 +35,9 @@ function App() {
         <div className="App">
             <Routes>
                 <Route path='/' element={<InorganicaPage setDarkMode={setDarkMode} />} />
-                <Route path='/inorganica' element={<InorganicaPage />} setDarkMode={setDarkMode} />
-                <Route path='/organica' element={<OrganicaPage />} />
-                <Route path='/exercicis' element={<ExercicisPage />} />
+                <Route path='/inorganica' element={<InorganicaPage setDarkMode={setDarkMode} />} />
+                <Route path='/organica' element={<OrganicaPage setDarkMode={setDarkMode} />} />
+                <Route path='/exercicis' element={<ExercicisPage setDarkMode={setDarkMode} />} />
             </Routes>
         </div>
     );

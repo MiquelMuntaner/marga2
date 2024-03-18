@@ -171,21 +171,23 @@ export const Form = () => {
             setResult([finalHtmlText])
 
             let processedFormula = splitFormula(currentValue)
+            console.log("processed formula", processedFormula)
             let formulaWithoutParentheses = []
             let tempElement = {}
-            for (let i in processedFormula) {
-                if (Object.prototype.toString.call(processedFormula[i]) === '[object Array]') {
-                    for (let k in processedFormula[i]) {
-                        if (k !== processedFormula[i].length - 1) {
+            for (let i in processedFormula[0]) {
+                if (Array.isArray(processedFormula[0][i])) {
+                    for (let k in processedFormula[0][i]) {
+                        if (k !== processedFormula[0][i].length - 1) {
                             // No estic segur de perquè aixó funciona, pero multiplica es nombre de molecules per es nombre d'atoms
-                            tempElement = { ...processedFormula[i][k] }
+                            tempElement = { ...processedFormula[0][i][k] }
                             formulaWithoutParentheses.push(tempElement)
                         }
                     }
                 } else {
-                    formulaWithoutParentheses.push(processedFormula[i])
+                    formulaWithoutParentheses.push(processedFormula[0][i])
                 }
             }
+            console.log("sense parentesis", formulaWithoutParentheses)
             setFormulaSplitted(formulaWithoutParentheses)
 
             let massaMolar = calcMassaMolar(formulaWithoutParentheses)
@@ -384,7 +386,7 @@ export const Form = () => {
 
     return (
         <ContainerDiv>
-            <Header />
+            <Header subheader="Inorgànica" />
             <StyledForm id="form" onSubmit={handleSubmit} autocomplete="off" >
                 <label htmlFor="formula" className='form_label' id='inorganica_label' ref={labelRef}>{doFormula ? "Fórmula" : "Nom"}</label>
                 <img src="./assets/icono-rotar.png" alt="" onClick={handleImgClick} />
@@ -405,7 +407,7 @@ export const Form = () => {
                                 </div>
                                 <div>
                                     {formulaSplitted.map((i) => (
-                                        (i.molarMass !== undefined && i.letters !== "" ? <div><p>{i.letters}:</p><p>{i.molarMass}u</p></div> : "")
+                                        (i.molarMass !== undefined && i.letters !== "" ? <div><p>{i.letters}:</p><p>{i.molarMass}</p></div> : "")
                                     ))}
                                 </div>
                             </MoleculalMassDiv> : ""
