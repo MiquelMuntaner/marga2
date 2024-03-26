@@ -2,45 +2,72 @@ export const organicProcessor = (nom) => {
     let prefixes = ["met", "et", "prop", "but", "pent", "hex", "hept", "oct", "non", "dec", "undec", "dodec", "tridec", "tetradec", "pentadec", "hexadec", "heptadec", "octadec"]
 
     let buffer = ""
-    let tempNumber = 0
+    let tempNumber = []
     let tempPrefix = 0
     let tempPrefix1 = 0
+    // True if the last character was a coma
+    let coma = false
+    // True if the last character was a number
+    let lastNumber = false
     let outputData = [
         {
             "carbons": 0,
             "doubleBonds": [],
             "tripleBonds": []
-        }
+        },
+        []
     ]
 
     for (let i in nom) {
-        buffer += nom[i]
+        buffer += nom[i].replace("-", "")
 
-        console.log("tempPrefix", tempPrefix1)
-        console.log("replaced", buffer.replace("-", ""))
+        console.log("buffer", buffer)
         if (prefixes.includes(buffer)) {
-            console.log("prefixbuffer", prefixes.indexOf(buffer))
             tempPrefix1 = prefixes.indexOf(buffer) + 1
+            console.log("prefiix", tempPrefix)
+            lastNumber = false;
             buffer = ""
-        }
+        } else {
+            if (buffer == "à") {
+                outputData[0].carbons = tempPrefix1
+                lastNumber = false
+                buffer = ""
+            } else if (buffer == "è") {
+                outputData[0].carbons = tempPrefix1
+                outputData[0].doubleBonds = tempNumber == [] ? [1] : tempNumber
+                lastNumber = false
+                buffer = ""
+            } else if (buffer == "í") {
+                outputData[0].carbons = tempPrefix1
+                outputData[0].tripleBonds = tempNumber == [] ? [1] : tempNumber
+                lastNumber = false
+                buffer = ""
+            } else if (buffer == "il") {
+                outputData[1].push({
+                    "carbons": tempPrefix1,
+                    "position": tempNumber
+                })
+                tempPrefix1 = 0;
+                tempNumber = []
+                buffer = "";
+            } else if (buffer == ",") {
+                coma = true
+                lastNumber = false
+                buffer = ""
+            } else if (buffer.match(/^[0-9]+$/)) {
+                if (coma == false && lastNumber == true) {
+                    console.log("aquii")
+                    tempNumber[tempNumber.length] = parseInt(tempNumber[tempNumber.length].toString() + buffer)
 
-        if (tempPrefix != 0) {
-            if (buffer = "à") {
-                outputData[0].carbons = tempPrefix
-            } else if (buffer = "è") {
-                console.log("double", tempNumber)
-                outputData[0].carbons = tempPrefix
-                outputData[0].doubleBonds = [tempNumber == 0 ? 1 : tempNumber]
-            } else if (buffer = "í") {
-                outputData[0].carbons = tempPrefix
-                outputData[0].tripleBonds = [1]
-            } else if (buffer.charAt(buffer.length - 1) == "-" && buffer.replace("-", "").match(/^[0-9]+$/)) {
-                tempNumber = parseInt(buffer.replace("-", ""))
-                console.log("tempNumbeeer", tempNumber)
+                } else if (lastNumber == false) {
+                    tempNumber.push(parseInt(buffer))
+                    coma = false
+                }
+                lastNumber = true
                 buffer = ""
             }
         }
-
-        console.log(outputData)
     }
+    console.log(outputData)
+    return outputData
 }
