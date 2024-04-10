@@ -1,6 +1,7 @@
 import styled from "styled-components";
 
 export const NavbarContainer = styled.div`
+    overflow: hidden;
     margin: 0;
     padding: 0;
     font-weight: bold;
