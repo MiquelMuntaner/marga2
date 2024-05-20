@@ -1,13 +1,16 @@
 import styled from "styled-components"
 
 export const ContainerDiv = styled.div`
-    height: calc(100% - 79px);
+    height: calc(100% - 79px - 34px);
+    text-align: center;
     display: flex;
-    width: 50vw;
-    margin: 0 25% 10% 25%;
-    align-items: center;
-    justify-content: center;
     flex-direction: column;
+    align-items: center;
+    align-content: center;
+    gap: 0;
+    width: 50vw;
+    padding-top: 34px;
+    margin: 0 25% 10% 25%;
     color: white;
     font-weight: bold;
     font-size: 25px;
@@ -25,7 +28,6 @@ export const StyledForm = styled.form`
     position: relative;
     padding: 15px 0 0;
     margin-top: 10px;
-    margin-bottom: 138px;
     width: 100%;
     display: flex;
 
@@ -97,4 +99,13 @@ export const InputText = styled.input`
         font-weight: 700;
         padding-right: 2px;
     }
+`
+
+export const Canvas = styled.canvas`
+    transform: scale(0.4);
+    display: flex;
+    position: relative;
+    top: -324px;
+    padding: 0;
+    margin: 0;
 `

@@ -116,6 +116,7 @@ export const nameSplitter = (formulaName) => {
         "isSalAcida": isAcidicSalt,
     })
 
+    console.log(outputFormula)
     return outputFormula
 }
 
