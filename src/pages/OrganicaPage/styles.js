@@ -2,33 +2,64 @@ import styled from "styled-components"
 
 export const ContainerDiv = styled.div`
     height: calc(100% - 79px - 34px);
+    width: 100vw !important;
     text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    display: grid;
+    grid-template-columns: 12% 38% auto 432px 12%;
     align-content: center;
-    gap: 0;
+    justify-content: space-between;
     width: 50vw;
     padding-top: 34px;
-    margin: 0 25% 10% 25%;
     color: white;
     font-weight: bold;
     font-size: 25px;
     
     & > div {
-        width: 100%;
         color: white;
         font-size: 1.3rem;
-        text-align: left;
         margin-top: 15px;
     }
+
+    
+    & > div:nth-child(2) {
+        //width: 432px;
+        height: 432px;
+        grid-column-start: 4;
+        grid-column-end: 4;
+        margin: 0;
+    }
+
+    & > div:first-child > button {
+        width: 100px;
+        height: 40px;
+        border-radius: 0;
+        background-color: transparent;
+        border: 2px solid #9b9b9b;
+        color: #9b9b9b;
+    }
+
+    & > div:first-child > button:hover {
+        border-image-slice: 1;
+        border-image-source: linear-gradient(#11998e, #38ef7d);
+        color: rgba(255, 255, 255, 0.8);
+    }
+
+    & > div:first-child {
+        grid-column-start: 2;
+        grid-column-end:2;
+        align-items: flex-start;
+        text-align: left;
+    }
+    // SMILES
+    & > div:first-child > p {
+        margin: 15px 0 15px 0;
+    } 
 `
 
 export const StyledForm = styled.form`
     position: relative;
     padding: 15px 0 0;
     margin-top: 10px;
-    width: 100%;
     display: flex;
 
     & > label {
@@ -103,9 +134,11 @@ export const InputText = styled.input`
 
 export const Canvas = styled.canvas`
     transform: scale(0.4);
-    display: flex;
-    position: relative;
-    top: -324px;
+    -ms-transform: scale(0.4); 
+    -webkit-transform: scale(0.4);
+    transform-origin: top left;
+    display: block;
+    height: auto;
     padding: 0;
     margin: 0;
 `
