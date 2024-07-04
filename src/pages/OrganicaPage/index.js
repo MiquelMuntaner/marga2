@@ -5,6 +5,7 @@ import { Header } from '../../components/Header'
 import { organicProcessor } from '../../tools/organicProcessor'
 
 export const OrganicaPage = ({ setDarkMode }) => {
+    const [moleculeData, setMoleculeData] = useState("")
     const [SMILES, setSMILES] = useState("")
     const [inputValue, setInputValue] = useState("")
 
@@ -12,13 +13,15 @@ export const OrganicaPage = ({ setDarkMode }) => {
     // ADVERTENCIA: no modificar els valors per defecte sense entendre el funcionament del programa
 
     const STROKE = "black" // Estils de la línia
-    const LINE_WIDTH = 2 // Grossor de la línia
+    const LINE_WIDTH = 4 // Grossor de la línia
     let CANVAS  // Etiqueta de canvas
     let CTX // Context del canvas
     const DOUBLE_BOND_SPACING = 12 // Espai entra la línia princpial i la línia del doble enllaç (px)
-    const LINE_LENGTH = 100 // Longitud de la línia que representa els carbonis (px)
+    const LINE_LENGTH = 110 // Longitud de la línia que representa els carbonis (px)
     const DEFAULT_ANGLE = Math.PI / 5 // Angle per defecta entre les línies (menys en cas de raminificacions) (rad)
 
+
+    const [lineAngle, setLineAngle] = useState(DEFAULT_ANGLE)
 
     useEffect(() => {
         CANVAS = document.getElementById("mainOrganicCanvas")
@@ -31,6 +34,7 @@ export const OrganicaPage = ({ setDarkMode }) => {
         let result = organicProcessor(e.target[0].value)
 
         console.log(result)
+        setMoleculeData(result)
         drawMolecule(result)
         generateSMILES(result)
     }
@@ -71,7 +75,7 @@ export const OrganicaPage = ({ setDarkMode }) => {
         CTX.moveTo(x0, y0);
         CTX.lineTo(x1, y1);
         CTX.strokeStyle = STROKE;
-        CTX.LINE_WIDTH = LINE_WIDTH;
+        CTX.lineWidth = LINE_WIDTH;
         CTX.stroke();
     }
 
@@ -135,9 +139,11 @@ export const OrganicaPage = ({ setDarkMode }) => {
     const drawMolecule = (data) => {
 
         // CTX.clearRect(0, 0, 1080, 1080)
+        CANVAS = document.getElementById("mainOrganicCanvas")
+        CTX = CANVAS.getContext("2d")
         CTX.fillStyle = "white";
         CTX.fillRect(0, 0, CANVAS.width, CANVAS.height);
-        const TOTAL_LENGTH = Math.cos(DEFAULT_ANGLE) * 100 * (data[0].carbons - 1)
+        const TOTAL_LENGTH = Math.cos(lineAngle) * LINE_LENGTH * (data[0].carbons - 1)
         const CICLO_ANGLE = 2 * Math.PI / data[0].carbons
 
         //drawLine(540, 0, 540, 1080)
@@ -154,7 +160,7 @@ export const OrganicaPage = ({ setDarkMode }) => {
         }
 
         console.log(last_coordinates)
-        let angle = - DEFAULT_ANGLE
+        let angle = - lineAngle
         let ciclo_angle_acumulated = CICLO_ANGLE
 
         for (let i = 0; i < data[0].carbons - 1; i++) {
@@ -175,15 +181,15 @@ export const OrganicaPage = ({ setDarkMode }) => {
                 for (let j in data[1][k].position) {
 
                     if (data[1][k].position[j] - 2 === i) {
-                        let angle_ramificacio = (angle <= 0 ? -Math.PI / 2 + DEFAULT_ANGLE : Math.PI / 2 + DEFAULT_ANGLE) - ciclo_angle_acumulated
+                        let angle_ramificacio = (angle <= 0 ? -Math.PI / 2 + lineAngle : Math.PI / 2 + lineAngle)
                         let change_angle = true // Vertader si l'angle per defecta ha de ser invertit
 
                         // Dibuixam la primera línia verticalment i tening en compte cap a quina direcció
-                        let last_coordinates_ramificacio = drawCarbon(last_coordinates[0], last_coordinates[1], angle_ramificacio - DEFAULT_ANGLE)
+                        let last_coordinates_ramificacio = drawCarbon(last_coordinates[0], last_coordinates[1], angle_ramificacio - lineAngle)
 
                         for (let z = 1; z < data[1][k].carbons; z++) {
                             last_coordinates_ramificacio = drawCarbon(last_coordinates_ramificacio[0], last_coordinates_ramificacio[1], angle_ramificacio)
-                            angle_ramificacio = (change_angle != true ? DEFAULT_ANGLE : - DEFAULT_ANGLE) + (angle <= 0 ? -Math.PI / 2 : Math.PI / 2)
+                            angle_ramificacio = (change_angle != true ? lineAngle : - lineAngle) + (angle <= 0 ? -Math.PI / 2 : Math.PI / 2)
                             change_angle = !change_angle
                         }
                     }
@@ -191,7 +197,7 @@ export const OrganicaPage = ({ setDarkMode }) => {
             }
 
             ciclo_angle_acumulated += CICLO_ANGLE
-            angle = angle == DEFAULT_ANGLE ? - DEFAULT_ANGLE : DEFAULT_ANGLE
+            angle = angle == lineAngle ? - lineAngle : lineAngle
         }
 
         if (data[0].ciclo == true) {
@@ -202,10 +208,21 @@ export const OrganicaPage = ({ setDarkMode }) => {
     }
 
     const drawWaterMark = () => {
-        var text = "M. Muntaner"
+        var text = "Nocions.cat"
         CTX.font = "bold 35px Roboto"
         CTX.fillStyle = "#3A4B4C"
         CTX.fillText(text, 80, 1000)
+
+        /*
+        for (let i = 0; i < 1080; i += 220) {
+            for (let y = 0; y < 1080; y += 50) {
+                var text = "M. Muntaner"
+                CTX.font = "bold 35px Roboto"
+                CTX.fillStyle = "rgba(58, 75, 76, 0.5)"
+                CTX.fillText(text, i, y)
+            }
+        }
+        s*/
     }
 
     const downloadButtonPressed = () => {
@@ -214,6 +231,8 @@ export const OrganicaPage = ({ setDarkMode }) => {
         link.href = CANVAS.toDataURL()
         link.click();
     }
+
+
 
     return (
         <PageLayout setDarkMode={setDarkMode}>

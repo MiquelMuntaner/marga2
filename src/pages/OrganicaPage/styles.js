@@ -141,4 +141,5 @@ export const Canvas = styled.canvas`
     height: auto;
     padding: 0;
     margin: 0;
+    border-radius: 25px;
 `

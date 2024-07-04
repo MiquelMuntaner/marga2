@@ -74,6 +74,7 @@ export const calcOxosals = (formula) => {
     let valenceDivider = formula[0].atomCount
     const prefixos = ["", "di", "tri", "tetra", "penta", "hexa", "hepta", "octa", "nona", "deca"]
 
+    console.log("aquiii")
     // Verificam si hi ha més d'una molècula de l'anió oxoàcid,
     // en aquell cas revertim el procés que es du a terme en la funció de dividir la fórmula
     if (Object.prototype.toString.call(formula[1]) === '[object Array]') {
