@@ -81,14 +81,15 @@ export const calcOxosals = (formula) => {
         if (formula[1].length === 4) {
             valenceMultiplier = formula[1][3].numOfMolecules
             formula = [formula[0], formula[1][0], formula[1][1], formula[1][2], formula[2]]
-            formula[3].atomCount = formula[3].atomCount / valenceMultiplier
+            formula[3].atomCount = formula[3].atomCount
         } else {
             valenceMultiplier = formula[1][2].numOfMolecules
             formula = [formula[0], formula[1][0], formula[1][1]]
         }
-        formula[1].atomCount = formula[1].atomCount / valenceMultiplier
-        formula[2].atomCount = formula[2].atomCount / valenceMultiplier
+        formula[1].atomCount = formula[1].atomCount
+        formula[2].atomCount = formula[2].atomCount
     }
+    console.log("lengths", formula)
 
     let valenciesSenseNegatiu = formula[0].valences.map((x) => {
         if (x >= 0) { return x }
@@ -142,6 +143,7 @@ export const calcOxosals = (formula) => {
 
                 possibleAtomCountHidrogenException.push(atomCountException[0])
                 possibleAtomCountOxigenException.push(atomCountException[2])
+                console.log("oxigen", possibleAtomCountOxigenException)
             }
 
             possibleAtomCountHidrogen.push(atomCountNewOxoacid[0])
@@ -164,10 +166,13 @@ export const calcOxosals = (formula) => {
         } else {
             hidrogenAtomCount = possibleAtomCountHidrogenException[possibleAtomCountOxigenException.indexOf(usedFormula[2].atomCount)] * valenceMultiplier / valenceDivider
             oxoAcidName = usedFormula[1].oxoAcidNames[possibleAtomCountOxigenException.indexOf(usedFormula[2].atomCount)]
+            console.log("aquiiii alots")
         }
 
         hidrogenAtomCount = (formula.length === 5 ? hidrogenAtomCount - formula[1] : hidrogenAtomCount)
 
+        console.log("HOOOLAAA", usedFormula[2])
+        console.log("dos", possibleAtomCountOxigenException.indexOf(usedFormula[2].atomCount))
         oxoAcidName = oxoAcidName.replace("urós", "it")
         oxoAcidName = oxoAcidName.replace("uric", "at")
         oxoAcidName = oxoAcidName.replace("úros", "it")

@@ -94,6 +94,11 @@ export const OrganicaPage = ({ setDarkMode }) => {
 
         if (bond == 2 || bond == 3) {
 
+            if (angle > Math.PI * 1.5) {
+                angle = -(angle - Math.PI * 1.5)
+            } else if (angle > Math.PI) {
+                angle = -(angle - Math.PI)
+            }
             if (angle <= 0) {
                 var x2 = Math.cos(angle) * (LINE_LENGTH - 2 * DOUBLE_BOND_SPACING) + x0
                 var y2 = Math.sin(angle) * (LINE_LENGTH - 2 * DOUBLE_BOND_SPACING) + (y0 - temp_double_bond_spacing)
@@ -175,18 +180,25 @@ export const OrganicaPage = ({ setDarkMode }) => {
                 )
             )
 
+            console.log("angle", angle)
+
             // Cercant ramificacions, en cas de que n'hi hagi es dibuixa
             for (let k in data[1]) {
 
                 for (let j in data[1][k].position) {
+                    console.log("js", j)
 
                     if (data[1][k].position[j] - 2 === i) {
-                        let angle_ramificacio = (angle <= 0 ? -Math.PI / 2 + lineAngle : Math.PI / 2 + lineAngle)
-                        let change_angle = true // Vertader si l'angle per defecta ha de ser invertit
+                        let angle_ramificacio = (data[0].ciclo == true) ?
+                            (((2 * Math.PI / data[0].carbons) * (data[1][k].position[j] - 0.5)) - Math.PI / 2) : // Angle de la ramificació si és un cicle
+                            (angle <= 0 ? -Math.PI / 2 : Math.PI / 2) // Angle de la ramificiació si no és un cicle
 
-                        // Dibuixam la primera línia verticalment i tening en compte cap a quina direcció
-                        let last_coordinates_ramificacio = drawCarbon(last_coordinates[0], last_coordinates[1], angle_ramificacio - lineAngle)
+                        let change_angle = true // Vertader si l'angle per defecte ha de ser invertit
 
+                        // Dibuixam la primera línia verticalment i tenint en compte cap a quina direcció
+                        let last_coordinates_ramificacio = drawCarbon(last_coordinates[0], last_coordinates[1], angle_ramificacio)
+
+                        angle_ramificacio = angle_ramificacio + lineAngle
                         for (let z = 1; z < data[1][k].carbons; z++) {
                             last_coordinates_ramificacio = drawCarbon(last_coordinates_ramificacio[0], last_coordinates_ramificacio[1], angle_ramificacio)
                             angle_ramificacio = (change_angle != true ? lineAngle : - lineAngle) + (angle <= 0 ? -Math.PI / 2 : Math.PI / 2)
