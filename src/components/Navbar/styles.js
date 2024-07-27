@@ -12,6 +12,12 @@ export const NavbarContainer = styled.div`
     flex-direction: row;
     padding-top: 10px;
 
+    & > div > img {
+        width: 46px;
+        height: 46px;
+        margin-top: 7px;
+        margin-left: 40px;
+    }
 
     & > div {
         min-height: 100%;
@@ -20,16 +26,16 @@ export const NavbarContainer = styled.div`
     }
 
     & > div > p {
-        padding-left: 40px;
+        padding-left: 20px;
         font-weight: 1000;
         margin: 0;
-        font-size: 30px;
-        color: white;
+        font-size: 25px;
+        color: ${props => props.theme.text};
         opacity: 90%;
     }
 
     & > ul {
-        color: rgba(255, 255, 255, 0.75);
+        color: ${props => props.theme.text};
         margin: 0;
         padding: 0;
         padding-right: 40px;
@@ -47,7 +53,7 @@ export const NavbarContainer = styled.div`
     
     & > ul > li > a {
         position: relative;
-        color: white;
+        color: ${props => props.theme.text};
         display: block;
         padding: 20px 15px 20px 15px;
         transition: all 300ms;
@@ -62,12 +68,12 @@ export const NavbarContainer = styled.div`
         height: 3px;
         left: 0;
         bottom: 5px;
-        background-color: #38ef7d;
+        background-color: ${props => props.theme.secondary};
         transition: all 0.5s ease;
     }
 
     & > ul > li > a:hover {
-        color: #38ef7d;
+        color: ${props => props.theme.secondary};
     }
     
     & > ul > li > a:hover::after {

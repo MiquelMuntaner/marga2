@@ -8,18 +8,19 @@ export const OrganicaPage = ({ setDarkMode }) => {
     const [moleculeData, setMoleculeData] = useState("")
     const [SMILES, setSMILES] = useState("")
     const [inputValue, setInputValue] = useState("")
+    const [inputEmpty, setInputEmpty] = useState(true)
 
     // Definint constants
     // ADVERTENCIA: no modificar els valors per defecte sense entendre el funcionament del programa
 
-    const STROKE = "black" // Estils de la línia
+    let STROKE = "black" // Estils de la línia
     const LINE_WIDTH = 4 // Grossor de la línia
     let CANVAS  // Etiqueta de canvas
     let CTX // Context del canvas
     const DOUBLE_BOND_SPACING = 12 // Espai entra la línia princpial i la línia del doble enllaç (px)
     const LINE_LENGTH = 110 // Longitud de la línia que representa els carbonis (px)
     const DEFAULT_ANGLE = Math.PI / 5 // Angle per defecta entre les línies (menys en cas de raminificacions) (rad)
-
+    const PLACEHOLDER = "2,3-dimetilpent-2-è"
 
     const [lineAngle, setLineAngle] = useState(DEFAULT_ANGLE)
 
@@ -27,6 +28,20 @@ export const OrganicaPage = ({ setDarkMode }) => {
         CANVAS = document.getElementById("mainOrganicCanvas")
         CTX = CANVAS.getContext("2d")
     }, [SMILES])
+
+    // Loading placeholder
+    useEffect(() => {
+        setInputValue(PLACEHOLDER)
+        let result = organicProcessor(PLACEHOLDER)
+
+        STROKE = "#d3d3d3"
+
+        console.log(result)
+        setMoleculeData(result)
+        drawMolecule(result)
+
+        STROKE = "black"
+    }, [])
 
     const handleSubmit = (e) => {
         e.preventDefault()
@@ -223,7 +238,14 @@ export const OrganicaPage = ({ setDarkMode }) => {
         var text = "Nocions.cat"
         CTX.font = "bold 35px Roboto"
         CTX.fillStyle = "#3A4B4C"
-        CTX.fillText(text, 80, 1000)
+        CTX.fillText(text, 200, 1000)
+
+        const logoImg = new Image()
+
+        logoImg.addEventListener("load", () => {
+            CTX.drawImage(logoImg, 80, 930, 100, 100)
+        })
+        logoImg.src = "./assets/logo.png"
 
         /*
         for (let i = 0; i < 1080; i += 220) {
@@ -237,6 +259,7 @@ export const OrganicaPage = ({ setDarkMode }) => {
         s*/
     }
 
+
     const downloadButtonPressed = () => {
         var link = document.createElement('a');
         link.download = `${inputValue}.png`;
@@ -244,16 +267,25 @@ export const OrganicaPage = ({ setDarkMode }) => {
         link.click();
     }
 
+    const handleInputChange = (e) => {
+        console.log(e.target.value)
+        setInputValue(e.target.value)
+        if (e.target.value.length === 0) {
+            setInputEmpty(true)
+        } else {
+            setInputEmpty(false)
+        }
+    }
 
-
+    console.log(inputEmpty)
     return (
         <PageLayout setDarkMode={setDarkMode}>
             <ContainerDiv>
                 <div>
                     <Header subheader="Orgànica" />
-                    <StyledForm onSubmit={handleSubmit}>
+                    <StyledForm empty={inputEmpty} data-text={inputValue} onSubmit={handleSubmit}>
                         <label htmlFor="formula" className='form_label' id='inorganica_label'>Nom</label>
-                        <InputText type="text" />
+                        <InputText type="text" onChange={handleInputChange} placeholder={"2,3-dimetilpent-2-è"} />
                         <input type="submit" value="Executar"></input>
                     </StyledForm>
                     {SMILES !== "" ?

@@ -4,9 +4,18 @@ import { InorganicaPage } from './pages/InorganicaPage';
 import { OrganicaPage } from './pages/OrganicaPage';
 import { ExercicisPage } from './pages/ExercicisPage';
 import { useEffect, useState } from 'react';
+import { ThemeProvider } from 'styled-components';
 
 function App() {
     const [darkMode, setDarkMode] = useState(true)
+
+    const theme = {
+        bg: "white",
+        text: "#333333",
+        // main: "#3E0F4A",
+        main: "#3E0F4A",
+        secondary: "#007972"
+    }
 
     useEffect(() => {
         if (!darkMode) {
@@ -33,12 +42,14 @@ function App() {
 
     return (
         <div className="App">
-            <Routes>
-                <Route path='/' element={<InorganicaPage setDarkMode={setDarkMode} />} />
-                <Route path='/inorganica' element={<InorganicaPage setDarkMode={setDarkMode} />} />
-                <Route path='/organica' element={<OrganicaPage setDarkMode={setDarkMode} />} />
-                <Route path='/exercicis' element={<ExercicisPage setDarkMode={setDarkMode} />} />
-            </Routes>
+            <ThemeProvider theme={theme}>
+                <Routes>
+                    <Route path='/' element={<InorganicaPage setDarkMode={setDarkMode} />} />
+                    <Route path='/inorganica' element={<InorganicaPage setDarkMode={setDarkMode} />} />
+                    <Route path='/organica' element={<OrganicaPage setDarkMode={setDarkMode} />} />
+                    <Route path='/exercicis' element={<ExercicisPage setDarkMode={setDarkMode} />} />
+                </Routes>
+            </ThemeProvider>
         </div>
     );
 }

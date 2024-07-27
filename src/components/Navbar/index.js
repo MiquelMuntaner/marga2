@@ -12,7 +12,7 @@ export const Navbar = ({ setDarkMode }) => {
     return (
         <NavbarContainer>
             <div>
-                <p>N</p>
+                <img src="./assets/logo.png" alt="" />
             </div>
             <ul>
                 <li>
@@ -30,7 +30,7 @@ export const Navbar = ({ setDarkMode }) => {
                         Exercicis
                     </NavLink>
                 </li>
-                <li>
+                {/*<li>
                     <ToggleDarkMode
                         className='light_theme'
                         type='checkbox'
@@ -38,7 +38,7 @@ export const Navbar = ({ setDarkMode }) => {
                         onChange={handleCheckboxChange}
                         defaultChecked={true}
                     ></ToggleDarkMode>
-                </li>
+                </li>*/}
             </ul>
         </NavbarContainer>
     )

@@ -16,7 +16,6 @@ export const ContainerDiv = styled.div`
 
     & > div {
         width: 100%;
-        color: white;
         font-size: 1.3rem;
         text-align: left;
         margin-top: 15px;
@@ -25,7 +24,8 @@ export const ContainerDiv = styled.div`
     & > div:nth-last-child(1) {
         display: flex;
         align-items: center;
-        padding-bottom: 69px;
+        //padding-bottom: 69px;
+        padding-bottom: 140px;
         position: relative;
     }
 
@@ -59,7 +59,8 @@ export const StyledForm = styled.form`
     }
 
     & > img:hover {
-        filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(76deg) brightness(107%) contrast(100%);
+        // filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(76deg) brightness(107%) contrast(100%);
+        filter: invert(39%) sepia(80%) saturate(7456%) hue-rotate(166deg) brightness(88%) contrast(102%);
         cursor: pointer;
     }
 
@@ -67,24 +68,27 @@ export const StyledForm = styled.form`
         position: absolute;
         top: 0;
         display: block;
-        transition: 0.2s;
+        transition: all 0.2s;
         font-size: 1.15rem;
         color: #9b9b9b;
     }
 
     & > input[type="submit"] {
         margin-left: 20px;
-        width: 100px;
-        border-radius: 0;
-        background-color: transparent;
-        border: 2px solid #9b9b9b;
-        color: #9b9b9b;
+        width: 120px;
+        height: 100%;
+        border-radius: 25px;
+        background-color: ${props => props.theme.main};
+        color: white;
+        font-weight: bold;
+        border: none;
+        transition: all 300ms;
     }
 
     & > input[type="submit"]:hover {
         border-image-slice: 1;
         border-image-source: linear-gradient(#11998e, #38ef7d);
-        color: rgba(255, 255, 255, 0.8);
+        background-color: ${props => props.theme.secondary};
     }
 `
 
@@ -112,8 +116,8 @@ export const QuestionMarkButton = styled.button`
     user-select: none;
 
     &:hover {
-        color: white;
-        border-color: white;
+        color: ${props => props.theme.text};
+        border-color: ${props => props.theme.text};
         cursor: pointer;
     }
 `

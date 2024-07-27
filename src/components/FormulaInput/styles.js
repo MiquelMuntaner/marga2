@@ -20,6 +20,7 @@ export const InputText = styled.input`
     padding: 7px 0;
     background: transparent;
     transition: border-color 0.2s;
+    transition: font-weight 300ms;
 
     &::placeholder {
         color: transparent;
@@ -38,7 +39,8 @@ export const InputText = styled.input`
             display: block;
             transition: 0.2s;
             font-size: 1rem;
-            color: #11998e;
+            // color: #11998e;
+            color: ${props => props.theme.text};
             font-weight:700;    
         }
         
@@ -46,8 +48,7 @@ export const InputText = styled.input`
         padding-bottom: 6px;  
         font-weight: 700;
         border-width: 3px;
-        border-image: linear-gradient(to right, #11998e, #38ef7d);
-        border-image-slice: 1;
+        border-color: ${props => props.theme.secondary};
     }
     &:focus + .topText {
         font-weight: 700;
@@ -60,13 +61,14 @@ export const TopText = styled.div`
     display: flex;
     top: 22px;
     font-size: 1.3rem;
-    color: #fff;
+    color: ${props => props.theme.text};
 `
 
 export const TextCursor = styled.div`
-    height: 24px;
+    height: 20px;
     width: 1px;
-    background-color: white;
+    background-color: ${props => props.theme.text};
+    color: ${props => props.theme.text};
     margin: 0px 0px 3px 1px;
     transition: none;
     animation: textCursorAnimation 1s linear(1, 1) infinite;
@@ -74,9 +76,9 @@ export const TextCursor = styled.div`
     animation-iteration-count: infinite;
 
     @keyframes textCursorAnimation {
-        0% {background-color: white}
+        0% {background-color: ${props => props.theme.text}}
         50% {background-color: transparent}
-        100% {background-color: white}
+        100% {background-color: ${props => props.theme.text}}
     }
 `
 
@@ -85,6 +87,6 @@ export const Placeholder = styled.div`
     display: block;
     top: 22px;
     font-size: 1.3rem;
-    color: #fff;
+    color: #9b9b9b;
     opacity: 30%;
 `

@@ -1,7 +1,7 @@
 import styled from "styled-components"
 
 export const ContainerDiv = styled.div`
-    height: calc(100% - 79px - 34px);
+    height: calc(100% - 70px - 70px);
     width: 100vw !important;
     text-align: center;
     display: grid;
@@ -9,11 +9,17 @@ export const ContainerDiv = styled.div`
     align-content: center;
     justify-content: space-between;
     width: 50vw;
-    padding-top: 34px;
     color: white;
     font-weight: bold;
     font-size: 25px;
+    margin-bottom: 70px;
     
+    @media only screen and (max-width: 480px) {
+        display: flex;
+        flex-direction: column;
+        padding: 0 10% 0 10%;
+    }
+
     & > div {
         color: white;
         font-size: 1.3rem;
@@ -30,18 +36,18 @@ export const ContainerDiv = styled.div`
     }
 
     & > div:first-child > button {
-        width: 100px;
+        width: 120px;
         height: 40px;
-        border-radius: 0;
-        background-color: transparent;
-        border: 2px solid #9b9b9b;
-        color: #9b9b9b;
+        border-radius: 25px;
+        background-color: ${props => props.theme.main};
+        color: white;
+        font-weight: bold;
+        border: none;
+        transition: all 300ms;
     }
 
     & > div:first-child > button:hover {
-        border-image-slice: 1;
-        border-image-source: linear-gradient(#11998e, #38ef7d);
-        color: rgba(255, 255, 255, 0.8);
+        background-color: ${props => props.theme.secondary};
     }
 
     & > div:first-child {
@@ -53,6 +59,7 @@ export const ContainerDiv = styled.div`
     // SMILES
     & > div:first-child > p {
         margin: 15px 0 15px 0;
+        color: ${props => props.theme.text};
     } 
 `
 
@@ -73,17 +80,30 @@ export const StyledForm = styled.form`
 
     & > input[type="submit"] {
         margin-left: 20px;
-        width: 100px;
-        border-radius: 0;
-        background-color: transparent;
-        border: 2px solid #9b9b9b;
-        color: #9b9b9b;
+        width: 120px;
+        height: auto;
+        border-radius: 25px;
+        background-color: ${props => props.theme.main};
+        color: white;
+        font-weight: bold;
+        border: none;
+        transition: all 300ms;
     }
 
     & > input[type="submit"]:hover {
-        border-image-slice: 1;
-        border-image-source: linear-gradient(#11998e, #38ef7d);
-        color: rgba(255, 255, 255, 0.8);
+        background-color: ${props => props.theme.secondary};
+    }
+    &::before {
+        position: absolute;
+        bottom: 10px;
+        font-weight: normal;
+        color: black;
+        content: ${props => props.empty ? "" : "attr(data-text)"};
+        transition: all 200ms;
+    }
+
+    &:focus-within::before {
+        color: transparent;
     }
 `
 
@@ -104,9 +124,26 @@ export const InputText = styled.input`
     outline: 0;
     font-size: 1.3rem;
     padding: 7px 0;
+    font-weight: 700;
     background: transparent;
-    color: white;
+    // color: ${props => props.theme.text};
+    color: transparent;
     transition: border-color 0.2s;
+    transition: color 300ms;
+    margin-bottom: 2px;
+
+    
+
+    &::placeholder {
+        font-weight: normal;
+        color: #d3d3d3;
+        opacity: 1;
+    }
+
+    &::-ms-input-placeholder { /* Edge 12 -18 */
+        font-weight: normal;
+        color: #d3d3d3;
+    }
 
     &:focus {
         .form_label {
@@ -119,16 +156,10 @@ export const InputText = styled.input`
             font-weight:700;    
         }
         
-        
-        padding-bottom: 6px;  
-        font-weight: 700;
-        border-width: 3px;
-        border-image: linear-gradient(to right, #11998e, #38ef7d);
-        border-image-slice: 1;
-    }
-    &:focus {
-        font-weight: 700;
-        padding-right: 2px;
+        color: ${props => props.theme.text};
+        border-width: 4px;
+        margin-bottom: 0px;
+        border-color: ${props => props.theme.secondary};
     }
 `
 
@@ -141,5 +172,14 @@ export const Canvas = styled.canvas`
     height: auto;
     padding: 0;
     margin: 0;
-    border-radius: 25px;
+    border-radius: 50px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+    //border: 1px solid #333333;
+
+    @media only screen and (max-width: 480px) {
+        transform: scale(0.25);
+        -ms-transform: scale(0.25); 
+        -webkit-transform: scale(0.25);
+        transform-origin: top left;
+    }
 `

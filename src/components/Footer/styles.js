@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const FooterDiv = styled.div`
-    color: white;
+    color: ${props => props.theme.text};
     width: 100%;
     display: flex;
     justify-content: space-between;

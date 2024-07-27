@@ -8,13 +8,14 @@ export const FormulaInput = ({ labelRef, doFormula, inputText }) => {
 
     const onFocus = () => {
         window.addEventListener("click", onClick)
-        labelRef.current.style.color = "white"
+        labelRef.current.style.color = "black"
         setFocused(true)
         setTimeout(function () {
             let inputLength = inputText.current.value.length
             inputText.current.setSelectionRange(inputLength, inputLength)
         }, 1);
     }
+    console.log(focused)
 
     const onBlur = () => {
         window.addEventListener("click", onClick)
