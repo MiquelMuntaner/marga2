@@ -40,6 +40,10 @@ export const ContainerDiv = styled.div`
     }
 `
 
+export const FlexContainer = styled.div`
+    display: flex;
+`
+
 export const StyledForm = styled.form`
     position: relative;
     padding: 15px 0 0;
@@ -77,7 +81,7 @@ export const StyledForm = styled.form`
         margin-left: 20px;
         width: 120px;
         height: 100%;
-        border-radius: 25px;
+        border-radius: 10px;
         background-color: ${props => props.theme.main};
         color: white;
         font-weight: bold;
