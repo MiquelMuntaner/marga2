@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react'
 import { exceptions } from '../../data'
-import { ContainerDiv, MoleculalMassDiv, QuestionMarkButton, StyledForm, TempResult } from './styles'
+import { Add, ContainerDiv, FlexContainer, InstructionsDiv, MoleculalMassDiv, QuestionMarkButton, StyledForm, TempResult } from './styles'
 import parse from 'html-react-parser'
 import { splitFormula } from '../../tools/formulaSplitter'
 import { FormulaInput } from '../FormulaInput'
@@ -22,6 +22,7 @@ export const Form = () => {
     const [formulaSplitted, setFormulaSplitted] = useState([])
     const [showMolecularMassDiv, setShowMolecularMassDiv] = useState(false)
     const [typeOfFormula, setTypeOfFormula] = useState("")
+    const [instructions, setInstructions] = useState([])
     const inputText = useRef()
     const labelRef = useRef()
 
@@ -35,10 +36,15 @@ export const Form = () => {
         inputText.current.value = ""
     }
 
+    const addInstructions = (newInstruction) => {
+        setInstructions(instructions => [...instructions, newInstruction])
+    }
+
     const handleSubmit = (e) => {
         e.preventDefault()
-
         setShowMolecularMassDiv(false)
+
+        setInstructions([])
 
         if (doFormula && e.target[0].value !== "") {
             setResult([])
@@ -70,18 +76,19 @@ export const Form = () => {
                 // Excepcions
                 resultValue = exceptions[e.target[0].value]
                 setResult([exceptions[e.target[0].value]])
+                addInstructions(`<b>${e.target[0].value}</b> es tracta d'una <b>excepció</b>, tot i que es podria formular de manera estàndard, habitualment es denomina simplement <b>"${exceptions[e.target[0].value]}"</b>`)
                 setTypeOfFormula("Excepció")
 
             } else if (formulaWithoutParentheses.length == 2) {
                 // Entitat homoatòmica
-                resultValue = calcEntitatHomoatomica(processedFormula)
-                setResult([calcEntitatHomoatomica(processedFormula)])
+                resultValue = calcEntitatHomoatomica(processedFormula, addInstructions)
+                setResult([resultValue])
                 setTypeOfFormula("Entitat homoatòmica, només conte un àtom")
 
             } else if (e.target[0].value.includes("OH")) {
                 // Hidroxids
-                resultValue = calcHidroxids(processedFormula)
-                setResult([calcHidroxids(processedFormula)])
+                resultValue = calcHidroxids(processedFormula, addInstructions)
+                setResult([resultValue])
                 setTypeOfFormula("Hidròxid (la nomenclatura preferent és la dels nombres d'oxidació)")
 
             } else if (formulaWithoutParentheses[1].letters == "H" && formulaWithoutParentheses[3]?.letters == "O") {
@@ -104,8 +111,8 @@ export const Form = () => {
 
             } else if ((processedFormula[0].isMetall === true && processedFormula[1].isMetall === false)) {
                 // Sals binaries, no metall + metall
-                resultValue = calcNombreOxidacio(processedFormula, e.target[0].value)
-                setResult([calcNombreOxidacio(processedFormula, e.target[0].value)])
+                resultValue = calcNombreOxidacio(processedFormula, addInstructions)
+                setResult([resultValue])
                 setTypeOfFormula("Sal binària (la nomenclatura preferent és la dels nombres d'oxidació)")
 
             } else if ((processedFormula[0].name === "hidrogen" && processedFormula[1].isMetall === false)) {
@@ -117,8 +124,8 @@ export const Form = () => {
             } else if (processedFormula[0].isMetall === false && processedFormula[1].isMetall === false) {
                 // Combinacions de no metalls
                 // setResult([`Prefixos: ${calcPrefixosMultiplicadors(processedFormula)}`, `Stock: ${calcNombreOxidacio(processedFormula)}`])
-                resultValue = calcPrefixosMultiplicadors(processedFormula)
-                setResult([calcPrefixosMultiplicadors(processedFormula)])
+                resultValue = calcPrefixosMultiplicadors(processedFormula, addInstructions)
+                setResult([resultValue])
                 setTypeOfFormula("Combinació entre no-metalls (la nomenclatura preferent és la dels prefixos multiplicadors)")
             }
 
@@ -385,36 +392,46 @@ export const Form = () => {
     }
 
     return (
-        <ContainerDiv>
-            <Header subheader="Inorgànica" />
-            <StyledForm id="form" onSubmit={handleSubmit} autocomplete="off" >
-                <label htmlFor="formula" className='form_label' id='inorganica_label' ref={labelRef}>{doFormula ? "Fórmula" : "Nom"}</label>
-                <img src="./assets/icono-rotar.png" alt="" onClick={handleImgClick} />
-                <FormulaInput labelRef={labelRef} doFormula={doFormula} inputText={inputText} />
-                <input type="submit" value="Executar"></input>
-            </StyledForm>
-            {result.length === 0 ? (<TempResult />) : result.map((i, key) => (<div key={key}>Resultat:&nbsp;<span>{parse(i.charAt(0).toUpperCase() + i.slice(1))}</span></div>))}
-            {typeOfFormula !== "" ? <div>Tipus:&nbsp;<span>{typeOfFormula}</span></div> : ""}
-            {
-                molarMass !== 0 ?
-                    <div>
-                        Massa molar:&nbsp; <span>{molarMass.toString().replace(".", ",")}</span>
-                        <QuestionMarkButton onClick={handleQuestionMarkButtonClick}>?</QuestionMarkButton>
-                        {showMolecularMassDiv ?
-                            <MoleculalMassDiv>
-                                <div>
-                                    <div />
-                                </div>
-                                <div>
-                                    {formulaSplitted.map((i) => (
-                                        (i.molarMass !== undefined && i.letters !== "" ? <div><p>{i.letters}:</p><p>{i.molarMass}</p></div> : "")
-                                    ))}
-                                </div>
-                            </MoleculalMassDiv> : ""
-                        }
-                    </div>
-                    : ""
-            }
-        </ContainerDiv>
+        <FlexContainer>
+            <ContainerDiv>
+                <Header subheader="Inorgànica" />
+                <StyledForm id="form" onSubmit={handleSubmit} autocomplete="off" >
+                    <label htmlFor="formula" className='form_label' id='inorganica_label' ref={labelRef}>{doFormula ? "Fórmula" : "Nom"}</label>
+                    <img src="./assets/icono-rotar.png" alt="" onClick={handleImgClick} />
+                    <FormulaInput labelRef={labelRef} doFormula={doFormula} inputText={inputText} />
+                    <input type="submit" value="Executar"></input>
+                </StyledForm>
+                {result.length === 0 ? (<TempResult />) : result.map((i, key) => (<div key={key}>Resultat:&nbsp;<span>{parse(i.charAt(0).toUpperCase() + i.slice(1))}</span></div>))}
+                {typeOfFormula !== "" ? <div>Tipus:&nbsp;<span>{typeOfFormula}</span></div> : ""}
+                {
+                    molarMass !== 0 ?
+                        <div>
+                            Massa molar:&nbsp; <span>{molarMass.toString().replace(".", ",")}</span>
+                            <QuestionMarkButton onClick={handleQuestionMarkButtonClick}>?</QuestionMarkButton>
+                            {showMolecularMassDiv ?
+                                <MoleculalMassDiv>
+                                    <div>
+                                        <div />
+                                    </div>
+                                    <div>
+                                        {formulaSplitted.map((i) => (
+                                            (i.molarMass !== undefined && i.letters !== "" ? <div><p>{i.letters}:</p><p>{i.molarMass}</p></div> : "")
+                                        ))}
+                                    </div>
+                                </MoleculalMassDiv> : ""
+                            }
+                        </div>
+                        : ""
+                }
+            </ContainerDiv>
+            <InstructionsDiv>
+                <ol>
+                    <p>Procediment</p>
+                    {instructions.map(function (content, i) {
+                        return <li key={i} dangerouslySetInnerHTML={{ __html: content }}></li>
+                    })}
+                </ol>
+            </InstructionsDiv>
+        </FlexContainer>
     )
 }

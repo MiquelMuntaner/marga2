@@ -36,7 +36,6 @@ export const OrganicaPage = ({ setDarkMode }) => {
 
         STROKE = "#d3d3d3"
 
-        console.log(result)
         setMoleculeData(result)
         drawMolecule(result)
 
@@ -48,7 +47,6 @@ export const OrganicaPage = ({ setDarkMode }) => {
         setInputValue(e.target[0].value)
         let result = organicProcessor(e.target[0].value)
 
-        console.log(result)
         setMoleculeData(result)
         drawMolecule(result)
         generateSMILES(result)
@@ -94,7 +92,7 @@ export const OrganicaPage = ({ setDarkMode }) => {
         CTX.stroke();
     }
 
-    const drawCarbon = (x0, y0, angle, bond = 1) => {
+    const drawCarbon = (x0, y0, angle, bond = 1, ciclo_angle = 0) => {
         let temp_double_bond_spacing = DOUBLE_BOND_SPACING
 
         if (angle >= 0) {
@@ -109,6 +107,7 @@ export const OrganicaPage = ({ setDarkMode }) => {
 
         if (bond == 2 || bond == 3) {
 
+            /*
             if (angle > Math.PI * 1.5) {
                 angle = -(angle - Math.PI * 1.5)
             } else if (angle > Math.PI) {
@@ -124,8 +123,46 @@ export const OrganicaPage = ({ setDarkMode }) => {
 
             let bondx0 = x0 + (angle >= 0 ? temp_double_bond_spacing : 0)
             let bondy0 = y0 - (angle <= 0 ? temp_double_bond_spacing : 0)
-            drawLine(bondx0, bondy0, x2, y2)
+
+            */
+
+            let boundx0, boundy0, boundx1, boundy1 = 0
+
+            if (ciclo_angle !== 0) {
+
+                const k = Math.round(2 * Math.PI / ciclo_angle); let increment = 0.3; let a = 0; for (let i = 0; i <= k; i++) {
+                    a = (i > 4 ? a + increment : a)
+                    increment = (i >= 5 ? increment - 0.1 : increment)
+                }
+
+                const EPSILON = ciclo_angle / 2
+                const H = DOUBLE_BOND_SPACING / Math.sin(EPSILON)
+                const MU = 2 * Math.PI - angle - EPSILON - a
+
+                boundx0 = x0 + Math.cos(MU) * H
+                boundy0 = y0 - Math.sin(MU) * H
+
+                boundx1 = x1 + Math.cos(MU - ciclo_angle) * H
+                boundy1 = y1 - Math.sin(MU - ciclo_angle) * H
+
+            } else if (angle > 0 && angle < Math.PI / 2) {
+                boundx0 = x0
+                boundy0 = y0 + DOUBLE_BOND_SPACING / Math.sin(Math.PI / 2 - angle)
+
+                boundx1 = x1 - DOUBLE_BOND_SPACING / Math.sin(angle)
+                boundy1 = y1
+            } else if (angle > Math.PI / 2 && angle < Math.PI) {
+                boundx0 = x0 - DOUBLE_BOND_SPACING / Math.sin(Math.PI - angle)
+                boundy0 = y0
+
+                boundx1 = x1
+                boundy1 = y1 + DOUBLE_BOND_SPACING / Math.sin(Math.PI / 2 - angle)
+            }
+
+            // drawLine(bondx0, bondy0, x2, y2)
+            drawLine(boundx0, boundy0, boundx1, boundy1)
         }
+
 
         if (bond == 3) {
 
@@ -135,10 +172,7 @@ export const OrganicaPage = ({ setDarkMode }) => {
                 temp_double_bond_spacing = DOUBLE_BOND_SPACING
             }
 
-            console.log(angle)
-            console.log(temp_double_bond_spacing)
             if (angle <= 0) {
-                console.log("aqui")
                 var x2 = x1
                 //var y2 = Math.sin(angle) * (LINE_LENGTH - 2 * DOUBLE_BOND_SPACING) + (y0 - temp_double_bond_spacing)
                 var y2 = y1 - Math.tan(angle) * temp_double_bond_spacing
@@ -156,6 +190,31 @@ export const OrganicaPage = ({ setDarkMode }) => {
         return [x1, y1]
     }
 
+    const drawText = (x, y, text) => {
+
+        // Drawing white rectangle
+        const PADDING_X = 10
+        const PADDING_Y = 10
+        let textWidth = CTX.measureText(text).width
+        let textHeight = CTX.measureText(text).actualBoundingBoxAscent + CTX.measureText(text).actualBoundingBoxDescent
+
+
+        let x0 = x - textWidth / 2 - PADDING_X
+        let y0 = y - textHeight / 2 - PADDING_Y
+        let rectangle_width = textWidth + 2 * PADDING_X
+        let rectangle_height = textHeight + 2 * PADDING_Y
+        console.log("x: ", x, "y: ", y)
+        console.log("x0: ", x0, "y0: ", y0)
+
+        CTX.fillStyle = 'white'
+        CTX.fillRect(x0, y0, rectangle_width, rectangle_height)
+
+        // Drawing text
+        CTX.font = "bold 35px Roboto"
+        CTX.fillStyle = "black"
+        console.log("measure", CTX.measureText(text))
+        CTX.fillText(text, x - textWidth / 2, y + textHeight / 2)
+    }
     const drawMolecule = (data) => {
 
         // CTX.clearRect(0, 0, 1080, 1080)
@@ -164,24 +223,28 @@ export const OrganicaPage = ({ setDarkMode }) => {
         CTX.fillStyle = "white";
         CTX.fillRect(0, 0, CANVAS.width, CANVAS.height);
         const TOTAL_LENGTH = Math.cos(lineAngle) * LINE_LENGTH * (data[0].carbons - 1)
-        const CICLO_ANGLE = 2 * Math.PI / data[0].carbons
+        const CICLO_ANGLE = (2 * Math.PI) / data[0].carbons
 
         //drawLine(540, 0, 540, 1080)
         //drawLine(0, 540, 1080, 540)
 
         let last_coordinates = [CANVAS.width / 2 - TOTAL_LENGTH / 2, CANVAS.height / 2]
+
         if (data[0].ciclo == true) {
-            let rad_circumcicle = (LINE_LENGTH / (2 * Math.sin(Math.PI / (data[0].carbons - 1))))
-            console.log(rad_circumcicle)
-            last_coordinates = [
+            let rad_circumcicle = (LINE_LENGTH / (2 * Math.sin(Math.PI / (data[0].carbons))))
+            /*last_coordinates = [
                 (CANVAS.width / 2) + LINE_LENGTH / 2,
+                (CANVAS.height / 2) - rad_circumcicle
+                ]*/
+            last_coordinates = [
+                (CANVAS.width / 2),
                 (CANVAS.height / 2) - rad_circumcicle
             ]
         }
 
-        console.log(last_coordinates)
+        let all_coordinates = [last_coordinates]
         let angle = - lineAngle
-        let ciclo_angle_acumulated = CICLO_ANGLE
+        let ciclo_angle_acumulated = Math.PI / 2 - CICLO_ANGLE
 
         for (let i = 0; i < data[0].carbons - 1; i++) {
 
@@ -190,22 +253,77 @@ export const OrganicaPage = ({ setDarkMode }) => {
             }
 
             last_coordinates = drawCarbon(last_coordinates[0], last_coordinates[1], angle,
-                data[0].doubleBonds.includes(i + 1) ? 2 : (
+                (data[0].doubleBonds.includes(i + 1) ? 2 : (
                     data[0].tripleBonds.includes(i + 1) ? 3 : null
-                )
+                )),
+                (data[0].ciclo == true ? CICLO_ANGLE : 0)
             )
 
-            console.log("angle", angle)
-
             // Cercant ramificacions, en cas de que n'hi hagi es dibuixa
-            for (let k in data[1]) {
+            console.log(data[0])
 
+            // Hidrocarburs halogenats
+
+            for (let element in data[0].extra) {
+                console.log("extra", data[0].extra[element])
+                if (data[0].extra[element][1] == i + 2) {
+                    let angle_ramificacio = (data[0].ciclo == true) ?
+                        ciclo_angle_acumulated - CICLO_ANGLE : // Angle de la ramificació si és un cicle
+                        (angle <= 0 ? -Math.PI / 2 : Math.PI / 2) // Angle de la ramificiació si no és un cicle
+                    if (i == 0 && data[0].ciclo == false) {
+                        angle_ramificacio = Math.PI / 2 - angle
+                    }
+                    console.log("drawing")
+                    let extra_coord = drawCarbon(last_coordinates[0], last_coordinates[1], angle_ramificacio)
+                    drawText(extra_coord[0], extra_coord[1], data[0].extra[element][0])
+                }
+            }
+
+            console.log("iii", i)
+            if (data[0].fluor.includes(i + 2)) {
+                let angle_ramificacio = (data[0].ciclo == true) ?
+                    ciclo_angle_acumulated - CICLO_ANGLE : // Angle de la ramificació si és un cicle
+                    (angle <= 0 ? -Math.PI / 2 : Math.PI / 2) // Angle de la ramificiació si no és un cicle
+                if (i == 0 && data[0].ciclo == false) {
+                    angle_ramificacio = Math.PI / 2 - angle
+                }
+                console.log("drawing")
+                let fluor_coord = drawCarbon(last_coordinates[0], last_coordinates[1], angle_ramificacio)
+                drawText(fluor_coord[0], fluor_coord[1], "F")
+            }
+
+            /*
+            if (data[0].brom.includes(i + 2)) {
+                let angle_ramificacio = (data[0].ciclo == true) ?
+                    ciclo_angle_acumulated - CICLO_ANGLE : // Angle de la ramificació si és un cicle
+                    (angle <= 0 ? -Math.PI / 2 : Math.PI / 2) // Angle de la ramificiació si no és un cicle
+                let brom_coord = drawCarbon(last_coordinates[0], last_coordinates[1], angle_ramificacio)
+                drawText(brom_coord[0], brom_coord[1], "Br")
+            }
+            */
+
+            if (data[0].clor.includes(i + 2)) {
+                let angle_ramificacio = (data[0].ciclo == true) ?
+                    ciclo_angle_acumulated - CICLO_ANGLE : // Angle de la ramificació si és un cicle
+                    (angle <= 0 ? -Math.PI / 2 : Math.PI / 2) // Angle de la ramificiació si no és un cicle
+                let clor_coord = drawCarbon(last_coordinates[0], last_coordinates[1], angle_ramificacio)
+                drawText(clor_coord[0], clor_coord[1], "Cl")
+            }
+
+            if (data[0].iode.includes(i + 2)) {
+                let angle_ramificacio = (data[0].ciclo == true) ?
+                    ciclo_angle_acumulated - CICLO_ANGLE : // Angle de la ramificació si és un cicle
+                    (angle <= 0 ? -Math.PI / 2 : Math.PI / 2) // Angle de la ramificiació si no és un cicle
+                let iode_coord = drawCarbon(last_coordinates[0], last_coordinates[1], angle_ramificacio)
+                drawText(iode_coord[0], iode_coord[1], "I")
+            }
+
+            for (let k in data[1]) {
                 for (let j in data[1][k].position) {
-                    console.log("js", j)
 
                     if (data[1][k].position[j] - 2 === i) {
                         let angle_ramificacio = (data[0].ciclo == true) ?
-                            (((2 * Math.PI / data[0].carbons) * (data[1][k].position[j] - 0.5)) - Math.PI / 2) : // Angle de la ramificació si és un cicle
+                            ciclo_angle_acumulated - CICLO_ANGLE : // Angle de la ramificació si és un cicle
                             (angle <= 0 ? -Math.PI / 2 : Math.PI / 2) // Angle de la ramificiació si no és un cicle
 
                         let change_angle = true // Vertader si l'angle per defecte ha de ser invertit
@@ -225,11 +343,32 @@ export const OrganicaPage = ({ setDarkMode }) => {
 
             ciclo_angle_acumulated += CICLO_ANGLE
             angle = angle == lineAngle ? - lineAngle : lineAngle
+            all_coordinates.push(last_coordinates)
         }
+        console.log(all_coordinates)
+
 
         if (data[0].ciclo == true) {
-            drawCarbon(last_coordinates[0], last_coordinates[1], ciclo_angle_acumulated)
+            drawCarbon(last_coordinates[0], last_coordinates[1], ciclo_angle_acumulated,
+                (data[0].doubleBonds.includes(data[0].carbons) ? 2 : (
+                    data[0].tripleBonds.includes(data[0].carbons) ? 3 : null
+                )),
+                (data[0].ciclo == true ? CICLO_ANGLE : 0))
         }
+
+        /*
+        for (let i in all_coordinates) {
+            for (let j in data[0].fluor) {
+                console.log("fluoor", data[0].fluor)
+                console.log("jjj", data[0].fluor[j], "iii", i)
+                if (data[0].fluor[j] == i) {
+                    console.log("drawing")
+                    drawText(all_coordinates[i][0], all_coordinates[i][1], "F")
+                }
+            }
+        }
+            */
+
 
         drawWaterMark()
     }
@@ -268,7 +407,6 @@ export const OrganicaPage = ({ setDarkMode }) => {
     }
 
     const handleInputChange = (e) => {
-        console.log(e.target.value)
         setInputValue(e.target.value)
         if (e.target.value.length === 0) {
             setInputEmpty(true)
@@ -277,7 +415,6 @@ export const OrganicaPage = ({ setDarkMode }) => {
         }
     }
 
-    console.log(inputEmpty)
     return (
         <PageLayout setDarkMode={setDarkMode}>
             <ContainerDiv>

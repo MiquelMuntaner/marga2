@@ -12,13 +12,14 @@ export const calcMassaMolar = (formula) => {
     return round(finalMolarMass, 4)
 }
 
-export const calcEntitatHomoatomica = (formula) => {
+export const calcEntitatHomoatomica = (formula, addInstructions) => {
     const prefixos = ["", "di", "tri", "tetra", "penta", "hexa", "hepta", "octa", "nona", "deca"]
-
-    return (
-        prefixos[formula[0].atomCount - 1]
+    let result = prefixos[formula[0].atomCount - 1]
         + formula[0].name
-    )
+
+    addInstructions(`<b>${formula[0].letters}<sub>${formula[0].atomCount}</sub></b> és una molècula composta per un únic tipus d'àtom, per la qual cosa és considera una <b>entitat homoàtomica</b>.`)
+    addInstructions(`En aquest cas afegim el <b>prefix multiplicador</b> per indicar el nombre d'àtoms presents. Per tant obtenim de resultat: <b>${result}</b>`)
+    return result
 }
 
 export const calcOxoacids = (formula) => {
@@ -228,46 +229,76 @@ export const calcHidrursNoMetalics = (formula) => {
     return `${formula[1].plusUrName} d'hidrogen`
 }
 
-export const calcHidroxids = (formula) => {
+export const calcHidroxids = (formula, addInstructions) => {
+    addInstructions(`Tenim un <b>metall (${formula[0].name})</b> combinat amb el <b>grup OH</b>, el qual forma un <b>hidròxid</b>. Això implica que la nomenclatura de <b>nombres d'oxidació</b> serà la preferent i començant el nom del compost amb "Hidroxid de".`)
     let valencesWithoutNegatives = formula[0].valences.map((x) => {
         if (x >= 0) { return x }
     })
 
-    return "hidròxid de "
+    addInstructions(`La valència del grup OH és -1, per tant, multipliquem el nombre d'OH per -1: <b>-1*${formula[1][2].numOfMolecules}=-${formula[1][2].numOfMolecules}</b>`)
+
+    console.log(formula)
+
+    let result = "hidròxid de "
         + formula[0].name
-        + (valencesWithoutNegatives.length !== 1 ? `(${intToRoman(formula[1][0].atomCount)})` : "")
+        + (valencesWithoutNegatives.length !== 1 ? `(${intToRoman(formula[1][2].numOfMolecules)})` : "")
+
+    addInstructions(`Atès que el grup OH té una càrrega total de -${formula[1][2].numOfMolecules}, <b>el ${formula[0].name} ha de tenir una valència de ${formula[1][2].numOfMolecules}</b> per equilibrar la càrrega. `
+        + (valencesWithoutNegatives.length !== 1 ? `Com que té més d'una valència positiva, <b>cal indicar-la</b> al final del nom del compost, d'aquesta manera: ${result}` :
+            `Com que el metall només té una valència positiva, <b>no cal indicar-la</b> al final del nom del compost, d'aquesta manera: ${result}`))
+
+    return result
 }
 
-export const calcPrefixosMultiplicadors = (formula) => {
+export const calcPrefixosMultiplicadors = (formula, addInstructions) => {
+    addInstructions(`Com que es tracta d'una <b>combinació entre dos no-metalls, el ${formula[0].name} i el ${formula[1].name}</b>, utilitzarem la nomenclatura basada en els prefixos multiplicadors.`)
     const prefixos = ["", "di", "tri", "tetra", "penta", "hexa", "hepta", "octa", "nona", "deca"]
 
     let valencesWithoutNegatives = formula[0].valences.map((x) => {
         if (x >= 0) { return x }
     })
 
-    return ((formula[1].atomCount == 1) && (valencesWithoutNegatives.length > 1) ? "mon" : prefixos[formula[1].atomCount - 1])
+    let result = ((formula[1].atomCount == 1) && (valencesWithoutNegatives.length > 1) ? "mon" : prefixos[formula[1].atomCount - 1])
         + formula[1].plusUrName
         + " de "
         + prefixos[formula[0].atomCount - 1]
         + formula[0].name
+
+    addInstructions(`Per tant, invertim la posició dels compostos i apliquem el prefix, obtenint el següent resultat: <b>${result}</b>.`)
+
+    return result
 }
 
-export const calcNombreOxidacio = (formula) => {
+export const calcNombreOxidacio = (formula, addInstructions) => {
+    addInstructions(`Es tracta d'una combinació d'<b>un metall (${formula[0].name}) amb un no-metall (${formula[1].name})</b>, per tant, ho considerem una <b>sal binària</b>. Aquests composts tenen com a nomenclatura preferent la dels <b>nombres d'oxidació</b>.`)
     let valence2nElement = 0
-
+    console.log(formula)
     formula[1].valences.forEach(num => {
         if (num < 0) { valence2nElement = num }
     })
+    addInstructions(`Per a determinar la valència del ${formula[0].name}, multipliquem el nombre d'àtoms del ${formula[1].name} per la seva valencià negativa: <b>${formula[1].atomCount}*${valence2nElement}=${formula[1].atomCount * valence2nElement}</b>.`)
 
     let valenceMetall = (formula[1].atomCount * -1 * valence2nElement) / formula[0].atomCount
+
+    if (formula[0].atomCount == 1) {
+        addInstructions(`Ara sabem que per <b>equilibrar el compost</b>, el ${formula[0].name}, <b>ha de tenir una valència de +${valenceMetall}</b>, ja que només hi ha un àtom de ${formula[0].name}.`)
+    } else {
+        addInstructions(`Com que hi ha més d'un àtom de ${formula[0].name}, la seva valència <b>no serà ${formula[1].atomCount * valence2nElement * -1}</b>, sinó que <b>l'hem de dividir pel nombre d'àtoms: ${formula[1].atomCount * valence2nElement * -1}/${formula[0].atomCount}=${valenceMetall}</b>.`)
+    }
 
     // Agafam les valències sense negatiu del primer element per veure si en queda més d'una
     let valencesWithoutNegatives = formula[0].valences.map((x) => {
         if (x >= 0) { return x }
     })
 
-    return formula[1].plusUrName
+    let result = formula[1].plusUrName
         + " de "
         + formula[0].name
         + (valencesWithoutNegatives.length !== 1 ? `(${intToRoman(valenceMetall.toString())})` : "")
+
+    addInstructions(`Finalment, escrivim el compost <b>començat pel no-metall (acabat amb ur, "${formula[1].plusUrName}"), seguit del metall ("${formula[0].name}")</b> i, `
+        + (valencesWithoutNegatives.length !== 1 ? `com que el ${formula[0].name} pot tenir diverses valències, <b>indiquem la seva entre parèntesis. El resultat és: ${result}</b>` :
+            `com que el ${formula[0].name} només pot tenir una valència, no fa falta indicar-la. <b>El resultat és: ${result}</b>`))
+
+    return result
 }

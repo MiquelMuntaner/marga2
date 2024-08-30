@@ -230,7 +230,7 @@ export const data = {
         "molarMass": 72.64
     },
     "Sn": {
-        "name": "Estany",
+        "name": "estany",
         "valences": [2, 4],
         "isMetall": true,
         "plusUrName": "",

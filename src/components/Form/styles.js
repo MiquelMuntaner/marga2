@@ -2,9 +2,7 @@ import styled from "styled-components";
 
 export const ContainerDiv = styled.div`
     display: flex;
-    height: calc(100% - 79px);
-    width: 50vw;
-    margin: 0 25% 10% 25%;
+    width: 100%;
     align-items: center;
     justify-content: center;
     flex-direction: column;
@@ -24,8 +22,8 @@ export const ContainerDiv = styled.div`
     & > div:nth-last-child(1) {
         display: flex;
         align-items: center;
-        //padding-bottom: 69px;
-        padding-bottom: 140px;
+        padding-bottom: 69px;
+        //padding-bottom: 140px;
         position: relative;
     }
 
@@ -41,7 +39,56 @@ export const ContainerDiv = styled.div`
 `
 
 export const FlexContainer = styled.div`
+    height: calc(100% - 79px);
+    width: 66vw;
+    margin: 0 17% 10% 17%;
     display: flex;
+
+    @media only screen and (max-width: 480px) {
+        flex-direction: column;
+        width: 90%;
+    }
+`
+
+export const InstructionsDiv = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    width: 40vw;
+    padding-left: 70px;
+
+    & > ol {
+        // box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+        box-shadow: -5px -5px 9px #FDFDFD, 5px 5px 7px #5e687949;
+        margin: 0 0 69px 0px;
+        padding: 40px;
+        width: calc(100% - 80px);
+        min-height: 20%;
+        border-radius: 25px;
+    }
+
+    & ol > p {
+        font-size: 25px;
+        margin: 0;
+        text-align: left;
+        font-weight: bold;
+        padding-bottom: 10px;
+    }
+
+    & ol li{
+        max-width: 100%;
+        margin-left: 20px;
+        margin-bottom: 8px;
+        font-size: 18px;
+        text-align: left;
+    }
+
+    & ol li::marker {
+        content: counter(list-item) ". ";
+        font-weight: bold;
+        color: ${props => props.theme.main};
+    }
 `
 
 export const StyledForm = styled.form`

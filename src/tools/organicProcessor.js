@@ -10,7 +10,12 @@ export const organicProcessor = (nom) => {
             "carbons": 0,
             "doubleBonds": [],
             "tripleBonds": [],
-            "ciclo": false
+            "ciclo": false,
+            "extra": [],
+            "fluor": [],
+            "clor": [],
+            "brom": [],
+            "iode": [],
         },
         []
     ]
@@ -18,7 +23,6 @@ export const organicProcessor = (nom) => {
 
     for (let i in nom) {
         buffer += nom[i].replace("-", "")
-        console.log(buffer)
 
         if (prefixes.includes(buffer)) {
             tempPrefix = prefixes.indexOf(buffer) + 1
@@ -26,6 +30,58 @@ export const organicProcessor = (nom) => {
             buffer = ""
         } else {
             switch (buffer) {
+                case "benzè":
+                    outputData[0].ciclo = true
+                    outputData[0].carbons = 6
+                    outputData[0].doubleBonds = [1, 3, 5]
+                    buffer = ""
+                    break
+                case "bromo":
+                    if (tempNumber != []) {
+                        for (let k in tempNumber) {
+                            outputData[0].extra.push(["Br", tempNumber[k]])
+                            outputData[0].brom.push(tempNumber[k])
+                        }
+                    } else {
+                        outputData[0].extra.push(["Br", 1])
+                        outputData[0].brom.push(1)
+                    }
+                    tempNumber = []
+                    buffer = ""
+                    break
+                case "cloro":
+                    if (tempNumber != []) {
+                        for (let k in tempNumber) {
+                            outputData[0].clor.push(tempNumber[k])
+                        }
+                    } else {
+                        outputData[0].clor.push(1)
+                    }
+                    tempNumber = []
+                    buffer = ""
+                    break
+                case "fluoro":
+                    if (tempNumber != []) {
+                        for (let k in tempNumber) {
+                            outputData[0].fluor.push(tempNumber[k])
+                        }
+                    } else {
+                        outputData[0].fluor.push(1)
+                    }
+                    tempNumber = []
+                    buffer = ""
+                    break
+                case "iodo":
+                    if (tempNumber != []) {
+                        for (let k in tempNumber) {
+                            outputData[0].iode.push(tempNumber[k])
+                        }
+                    } else {
+                        outputData[0].iode.push(1)
+                    }
+                    tempNumber = []
+                    buffer = ""
+                    break
                 case "à":
                     outputData[0].carbons = tempPrefix
                     buffer = ""
@@ -43,7 +99,7 @@ export const organicProcessor = (nom) => {
                 case "il":
                     outputData[1].push({
                         "carbons": tempPrefix,
-                        "position": tempNumber
+                        "position": (tempNumber != [] ? tempNumber : [1])
                     })
                     tempPrefix = 0;
                     tempNumber = []

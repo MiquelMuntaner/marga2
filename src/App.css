@@ -10,7 +10,8 @@
     width: 100vw;
     /*background-color: #222222;*/
     /*background-color: #121212;*/
-    background-color: white;
+    /*background-color: white;*/
+    background-color: #F9FBFD;
     align-items: center;
     justify-content: center;
     flex-direction: column;

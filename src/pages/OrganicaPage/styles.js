@@ -93,7 +93,7 @@ export const StyledForm = styled.form`
     & > input[type="submit"]:hover {
         background-color: ${props => props.theme.secondary};
     }
-    &::before {
+    /*&::before {
         position: absolute;
         bottom: 10px;
         font-weight: normal;
@@ -104,17 +104,18 @@ export const StyledForm = styled.form`
 
     &:focus-within::before {
         color: transparent;
-    }
+    }*/
 `
 
 export const InputText = styled.input`
-    &:-webkit-autofill,
+    /*webkit-autofill,
     &:-webkit-autofill:hover, 
     &:-webkit-autofill:focus, 
     &:-webkit-autofill:active  {
         transition: background-color 5000s;
         -webkit-text-fill-color: transparent !important;
     }
+    */
     z-index: 10000;
     width: 400px;
     font-family: inherit;
@@ -124,12 +125,13 @@ export const InputText = styled.input`
     outline: 0;
     font-size: 1.3rem;
     padding: 7px 0;
-    font-weight: 700;
+    font-weight: normal;
     background: transparent;
     // color: ${props => props.theme.text};
-    color: transparent;
+    // color: transparent;
     transition: border-color 0.2s;
     transition: color 300ms;
+    transition: font-weight 300ms;
     margin-bottom: 2px;
 
     
@@ -156,6 +158,7 @@ export const InputText = styled.input`
             font-weight:700;    
         }
         
+        font-weight: 700;
         color: ${props => props.theme.text};
         border-width: 4px;
         margin-bottom: 0px;
@@ -173,7 +176,8 @@ export const Canvas = styled.canvas`
     padding: 0;
     margin: 0;
     border-radius: 50px;
-    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+    // box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+    box-shadow: -5px -5px 9px #FDFDFD, 5px 5px 7px #5e687949;
     //border: 1px solid #333333;
 
     @media only screen and (max-width: 480px) {
