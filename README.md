@@ -1,4 +1,7 @@
-# Nocions
+# Marga2
+
+Copyright (c), 2016
+THIS IS NOT OPEN SOURCE
 
 Lila: #6B0F82
 "gris": #4F4350
