@@ -4,6 +4,7 @@ import { ContainerDiv, InputText, StyledForm, Canvas, DownloadButton, ResetButto
 import { Header } from '../../components/Header'
 import { organicProcessor } from '../../tools/organicProcessor'
 import { RangeSlider } from '../../components/RangeSlider'
+import { CookieBanner } from '../../components/CookieBanner'
 
 export const OrganicaPage = ({ setDarkMode }) => {
     const [moleculeData, setMoleculeData] = useState("")

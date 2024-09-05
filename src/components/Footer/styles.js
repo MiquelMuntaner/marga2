@@ -21,6 +21,14 @@ export const FooterDiv = styled.div`
         margin : 0 40px 30px 20px;
     }
 
+    & p a {
+        color: ${props => props.theme.text};
+    }
+
+    & p a:hover {
+        color: ${props => props.theme.secondary};
+    }
+
     @media only screen and (max-width: 480px) {
         position: relative;
         bottom: 0;

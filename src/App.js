@@ -6,7 +6,14 @@ import { ExercicisPage } from './pages/ExercicisPage';
 import { useEffect, useState } from 'react';
 import { ThemeProvider } from 'styled-components';
 import { InformacioPage } from './pages/InformacioPage';
+import { GoogleAnalytics } from './components/GoogleAnalytics'
+/*
+import { ReactGAImplementation } from 'react-ga4';
 
+
+ReactGAImplementation.initialize(TRACKING_ID)
+
+*/
 function App() {
     const [darkMode, setDarkMode] = useState(true)
 
@@ -43,6 +50,7 @@ function App() {
 
     return (
         <div className="App">
+            <GoogleAnalytics GA_MEASUREMENT_ID={"G-D1DX631HCE"} />
             <ThemeProvider theme={theme}>
                 <Routes>
                     <Route path='/' element={<InorganicaPage setDarkMode={setDarkMode} />} />
