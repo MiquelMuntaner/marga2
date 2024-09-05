@@ -20,4 +20,12 @@ export const FooterDiv = styled.div`
         opacity: 80%;
         margin : 0 40px 30px 20px;
     }
+
+    @media only screen and (max-width: 480px) {
+        position: relative;
+        bottom: 0;
+        margin-top: 20px;
+
+        font-size: 11px;
+    }
 `

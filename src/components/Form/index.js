@@ -25,7 +25,7 @@ export const Form = () => {
     const [instructions, setInstructions] = useState([])
     const inputText = useRef()
     const labelRef = useRef()
-
+    console.log("instructions: ", instructions)
     const handleImgClick = (e) => {
         e.preventDefault()
         setDoFormula(!doFormula)
@@ -33,6 +33,7 @@ export const Form = () => {
         setShowMolecularMassDiv(false)
         setMolarMass(0)
         setTypeOfFormula("")
+        setInstructions([])
         inputText.current.value = ""
     }
 
@@ -427,9 +428,11 @@ export const Form = () => {
             <InstructionsDiv>
                 <ol>
                     <p>Procediment</p>
-                    {instructions.map(function (content, i) {
-                        return <li key={i} dangerouslySetInnerHTML={{ __html: content }}></li>
-                    })}
+                    {instructions.length == 0 ? <span>El procediment no es troba disponible</span> : <>
+                        {instructions.map(function (content, i) {
+                            return <li key={i} dangerouslySetInnerHTML={{ __html: content }}></li>
+                        })}
+                    </>}
                 </ol>
             </InstructionsDiv>
         </FlexContainer>

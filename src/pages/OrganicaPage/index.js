@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { PageLayout } from '../../components/PageLayout'
-import { ContainerDiv, InputText, StyledForm, Canvas } from './styles'
+import { ContainerDiv, InputText, StyledForm, Canvas, DownloadButton, ResetButton, RangeSliderLabel } from './styles'
 import { Header } from '../../components/Header'
 import { organicProcessor } from '../../tools/organicProcessor'
+import { RangeSlider } from '../../components/RangeSlider'
 
 export const OrganicaPage = ({ setDarkMode }) => {
     const [moleculeData, setMoleculeData] = useState("")
@@ -23,11 +24,24 @@ export const OrganicaPage = ({ setDarkMode }) => {
     const PLACEHOLDER = "2,3-dimetilpent-2-è"
 
     const [lineAngle, setLineAngle] = useState(DEFAULT_ANGLE)
+    const [lineLength, setLineLength] = useState(LINE_LENGTH)
+
+
 
     useEffect(() => {
         CANVAS = document.getElementById("mainOrganicCanvas")
         CTX = CANVAS.getContext("2d")
     }, [SMILES])
+
+    useEffect(() => {
+        CANVAS = document.getElementById("mainOrganicCanvas")
+        CTX = CANVAS.getContext("2d")
+        let result = organicProcessor(inputValue)
+
+        setMoleculeData(result)
+        drawMolecule(result)
+        generateSMILES(result)
+    }, [lineAngle, lineLength])
 
     // Loading placeholder
     useEffect(() => {
@@ -40,9 +54,34 @@ export const OrganicaPage = ({ setDarkMode }) => {
         drawMolecule(result)
 
         STROKE = "black"
+
+        if (window.matchMedia("(max-width: 480px)").matches) {
+            console.log("innerWidth:", document.documentElement.clientWidth)
+            let scale = parseInt(document.documentElement.clientWidth) * 0.76 / 1080
+
+            document.getElementById("mainOrganicCanvas").style.transform = `scale(${scale})`
+            document.getElementById("canvasDiv").style.width = parseInt(document.documentElement.clientWidth) * 0.76 + "px"
+            document.getElementById("canvasDiv").style.height = `${parseInt(document.documentElement.clientWidth) * 0.76}px`
+        }
     }, [])
 
+    const resetValues = (e) => {
+        e.preventDefault()
+        setLineAngle(DEFAULT_ANGLE)
+        setLineLength(LINE_LENGTH)
+
+        CANVAS = document.getElementById("mainOrganicCanvas")
+        CTX = CANVAS.getContext("2d")
+        let result = organicProcessor(inputValue)
+
+        setMoleculeData(result)
+        drawMolecule(result)
+        generateSMILES(result)
+    }
+
     const handleSubmit = (e) => {
+        CANVAS = document.getElementById("mainOrganicCanvas")
+        CTX = CANVAS.getContext("2d")
         e.preventDefault()
         setInputValue(e.target[0].value)
         let result = organicProcessor(e.target[0].value)
@@ -99,8 +138,8 @@ export const OrganicaPage = ({ setDarkMode }) => {
             temp_double_bond_spacing = temp_double_bond_spacing * Math.tan(Math.PI / 2 - angle)
         }
 
-        var x1 = Math.cos(angle) * LINE_LENGTH + x0
-        var y1 = Math.sin(angle) * LINE_LENGTH + y0
+        var x1 = Math.cos(angle) * lineLength + x0
+        var y1 = Math.sin(angle) * lineLength + y0
 
         // Dibuixant la línia principal
         drawLine(x0, y0, x1, y1)
@@ -115,11 +154,11 @@ export const OrganicaPage = ({ setDarkMode }) => {
                 angle = -(angle - Math.PI)
             }
             if (angle <= 0) {
-                var x2 = Math.cos(angle) * (LINE_LENGTH - 2 * DOUBLE_BOND_SPACING) + x0
-                var y2 = Math.sin(angle) * (LINE_LENGTH - 2 * DOUBLE_BOND_SPACING) + (y0 - temp_double_bond_spacing)
+                var x2 = Math.cos(angle) * (lineLength - 2 * DOUBLE_BOND_SPACING) + x0
+                var y2 = Math.sin(angle) * (lineLength - 2 * DOUBLE_BOND_SPACING) + (y0 - temp_double_bond_spacing)
             } else {
-                var x2 = Math.cos(angle) * (LINE_LENGTH - 2 * DOUBLE_BOND_SPACING) + (x0 + temp_double_bond_spacing)
-                var y2 = Math.sin(angle) * (LINE_LENGTH - 2 * DOUBLE_BOND_SPACING) + y0
+                var x2 = Math.cos(angle) * (lineLength - 2 * DOUBLE_BOND_SPACING) + (x0 + temp_double_bond_spacing)
+                var y2 = Math.sin(angle) * (lineLength - 2 * DOUBLE_BOND_SPACING) + y0
             }
 
             let bondx0 = x0 + (angle >= 0 ? temp_double_bond_spacing : 0)
@@ -161,11 +200,11 @@ export const OrganicaPage = ({ setDarkMode }) => {
                     angle = -(angle - Math.PI)
                 }
                 if (angle <= 0) {
-                    boundx1 = Math.cos(angle) * (LINE_LENGTH - 2 * DOUBLE_BOND_SPACING) + x0
-                    boundy1 = Math.sin(angle) * (LINE_LENGTH - 2 * DOUBLE_BOND_SPACING) + (y0 - temp_double_bond_spacing)
+                    boundx1 = Math.cos(angle) * (lineLength - 2 * DOUBLE_BOND_SPACING) + x0
+                    boundy1 = Math.sin(angle) * (lineLength - 2 * DOUBLE_BOND_SPACING) + (y0 - temp_double_bond_spacing)
                 } else {
-                    boundx1 = Math.cos(angle) * (LINE_LENGTH - 2 * DOUBLE_BOND_SPACING) + (x0 + temp_double_bond_spacing)
-                    boundy1 = Math.sin(angle) * (LINE_LENGTH - 2 * DOUBLE_BOND_SPACING) + y0
+                    boundx1 = Math.cos(angle) * (lineLength - 2 * DOUBLE_BOND_SPACING) + (x0 + temp_double_bond_spacing)
+                    boundy1 = Math.sin(angle) * (lineLength - 2 * DOUBLE_BOND_SPACING) + y0
                 }
 
                 boundx0 = x0 + (angle >= 0 ? temp_double_bond_spacing : 0)
@@ -206,7 +245,7 @@ export const OrganicaPage = ({ setDarkMode }) => {
 
             if (angle <= 0) {
                 var x2 = x1
-                //var y2 = Math.sin(angle) * (LINE_LENGTH - 2 * DOUBLE_BOND_SPACING) + (y0 - temp_double_bond_spacing)
+                //var y2 = Math.sin(angle) * (lineLength - 2 * DOUBLE_BOND_SPACING) + (y0 - temp_double_bond_spacing)
                 var y2 = y1 - Math.tan(angle) * temp_double_bond_spacing
             } else {
                 var x2 = x1 - (temp_double_bond_spacing / Math.tan(angle))
@@ -236,7 +275,7 @@ export const OrganicaPage = ({ setDarkMode }) => {
         let rectangle_width = textWidth + 2 * PADDING_X
         let rectangle_height = textHeight + 2 * PADDING_Y
 
-        CTX.fillStyle = 'white'
+        CTX.fillStyle = '#F2F3F4'
         CTX.fillRect(x0, y0, rectangle_width, rectangle_height)
 
         // Drawing text
@@ -249,12 +288,12 @@ export const OrganicaPage = ({ setDarkMode }) => {
         // CTX.clearRect(0, 0, 1080, 1080)
         CANVAS = document.getElementById("mainOrganicCanvas")
         CTX = CANVAS.getContext("2d")
-        CTX.fillStyle = "white";
+        CTX.fillStyle = "#F2F3F4";
         CTX.fillRect(0, 0, CANVAS.width, CANVAS.height);
 
-        let TOTAL_LENGTH = Math.cos(lineAngle) * LINE_LENGTH * (data[0].carbons - 1)
-        if (data[0].eter !== null) {
-            TOTAL_LENGTH = TOTAL_LENGTH + Math.cos(lineAngle) * LINE_LENGTH
+        let TOTAL_LENGTH = Math.cos(lineAngle) * lineLength * (data[0].carbons - 1)
+        if (data[0].eter !== null || data[0].ester !== null) {
+            TOTAL_LENGTH = TOTAL_LENGTH + Math.cos(lineAngle) * lineLength
         }
 
 
@@ -264,10 +303,10 @@ export const OrganicaPage = ({ setDarkMode }) => {
         // drawLine(0, 540, 1080, 540)
 
         let last_coordinates = [CANVAS.width / 2 - TOTAL_LENGTH / 2, CANVAS.height / 2]
-
+        let oxigen_coord = []
 
         if (data[0].ciclo == true) {
-            let rad_circumcicle = (LINE_LENGTH / (2 * Math.sin(Math.PI / (data[0].carbons))))
+            let rad_circumcicle = (lineLength / (2 * Math.sin(Math.PI / (data[0].carbons))))
             last_coordinates = [
                 (CANVAS.width / 2),
                 (CANVAS.height / 2) - rad_circumcicle
@@ -279,8 +318,8 @@ export const OrganicaPage = ({ setDarkMode }) => {
         let ciclo_angle_acumulated = Math.PI / 2 - CICLO_ANGLE
 
         if (data[0].aldehid == true) {
-            TOTAL_LENGTH = TOTAL_LENGTH + Math.cos(lineAngle) * LINE_LENGTH
-            let oxigen_coord = last_coordinates
+            TOTAL_LENGTH = TOTAL_LENGTH + Math.cos(lineAngle) * lineLength
+            oxigen_coord = last_coordinates
 
             last_coordinates = drawCarbon(last_coordinates[0], last_coordinates[1], angle, 2,
                 (data[0].ciclo == true ? CICLO_ANGLE : 0)
@@ -291,8 +330,8 @@ export const OrganicaPage = ({ setDarkMode }) => {
             drawText(oxigen_coord[0], oxigen_coord[1], "O")
         }
 
-        if (data[0].acidCarboxilic == true) {
-            TOTAL_LENGTH = TOTAL_LENGTH + Math.cos(lineAngle) * LINE_LENGTH
+        if (data[0].acidCarboxilic == true || data[0].amida == true) {
+            TOTAL_LENGTH = TOTAL_LENGTH + Math.cos(lineAngle) * lineLength
             let oxigen_coord = last_coordinates
 
             last_coordinates = drawCarbon(last_coordinates[0], last_coordinates[1], angle, 1,
@@ -301,7 +340,11 @@ export const OrganicaPage = ({ setDarkMode }) => {
 
             angle = angle == lineAngle ? - lineAngle : lineAngle
 
-            drawText(oxigen_coord[0], oxigen_coord[1], "HO")
+            if (data[0].acidCarboxilic == true) {
+                drawText(oxigen_coord[0], oxigen_coord[1], "HO")
+            } else {
+                drawText(oxigen_coord[0], oxigen_coord[1], "H₂N")
+            }
 
             let angle_ramificacio = (data[0].ciclo == true) ?
                 ciclo_angle_acumulated - 2 * CICLO_ANGLE : // Angle de la ramificació si és un cicle
@@ -317,12 +360,33 @@ export const OrganicaPage = ({ setDarkMode }) => {
                 angle = ciclo_angle_acumulated
             }
 
+            if (data[0].ester == i + 2) {
+                last_coordinates = drawCarbon(last_coordinates[0], last_coordinates[1], angle, 1,
+                    (data[0].ciclo == true ? CICLO_ANGLE : 0)
+                )
+
+                let angle_ramificacio = (data[0].ciclo == true) ?
+                    ciclo_angle_acumulated - 2 * CICLO_ANGLE : // Angle de la ramificació si és un cicle
+                    (angle <= 0 ? -Math.PI / 2 : Math.PI / 2) // Angle de la ramificiació si no és un cicle
+                let extra_coord = drawCarbon(last_coordinates[0], last_coordinates[1], angle_ramificacio, 2)
+                drawText(extra_coord[0], extra_coord[1], "O")
+                angle = angle == lineAngle ? - lineAngle : lineAngle
+            }
+
+            if (data[0].ester == i + 1) {
+                oxigen_coord = last_coordinates
+            }
+
+            if (data[0].ester == i) {
+                drawText(oxigen_coord[0], oxigen_coord[1], "O")
+            }
+
             for (let element in data[0].extra) {
 
                 if (data[0].extra[element][1] == i + 1) {
 
                     // Hidrocarburs halogenats
-                    if (["Cl", "Br", "I", "F", "OH"].includes(data[0].extra[element][0])) {
+                    if (["Cl", "Br", "I", "F", "OH", "N"].includes(data[0].extra[element][0])) {
                         let angle_ramificacio = (data[0].ciclo == true) ?
                             ciclo_angle_acumulated - 2 * CICLO_ANGLE : // Angle de la ramificació si és un cicle
                             (angle <= 0 ? Math.PI / 2 : -Math.PI / 2) // Angle de la ramificiació si no és un cicle
@@ -468,6 +532,8 @@ export const OrganicaPage = ({ setDarkMode }) => {
 
 
     const downloadButtonPressed = () => {
+        CANVAS = document.getElementById("mainOrganicCanvas")
+        CTX = CANVAS.getContext("2d")
         var link = document.createElement('a');
         link.download = `${inputValue}.png`;
         link.href = CANVAS.toDataURL()
@@ -483,6 +549,7 @@ export const OrganicaPage = ({ setDarkMode }) => {
         }
     }
 
+    const [testInputValue, setTestInputValue] = useState(0)
     return (
         <PageLayout setDarkMode={setDarkMode}>
             <ContainerDiv>
@@ -493,16 +560,35 @@ export const OrganicaPage = ({ setDarkMode }) => {
                         <InputText type="text" onChange={handleInputChange} placeholder={"2,3-dimetilpent-2-è"} />
                         <input type="submit" value="Executar"></input>
                     </StyledForm>
-                    {SMILES !== "" ?
-                        <>
-                            <p style={{ fontWeight: "normal" }}>Nomenclatura SMILES: <b>{SMILES}</b></p>
-                            <button onClick={downloadButtonPressed}>Descarrega</button>
-                        </>
-                        : <div style={{ height: "91px" }} />
+                    {SMILES !== "" ? <>
+                        <RangeSliderLabel>Angle</RangeSliderLabel>
+                        <RangeSlider max={1.57} min={0} inputValue={lineAngle} step={0.01} setInputValue={setLineAngle} />
+                        <RangeSliderLabel>Longitud de línia</RangeSliderLabel>
+                        <RangeSlider max={200} min={0} inputValue={lineLength} step={1} setInputValue={setLineLength} />
+                    </> : <></>}
+                    {!window.matchMedia("(max-width: 480px)").matches ?
+                        <>{SMILES !== "" ?
+                            <>
+                                {/*<p style={{ fontWeight: "normal" }}>Nomenclatura SMILES: <b>{SMILES}</b></p>*/}
+                                <DownloadButton onClick={downloadButtonPressed}>Descarrega</DownloadButton>
+                                <ResetButton onClick={resetValues}>Restaurar</ResetButton>
+                            </>
+                            : <div style={{ height: "91px" }} />
+                        }</> : <></>
                     }
                 </div>
-                <div>
+                <div id='canvasDiv'>
                     <Canvas id='mainOrganicCanvas' width="1080" height="1080" style={{ backgroundColor: "white" }}></Canvas>
+                </div>
+                <div>
+                    {SMILES !== "" && window.matchMedia("(max-width: 480px)").matches ?
+                        <>
+                            {/*<p style={{ fontWeight: "normal" }}>Nomenclatura SMILES: <b>{SMILES}</b></p>*/}
+                            <DownloadButton onClick={downloadButtonPressed}>Descarrega</DownloadButton>
+                            <ResetButton onClick={resetValues}>Restaurar</ResetButton>
+                        </>
+                        : <></>
+                    }
                 </div>
             </ContainerDiv>
         </PageLayout >

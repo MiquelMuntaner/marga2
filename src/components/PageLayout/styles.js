@@ -5,4 +5,10 @@ export const LayoutDiv = styled.div`
     height: 100%;
     padding: 0;
     margin: 0;
+    flex: 1;
+
+    @media only screen and (max-width: 480px) {
+        flex: auto;
+        height: auto;
+    }
 `

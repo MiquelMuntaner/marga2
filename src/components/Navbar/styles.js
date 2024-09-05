@@ -91,6 +91,8 @@ export const NavbarContainer = styled.div`
         align-items: center;
         justify-content: center;
 
+        font-size: 15px;
+
         & > ul {
             padding: 0;
         }

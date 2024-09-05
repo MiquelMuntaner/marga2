@@ -5,9 +5,9 @@ const replaceAll = (str, find, replace) => {
 const replaceList = (str, list) => {
     let output = str
     for (let i in list) {
-        console.log("output: ", output)
+        console.log("output: ", output, list[i])
         if (["di", "tri", "tetra", "penta", "hexa"].includes(list[i])) {
-            if (str.includes(list[i] + "l")) {
+            if (!str.includes(list[i] + "l")) {
                 console.log("dimarts", list[i] + "l")
                 output = replaceAll(output, list[i], "")
             }
@@ -37,14 +37,15 @@ export const organicProcessor = (nom) => {
             "eter": null,
             "extra": [],
             "aldehid": false,
-            "ester": 0,
+            "ester": null,
             "acidCarboxilic": false,
+            "amida": false,
         },
         []
     ]
     // nom = nom.replace("an", "").replace("di", "").replace("tri", "").replace("tetra", "").replace("penta", "").replace("hexa", "").replace(" ", "")
 
-    nom = replaceList(nom, ["an", "di", "tri", "tetra", "penta", "hexa", "àcid", " ", "de", "d'"])
+    nom = replaceList(nom.toLowerCase(), ["an", "di", "tri", "tetra", "penta", "hexa", "àcid", " ", "de", "d'"])
     console.log("nom: ", nom)
     for (let i in nom) {
         buffer += nom[i].replace("-", "")
@@ -134,6 +135,17 @@ export const organicProcessor = (nom) => {
                     }
                     buffer = ""
                     break
+                case "amina":
+                    if (tempNumber.length !== 0) {
+                        for (let k in tempNumber) {
+                            outputData[0].extra.push(["N", tempNumber[k]])
+                        }
+                    } else {
+                        outputData[0].extra.push(["N", 1])
+                    }
+                    outputData[0].carbons = tempPrefix
+                    buffer = ""
+                    break
                 case "ona":
                     if (i == nom.length - 1) {
                         outputData[0].carbons = tempPrefix
@@ -160,6 +172,12 @@ export const organicProcessor = (nom) => {
                     if (i == nom.length - 1) {
                         outputData[0].carbons = tempPrefix
                         outputData[0].acidCarboxilic = true
+                    }
+                    break
+                case "amida":
+                    if (i == nom.length - 1) {
+                        outputData[0].carbons = tempPrefix
+                        outputData[0].amida = true
                     }
                     break
                 case "à":

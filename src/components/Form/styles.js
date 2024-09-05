@@ -7,9 +7,10 @@ export const ContainerDiv = styled.div`
     justify-content: center;
     flex-direction: column;
 
+
     @media only screen and (max-width: 480px) {
-        width: 80%;
-        margin: 0 10% 0 10%;
+        width: 100%;
+        margin: 0;
     }
 
     & > div {
@@ -36,17 +37,30 @@ export const ContainerDiv = styled.div`
         position: relative;
         top: 0.25rem;
     }
+
+    @media only screen and (max-width: 480px) {
+        & > div {
+            font-size: 16px;
+        }
+
+        & > div:nth-last-child(1) {
+            padding-bottom: 30px;
+        }
+    }
 `
 
 export const FlexContainer = styled.div`
-    height: calc(100% - 79px);
+    height: calc(100vh - 69px);
     width: 66vw;
-    margin: 0 17% 10% 17%;
+    align-items: center;
+    margin: 0 17% 0 17%;
     display: flex;
 
     @media only screen and (max-width: 480px) {
         flex-direction: column;
-        width: 90%;
+        width: 76%;
+        margin: 0 12% 0 12%;
+        height: auto;
     }
 `
 
@@ -89,6 +103,34 @@ export const InstructionsDiv = styled.div`
         font-weight: bold;
         color: ${props => props.theme.main};
     }
+
+    & ol span {
+        margin-left: 0;
+        font-size: 16px;
+        color: #9b9b9b;
+        font-weight: 700;
+        display: block;
+        text-align: left;
+    }
+
+    @media only screen and (max-width: 480px) {
+        width: 76vw;
+        padding: 0;
+        margin: 0;
+
+        & > ol {
+            width: calc(76vw - 50px);
+            padding: 25px;
+        }
+
+        & > ol > p {
+            font-size: 21px;
+        }
+
+        & > ol > li {
+            font-size: 16px;
+        }
+    }
 `
 
 export const StyledForm = styled.form`
@@ -127,7 +169,7 @@ export const StyledForm = styled.form`
     & > input[type="submit"] {
         margin-left: 20px;
         width: 120px;
-        height: 100%;
+        height: 37px;
         border-radius: 10px;
         background-color: ${props => props.theme.main};
         color: white;
@@ -141,12 +183,19 @@ export const StyledForm = styled.form`
         border-image-source: linear-gradient(#11998e, #38ef7d);
         background-color: ${props => props.theme.secondary};
     }
-`
+
+    `
 
 export const TempResult = styled.span`
     display: block;
     // min-height: 98px;
     height: 177px;
+    
+    @media only screen and (max-width: 480px) {
+        height: 40px;
+    }
+
+
 `
 
 export const QuestionMarkButton = styled.button`

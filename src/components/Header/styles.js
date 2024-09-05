@@ -10,7 +10,8 @@ export const TitleContainer = styled.div`
         margin: 0 0 0 0;
 
         @media only screen and (max-width: 480px) {
-            font-size: 4rem;
+            font-size: 3.2rem;
+            width: auto;
         }
     }
 
@@ -22,7 +23,9 @@ export const TitleContainer = styled.div`
         font-size: 2.4rem;
 
         @media only screen and (max-width: 480px) {
-            font-size: 2.2rem;
+            font-size: 1.8rem;
+            width: auto;
+            margin-bottom: 20px;
         }
     }
 `

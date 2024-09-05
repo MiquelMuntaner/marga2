@@ -1,29 +1,27 @@
 import styled from "styled-components"
 
 export const ContainerDiv = styled.div`
-    height: calc(100% - 70px - 70px);
-    width: 100vw !important;
+    /*height: calc(100% - 70px - 70px);*/
+    height: auto;
+    width: 100%;
+    max-width: 100%;
     text-align: center;
     display: grid;
     grid-template-columns: 12% 38% auto 432px 12%;
     align-content: center;
     justify-content: space-between;
-    width: 50vw;
     color: white;
     font-weight: bold;
     font-size: 25px;
-    margin-bottom: 70px;
+    margin: 0;
+    margin-top: calc(50vh - (216px + 69px));
     
-    @media only screen and (max-width: 480px) {
-        display: flex;
-        flex-direction: column;
-        padding: 0 10% 0 10%;
-    }
-
+    
     & > div {
         color: white;
         font-size: 1.3rem;
-        margin-top: 15px;
+        /*padding-bottom: 70px;*/
+        /*padding-top: 15px;*/
     }
 
     
@@ -61,6 +59,35 @@ export const ContainerDiv = styled.div`
         margin: 15px 0 15px 0;
         color: ${props => props.theme.text};
     } 
+    @media only screen and (max-width: 480px) {
+        display: flex;
+        flex-direction: column;
+        width: auto;
+        padding: 0 12% 0 12%;
+        margin-top: 20px;
+        
+        & > div:nth-child(2) {
+            height: auto;
+            margin-top: 20px;
+        }
+
+        & > div:nth-child(3) > button {
+            margin-top: 30px;
+            margin-bottom: 10px;
+            width: 100%;
+            height: 40px;
+            border-radius: 25px;
+            background-color: ${props => props.theme.main};
+            color: white;
+            font-weight: bold;
+            border: none;
+            transition: all 300ms;
+        }
+
+        & > div:nth-child(3) > button:hover {
+            background-color: ${props => props.theme.secondary};
+        }
+    }
 `
 
 export const StyledForm = styled.form`
@@ -69,6 +96,7 @@ export const StyledForm = styled.form`
     margin-top: 10px;
     display: flex;
 
+    
     & > label {
         position: absolute;
         top: 0;
@@ -92,6 +120,21 @@ export const StyledForm = styled.form`
 
     & > input[type="submit"]:hover {
         background-color: ${props => props.theme.secondary};
+    }
+
+    @media only screen and (max-width: 480px) {
+        display: flex;
+        flex-direction: column;
+        & > input[type="text"] {
+            width: 100%;
+        }
+        & > input[type="submit"] {
+            width: 100%;
+            height: 40px;
+            margin: 20px 0 0 0;
+            font-size: 16px;
+
+        }
     }
     /*&::before {
         position: absolute;
@@ -164,6 +207,11 @@ export const InputText = styled.input`
         margin-bottom: 0px;
         border-color: ${props => props.theme.secondary};
     }
+
+    @media only screen and (max-width: 480px) {
+        width: 80%;
+
+    }
 `
 
 export const Canvas = styled.canvas`
@@ -181,9 +229,31 @@ export const Canvas = styled.canvas`
     //border: 1px solid #333333;
 
     @media only screen and (max-width: 480px) {
-        transform: scale(0.25);
-        -ms-transform: scale(0.25); 
-        -webkit-transform: scale(0.25);
+        /*
+        transform: scale(0.27px);
+        -ms-transform: scale(0.27px); 
+        -webkit-transform: scale(0.27px);
+        */
         transform-origin: top left;
     }
+`
+
+export const DownloadButton = styled.button`
+    margin-top: 30px;
+
+    @media only screen and (max-width: 480px) {
+        width: 45% !important;
+    }
+`
+
+export const ResetButton = styled.button`
+    margin-left: 30px;
+
+    @media only screen and (max-width: 480px) {
+        width: 45% !important;
+        margin-left: 10%;
+    }
+`
+
+export const RangeSliderLabel = styled.p`
 `
