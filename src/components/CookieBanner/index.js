@@ -38,10 +38,10 @@ export const CookieBanner = () => {
     }, [cookieConsent])
 
     return <>{cookieConsent == null ? <BannerContainer>
-        <p>Utilitzem cookies per millorar la teva experiència en aquesta pàgina. <a target="_blank" href="./informacio#privacitat">Fes clic aquí per obtenir més informació.</a></p>
+        <p>Utilitzem cookies per optimitzar la teva experiència en aquest lloc web. Per això, et demanem que acceptis la nostra <a target="_blank" href="/informacio#privacitat">Política de Privacitat</a> i la nostra <a target="_blank" href="/informacio#cookies">Política de Cookies</a>.</p>
         <div>
             <button onClick={() => setCookieConsent(false)}>Denega</button>
-            <button onClick={() => setCookieConsent(true)}>Accepta totes les cookies</button>
+            <button onClick={() => setCookieConsent(true)}>Accepta tot</button>
         </div>
     </BannerContainer> : <></>}</>
 }

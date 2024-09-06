@@ -5,7 +5,7 @@ export const FooterDiv = styled.div`
     width: 100%;
     display: flex;
     justify-content: space-between;
-    position: absolute;
+    position: relative;
     bottom: 0;
     font-weight: 700;
 
@@ -33,7 +33,6 @@ export const FooterDiv = styled.div`
         position: relative;
         bottom: 0;
         margin-top: 20px;
-
         font-size: 11px;
     }
 `

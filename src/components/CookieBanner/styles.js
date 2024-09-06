@@ -13,7 +13,8 @@ export const BannerContainer = styled.div`
     margin: auto;
     padding: 10px 30px;
     border-radius: 50px;
-    z-index: 100;
+    background-color: #F2F3F4; 
+    z-index: 1000;
 
     & > div {
         margin-left: 30px;
@@ -21,6 +22,13 @@ export const BannerContainer = styled.div`
 
     & > div > button:first-child {
         margin-right: 15px;
+        color: black;
+        background-color: transparent;
+
+    }
+
+    & > div > button:first-child:hover {
+        color: white;
     }
 
     & > div > button {
@@ -42,5 +50,19 @@ export const BannerContainer = styled.div`
 
     & a:hover {
         color: ${props => props.theme.secondary};
+    }
+
+    @media only screen and (max-width: 480px) {
+        flex-direction: column;
+        width: 80vw;
+        bottom: 90px;
+
+        & > div {
+        margin-left: 0;
+        }
+
+        & > div > button:first-child {
+            margin-right: 15px;
+        }
     }
 `
