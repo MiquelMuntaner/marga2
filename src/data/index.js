@@ -356,7 +356,8 @@ export const exceptions = {
     "NH3": "Amoníac",
     "AsH3": "Arsà",
     "H2O": "Aigua",
-    "H2O2": "Peròxid d'hidrogen (aigua oxigenada)"
+    "H2O2": "Peròxid d'hidrogen (aigua oxigenada)",
+    "C17H21NO4": "cocaïna"
 }
 
 export const oxids = {
