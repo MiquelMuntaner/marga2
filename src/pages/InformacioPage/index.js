@@ -5,14 +5,19 @@ import { getLocalStorage, setLocalStorage } from '../../tools/storageHelper'
 
 const VERSIONS = [
     {
-        "version": "0.0.1",
-        "date": "04/09/2024",
-        "info": ["Després de quasi un any de desenvolupament primera beta pública de Nocions. El fet de no ser una versió estable implica que pot tenir una gran varietat d'errors que corregirem amb la màxima brevetat possible."]
+        "version": "0.0.3",
+        "date": "14/09/2024",
+        "info": ["Correccions d'errors menors.", "Millores de SEO.", "Nova funcionalitat afegida a la formulació orgànica (ara es pot canviar la grossor de la línia)."]
     },
     {
         "version": "0.0.2",
         "date": "06/09/2024",
         "info": ["Hem implementat un sistema de recopilació d'analítiques i amb ell tot el necessari per a assegurar la privacitat de l'usuari final."]
+    },
+    {
+        "version": "0.0.1",
+        "date": "04/09/2024",
+        "info": ["Després de quasi un any de desenvolupament primera beta pública de Nocions. El fet de no ser una versió estable implica que pot tenir una gran varietat d'errors que corregirem amb la màxima brevetat possible."]
     }
 ]
 

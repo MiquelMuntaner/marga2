@@ -26,6 +26,7 @@ export const OrganicaPage = ({ setDarkMode }) => {
 
     const [lineAngle, setLineAngle] = useState(DEFAULT_ANGLE)
     const [lineLength, setLineLength] = useState(LINE_LENGTH)
+    const [lineWidth, setLineWidth] = useState(LINE_WIDTH)
 
 
 
@@ -42,7 +43,7 @@ export const OrganicaPage = ({ setDarkMode }) => {
         setMoleculeData(result)
         drawMolecule(result)
         generateSMILES(result)
-    }, [lineAngle, lineLength])
+    }, [lineAngle, lineLength, lineWidth])
 
     // Loading placeholder
     useEffect(() => {
@@ -70,6 +71,7 @@ export const OrganicaPage = ({ setDarkMode }) => {
         e.preventDefault()
         setLineAngle(DEFAULT_ANGLE)
         setLineLength(LINE_LENGTH)
+        setLineWidth(LINE_WIDTH)
 
         CANVAS = document.getElementById("mainOrganicCanvas")
         CTX = CANVAS.getContext("2d")
@@ -128,7 +130,7 @@ export const OrganicaPage = ({ setDarkMode }) => {
         CTX.moveTo(x0, y0);
         CTX.lineTo(x1, y1);
         CTX.strokeStyle = STROKE;
-        CTX.lineWidth = LINE_WIDTH;
+        CTX.lineWidth = lineWidth;
         CTX.stroke();
     }
 
@@ -566,6 +568,8 @@ export const OrganicaPage = ({ setDarkMode }) => {
                         <RangeSlider max={1.57} min={0} inputValue={lineAngle} step={0.01} setInputValue={setLineAngle} />
                         <RangeSliderLabel>Longitud de línia</RangeSliderLabel>
                         <RangeSlider max={200} min={0} inputValue={lineLength} step={1} setInputValue={setLineLength} />
+                        <RangeSliderLabel>Grossor</RangeSliderLabel>
+                        <RangeSlider max={10} min={1} inputValue={lineWidth} step={0.05} setInputValue={setLineWidth} />
                     </> : <></>}
                     {!window.matchMedia("(max-width: 480px)").matches ?
                         <>{SMILES !== "" ?

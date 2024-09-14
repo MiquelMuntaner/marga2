@@ -14,7 +14,7 @@ export const Footer = () => {
 
     return (
         <FooterDiv id="footerDiv">
-            <p>&#169;​Nocions, 2024<br />Versió 0.0.2 (beta)<br />Miquel Muntaner Barceló</p>
+            <p>&#169;​Nocions, 2024<br />Versió 0.0.3 (beta)<br />Miquel Muntaner Barceló</p>
             <p>Un treball de recerca<br />de l'IES Felanitx<br /><a href="/informacio#privacitat">Política de privacitat</a></p>
         </FooterDiv>
     )
