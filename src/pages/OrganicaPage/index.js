@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { PageLayout } from '../../components/PageLayout'
-import { ContainerDiv, InputText, StyledForm, Canvas, DownloadButton, ResetButton, RangeSliderLabel } from './styles'
+import { ContainerDiv, InputText, StyledForm, Canvas, DownloadButton, ResetButton, RangeSliderLabel, RangeSliderContainer } from './styles'
 import { Header } from '../../components/Header'
 import { organicProcessor } from '../../tools/organicProcessor'
 import { RangeSlider } from '../../components/RangeSlider'
@@ -27,6 +27,7 @@ export const OrganicaPage = ({ setDarkMode }) => {
     const [lineAngle, setLineAngle] = useState(DEFAULT_ANGLE)
     const [lineLength, setLineLength] = useState(LINE_LENGTH)
     const [lineWidth, setLineWidth] = useState(LINE_WIDTH)
+    const [doubleBondSpacing, setDoubleBondSpacing] = useState(DOUBLE_BOND_SPACING)
 
 
 
@@ -43,7 +44,7 @@ export const OrganicaPage = ({ setDarkMode }) => {
         setMoleculeData(result)
         drawMolecule(result)
         generateSMILES(result)
-    }, [lineAngle, lineLength, lineWidth])
+    }, [lineAngle, lineLength, lineWidth, doubleBondSpacing])
 
     // Loading placeholder
     useEffect(() => {
@@ -135,7 +136,7 @@ export const OrganicaPage = ({ setDarkMode }) => {
     }
 
     const drawCarbon = (x0, y0, angle, bond = 1, ciclo_angle = 0) => {
-        let temp_double_bond_spacing = DOUBLE_BOND_SPACING
+        let temp_double_bond_spacing = doubleBondSpacing
 
         if (angle >= 0) {
             temp_double_bond_spacing = temp_double_bond_spacing * Math.tan(Math.PI / 2 - angle)
@@ -157,11 +158,11 @@ export const OrganicaPage = ({ setDarkMode }) => {
                 angle = -(angle - Math.PI)
             }
             if (angle <= 0) {
-                var x2 = Math.cos(angle) * (lineLength - 2 * DOUBLE_BOND_SPACING) + x0
-                var y2 = Math.sin(angle) * (lineLength - 2 * DOUBLE_BOND_SPACING) + (y0 - temp_double_bond_spacing)
+                var x2 = Math.cos(angle) * (lineLength - 2 * doubleBondSpacing) + x0
+                var y2 = Math.sin(angle) * (lineLength - 2 * doubleBondSpacing) + (y0 - temp_double_bond_spacing)
             } else {
-                var x2 = Math.cos(angle) * (lineLength - 2 * DOUBLE_BOND_SPACING) + (x0 + temp_double_bond_spacing)
-                var y2 = Math.sin(angle) * (lineLength - 2 * DOUBLE_BOND_SPACING) + y0
+                var x2 = Math.cos(angle) * (lineLength - 2 * doubleBondSpacing) + (x0 + temp_double_bond_spacing)
+                var y2 = Math.sin(angle) * (lineLength - 2 * doubleBondSpacing) + y0
             }
 
             let bondx0 = x0 + (angle >= 0 ? temp_double_bond_spacing : 0)
@@ -180,7 +181,7 @@ export const OrganicaPage = ({ setDarkMode }) => {
                 }
 
                 const EPSILON = ciclo_angle / 2
-                const H = DOUBLE_BOND_SPACING / Math.sin(EPSILON)
+                const H = doubleBondSpacing / Math.sin(EPSILON)
                 const MU = 2 * Math.PI - angle - EPSILON - a
 
                 boundx0 = x0 + Math.cos(MU) * H
@@ -191,10 +192,10 @@ export const OrganicaPage = ({ setDarkMode }) => {
 
             } else if (angle == Math.PI / 2 || angle == -Math.PI / 2) {
                 console.log("angle 0")
-                boundx0 = x0 + DOUBLE_BOND_SPACING
+                boundx0 = x0 + doubleBondSpacing
                 boundy0 = y0
 
-                boundx1 = x1 + DOUBLE_BOND_SPACING
+                boundx1 = x1 + doubleBondSpacing
                 boundy1 = y1
             } else {
                 if (angle > Math.PI * 1.5) {
@@ -203,33 +204,33 @@ export const OrganicaPage = ({ setDarkMode }) => {
                     angle = -(angle - Math.PI)
                 }
                 if (angle <= 0) {
-                    boundx1 = Math.cos(angle) * (lineLength - 2 * DOUBLE_BOND_SPACING) + x0
-                    boundy1 = Math.sin(angle) * (lineLength - 2 * DOUBLE_BOND_SPACING) + (y0 - temp_double_bond_spacing)
+                    boundx1 = Math.cos(angle) * (lineLength - 2 * doubleBondSpacing) + x0
+                    boundy1 = Math.sin(angle) * (lineLength - 2 * doubleBondSpacing) + (y0 - temp_double_bond_spacing)
                 } else {
-                    boundx1 = Math.cos(angle) * (lineLength - 2 * DOUBLE_BOND_SPACING) + (x0 + temp_double_bond_spacing)
-                    boundy1 = Math.sin(angle) * (lineLength - 2 * DOUBLE_BOND_SPACING) + y0
+                    boundx1 = Math.cos(angle) * (lineLength - 2 * doubleBondSpacing) + (x0 + temp_double_bond_spacing)
+                    boundy1 = Math.sin(angle) * (lineLength - 2 * doubleBondSpacing) + y0
                 }
 
                 boundx0 = x0 + (angle >= 0 ? temp_double_bond_spacing : 0)
                 boundy0 = y0 - (angle <= 0 ? temp_double_bond_spacing : 0)
             } /*else if (angle > 0 && angle < Math.PI / 2) {
                 boundx0 = x0
-                boundy0 = y0 + DOUBLE_BOND_SPACING / Math.sin(Math.PI / 2 - angle)
+                boundy0 = y0 + doubleBondSpacing / Math.sin(Math.PI / 2 - angle)
 
-                boundx1 = x1 - DOUBLE_BOND_SPACING / Math.sin(angle)
+                boundx1 = x1 - doubleBondSpacing / Math.sin(angle)
                 boundy1 = y1
             } else if (angle > Math.PI / 2 && angle < Math.PI) {
-                boundx0 = x0 - DOUBLE_BOND_SPACING / Math.sin(Math.PI - angle)
+                boundx0 = x0 - doubleBondSpacing / Math.sin(Math.PI - angle)
                 boundy0 = y0
 
                 boundx1 = x1
-                boundy1 = y1 + DOUBLE_BOND_SPACING / Math.sin(Math.PI / 2 - angle)
+                boundy1 = y1 + doubleBondSpacing / Math.sin(Math.PI / 2 - angle)
             } else if (angle > Math.PI && angle < Math.PI*1.25) {
-                boundx0 = xo-DOUBLE_BOND_SPACING/Math.sin(angle-Math.PI)
+                boundx0 = xo-doubleBondSpacing/Math.sin(angle-Math.PI)
                 boundy0 = yo
 
                 boundx1 = x1
-                boundy1 = y1 + DOUBLE_BOND_SPACING/Math.cos(Math.PI-angles)
+                boundy1 = y1 + doubleBondSpacing/Math.cos(Math.PI-angles)
             } else if (angle > Math.PI && )*/
 
             // drawLine(bondx0, bondy0, x2, y2)
@@ -241,14 +242,14 @@ export const OrganicaPage = ({ setDarkMode }) => {
 
             console.log("part2")
             if (angle <= 0) {
-                temp_double_bond_spacing = -DOUBLE_BOND_SPACING * Math.tan(Math.PI / 2 - angle)
+                temp_double_bond_spacing = -doubleBondSpacing * Math.tan(Math.PI / 2 - angle)
             } else {
-                temp_double_bond_spacing = DOUBLE_BOND_SPACING
+                temp_double_bond_spacing = doubleBondSpacing
             }
 
             if (angle <= 0) {
                 var x2 = x1
-                //var y2 = Math.sin(angle) * (lineLength - 2 * DOUBLE_BOND_SPACING) + (y0 - temp_double_bond_spacing)
+                //var y2 = Math.sin(angle) * (lineLength - 2 * doubleBondSpacing) + (y0 - temp_double_bond_spacing)
                 var y2 = y1 - Math.tan(angle) * temp_double_bond_spacing
             } else {
                 var x2 = x1 - (temp_double_bond_spacing / Math.tan(angle))
@@ -563,14 +564,21 @@ export const OrganicaPage = ({ setDarkMode }) => {
                         <InputText type="text" onChange={handleInputChange} placeholder={"2,3-dimetilpent-2-è"} />
                         <input type="submit" value="Executar"></input>
                     </StyledForm>
-                    {SMILES !== "" ? <>
-                        <RangeSliderLabel>Angle</RangeSliderLabel>
-                        <RangeSlider max={1.57} min={0} inputValue={lineAngle} step={0.01} setInputValue={setLineAngle} />
-                        <RangeSliderLabel>Longitud de línia</RangeSliderLabel>
-                        <RangeSlider max={200} min={0} inputValue={lineLength} step={1} setInputValue={setLineLength} />
-                        <RangeSliderLabel>Grossor</RangeSliderLabel>
-                        <RangeSlider max={10} min={1} inputValue={lineWidth} step={0.05} setInputValue={setLineWidth} />
-                    </> : <></>}
+                    {SMILES !== "" ? <RangeSliderContainer>
+                        <div>
+                            <RangeSliderLabel>Angle</RangeSliderLabel>
+                            <RangeSlider max={1.57} min={0} inputValue={lineAngle} step={0.01} setInputValue={setLineAngle} />
+                            <RangeSliderLabel>Longitud de línia</RangeSliderLabel>
+                            <RangeSlider max={200} min={0} inputValue={lineLength} step={1} setInputValue={setLineLength} />
+                        </div>
+                        <div>
+
+                            <RangeSliderLabel>Grossor</RangeSliderLabel>
+                            <RangeSlider max={10} min={1} inputValue={lineWidth} step={0.05} setInputValue={setLineWidth} />
+                            <RangeSliderLabel>Separació dels dobles enllaços</RangeSliderLabel>
+                            <RangeSlider max={30} min={1} inputValue={doubleBondSpacing} step={0.05} setInputValue={setDoubleBondSpacing} />
+                        </div>
+                    </RangeSliderContainer> : <></>}
                     {!window.matchMedia("(max-width: 480px)").matches ?
                         <>{SMILES !== "" ?
                             <>

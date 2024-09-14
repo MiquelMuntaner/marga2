@@ -14,7 +14,7 @@ export const ContainerDiv = styled.div`
     font-weight: bold;
     font-size: 25px;
     margin: 0;
-    margin-top: calc(50vh - (216px + 69px));
+    margin-top: calc(50vh - (255px + 69px));
     
     
     & > div {
@@ -215,20 +215,24 @@ export const InputText = styled.input`
 `
 
 export const Canvas = styled.canvas`
-    transform: scale(0.4);
+    /*transform: scale(0.4);
     -ms-transform: scale(0.4); 
-    -webkit-transform: scale(0.4);
+    -webkit-transform: scale(0.4);*/
+    transform: scale(0.43);
+    -ms-transform: scale(0.43); 
+    -webkit-transform: scale(0.43);
+    margin-top: 22.8px;
     transform-origin: top left;
     display: block;
     height: auto;
     padding: 0;
-    margin: 0;
     border-radius: 50px;
     // box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
     box-shadow: -5px -5px 9px #FDFDFD, 5px 5px 7px #5e687949;
     //border: 1px solid #333333;
 
     @media only screen and (max-width: 480px) {
+        margin-top: 0;
         /*
         transform: scale(0.27px);
         -ms-transform: scale(0.27px); 
@@ -256,4 +260,26 @@ export const ResetButton = styled.button`
 `
 
 export const RangeSliderLabel = styled.p`
+    color: ${props => props.theme.text};
+    width: 100%;
+
+    @media only screen and (max-width: 480px) {
+        width: calc(100vw - 24vw);
+        font-size: 18px;
+    }
+`
+
+export const RangeSliderContainer = styled.div`
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+
+    & > div {
+        width: 45%;
+    }
+
+    @media only screen and (max-width: 480px) {
+        flex-direction: column;
+    }
+
 `

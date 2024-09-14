@@ -5,7 +5,8 @@ export const Range = styled.div`
     color: black;
     place-items: center;
     height: 50px;
-    width: 300px;
+    //width: 300px;
+    width: calc(100% - 65px - 45px);
     border-radius: 10px;
     box-shadow: -5px -5px 9px #FDFDFD, 5px 5px 7px #5e687949;
     padding: 0 65px 0 45px;

@@ -7,7 +7,7 @@ const VERSIONS = [
     {
         "version": "0.0.3",
         "date": "14/09/2024",
-        "info": ["Correccions d'errors menors.", "Millores de SEO.", "Nova funcionalitat afegida a la formulació orgànica (ara es pot canviar la grossor de la línia)."]
+        "info": ["Correccions d'errors menors.", "Millores de SEO.", "Noves funcionalitats afegides a la formulació orgànica (ara es pot canviar la grossor de la línia i la separació dels dobles enllaços)."]
     },
     {
         "version": "0.0.2",
