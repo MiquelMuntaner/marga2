@@ -308,7 +308,7 @@ export const InputDropdown = styled.div`
     }
 
     & > div {
-        padding: 15px 0 15px 15px;
+        padding: 10px 0 10px 0px;
         margin: 0;
         display: flex;
         align-items: center;
@@ -317,7 +317,7 @@ export const InputDropdown = styled.div`
 
     & > div > button:first-child {
         height: auto;
-        font-size: 16px;
+        font-size: 17px;
         color: ${props => props.theme.text};
         background: none;
         color: inherit;

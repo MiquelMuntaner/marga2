@@ -93,6 +93,19 @@ export const OrganicaPage = ({ setDarkMode }) => {
         }
     }
 
+    const handleInputAdd = (valueInput) => {
+        setInputValue(valueInput)
+        document.getElementById("inputText").value = valueInput
+
+        CANVAS = document.getElementById("mainOrganicCanvas")
+        CTX = CANVAS.getContext("2d")
+        let result = organicProcessor(valueInput)
+
+        setMoleculeData(result)
+        drawMolecule(result)
+        generateSMILES(result)
+    }
+
     const resetValues = (e) => {
         e.preventDefault()
         setLineAngle(DEFAULT_ANGLE)
@@ -572,6 +585,7 @@ export const OrganicaPage = ({ setDarkMode }) => {
     }
 
     const handleInputChange = (e) => {
+        e.preventDefault()
         setInputValue(e.target.value)
         if (e.target.value.length === 0) {
             setInputEmpty(true)
@@ -588,7 +602,7 @@ export const OrganicaPage = ({ setDarkMode }) => {
                     <Header subheader="Orgànica" />
                     <StyledForm empty={inputEmpty} data-text={inputValue} onSubmit={handleSubmit}>
                         <label htmlFor="formula" className='form_label' id='inorganica_label'>Nom</label>
-                        <InputText type="text" onChange={handleInputChange} placeholder={"2,3-dimetilpent-2-è"} />
+                        <InputText id="inputText" type="text" onChange={handleInputChange} placeholder={"2,3-dimetilpent-2-è"} />
                         <InputDropdown>
                             {searchHistory.filter(item => {
                                 const searchTerm = inputValue.toLowerCase()
@@ -597,7 +611,7 @@ export const OrganicaPage = ({ setDarkMode }) => {
                                 return searchTerm && searchTerm !== molecule && molecule.startsWith(searchTerm)
                             }).map((item) => (
                                 <div>
-                                    <button onClick={() => setInputValue(item)}>{item}</button>
+                                    <button onClick={() => handleInputAdd(item)}>{item}</button>
                                     <button onClick={() => removeFromHistory(item)}>x</button>
                                 </div>
                             ))}
