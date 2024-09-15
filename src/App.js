@@ -6,7 +6,7 @@ import { ExercicisPage } from './pages/ExercicisPage';
 import { useEffect, useState } from 'react';
 import { ThemeProvider } from 'styled-components';
 import { InformacioPage } from './pages/InformacioPage';
-import { GoogleAnalytics } from './components/GoogleAnalytics'
+import PageTitle from './components/PageTitle';
 /*
 import { ReactGAImplementation } from 'react-ga4';
 
@@ -50,14 +50,33 @@ function App() {
 
     return (
         <div className="App">
-            <GoogleAnalytics GA_MEASUREMENT_ID={"G-D1DX631HCE"} />
             <ThemeProvider theme={theme}>
                 <Routes>
-                    <Route path='/' element={<InorganicaPage setDarkMode={setDarkMode} />} />
-                    <Route path='/inorganica' element={<InorganicaPage setDarkMode={setDarkMode} />} />
-                    <Route path='/organica' element={<OrganicaPage setDarkMode={setDarkMode} />} />
+                    <Route path='/' element={(
+                        <>
+                            <PageTitle title="Nocions - Inorgànica" />
+                            <InorganicaPage setDarkMode={setDarkMode} />
+                        </>
+                    )} />
+                    <Route path='/inorganica' element={
+                        <>
+                            <PageTitle title="Nocions - Inorgànica" />
+                            <InorganicaPage setDarkMode={setDarkMode} />
+                        </>
+                    } />
+                    <Route path='/organica' element={
+                        <>
+                            <PageTitle title="Nocions - Orgànica" />
+                            <OrganicaPage setDarkMode={setDarkMode} />
+                        </>}
+                    />
                     <Route path='/exercicis' element={<ExercicisPage setDarkMode={setDarkMode} />} />
-                    <Route path='/informacio' element={<InformacioPage setDarkMode={setDarkMode} />} />
+                    <Route path='/informacio' element={
+                        <>
+                            <PageTitle title="Nocions - Informació" />
+                            <InformacioPage setDarkMode={setDarkMode} />
+                        </>
+                    } />
                 </Routes>
             </ThemeProvider>
         </div>
