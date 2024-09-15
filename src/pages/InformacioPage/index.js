@@ -5,6 +5,11 @@ import { getLocalStorage, setLocalStorage } from '../../tools/storageHelper'
 
 const VERSIONS = [
     {
+        "version": "0.0.4",
+        "date": "15/09/2024",
+        "info": ["Correccions d'errors menors.", "Historial de cerca local afegit a l'orgànica."]
+    },
+    {
         "version": "0.0.3",
         "date": "14/09/2024",
         "info": ["Correccions d'errors menors.", "Millores de SEO.", "Noves funcionalitats afegides a la formulació orgànica (ara es pot canviar la grossor de la línia i la separació dels dobles enllaços)."]

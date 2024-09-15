@@ -64,7 +64,7 @@ export const ContainerDiv = styled.div`
         flex-direction: column;
         width: auto;
         padding: 0 12% 0 12%;
-        margin-top: 20px;
+        margin-top: 15px;
         
         & > div:nth-child(2) {
             height: auto;
@@ -282,4 +282,73 @@ export const RangeSliderContainer = styled.div`
         flex-direction: column;
     }
 
+`
+
+export const InputDropdown = styled.div`
+    position: absolute;
+    width: calc(100% - 115px);
+    left: -2px;
+    top: 50px;
+    color: black;
+    background-color: #F2F3F4;
+    box-shadow: -5px 0px 9px #FDFDFD, 5px 5px 7px #5e687949;
+    z-index: 100000;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px; 
+
+    &:before {
+        content: '';
+        position: absolute;
+        top: -5px;;
+        left: 0;
+        right: 0;
+        height: 5px; 
+        background-color: #F2F3F4;
+        z-index: 1;
+    }
+
+    & > div {
+        padding: 15px 0 15px 15px;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    & > div > button:first-child {
+        height: auto;
+        font-size: 16px;
+        color: ${props => props.theme.text};
+        background: none;
+        color: inherit;
+        border: none;
+        padding: 0;
+        outline: inherit;
+        margin: 0;
+        transition: all 300ms;
+        width: 80%;
+        text-align: left;
+    }
+
+    & > div > button:first-child:hover {
+        color: ${props => props.theme.secondary};
+    }
+
+    & > div > button:last-child {
+        color: black;
+        width: 32px;
+        height: 32px;
+        opacity: 0.3;
+        font-size: 18px;
+        border: none;
+    }
+
+    & > div > button:last-child:hover {
+        opacity: 1;
+    }
+
+    @media only screen and (max-width: 480px) {
+        width: 76vw;
+        left: 0;
+    }
 `

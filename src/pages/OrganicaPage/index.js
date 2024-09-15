@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from 'react'
 import { PageLayout } from '../../components/PageLayout'
-import { ContainerDiv, InputText, StyledForm, Canvas, DownloadButton, ResetButton, RangeSliderLabel, RangeSliderContainer } from './styles'
+import { ContainerDiv, InputText, StyledForm, Canvas, DownloadButton, ResetButton, RangeSliderLabel, RangeSliderContainer, InputDropdown } from './styles'
 import { Header } from '../../components/Header'
 import { organicProcessor } from '../../tools/organicProcessor'
 import { RangeSlider } from '../../components/RangeSlider'
 import { CookieBanner } from '../../components/CookieBanner'
+import { getLocalStorage, setLocalStorage } from '../../tools/storageHelper'
 
 export const OrganicaPage = ({ setDarkMode }) => {
     const [moleculeData, setMoleculeData] = useState("")
     const [SMILES, setSMILES] = useState("")
     const [inputValue, setInputValue] = useState("")
     const [inputEmpty, setInputEmpty] = useState(true)
-
+    const [searchHistory, setSearchHistory] = useState([])
+    const [trueInputValue, setTrueInputValue] = useState("")
     // Definint constants
     // ADVERTENCIA: no modificar els valors per defecte sense entendre el funcionament del programa
 
@@ -66,13 +68,37 @@ export const OrganicaPage = ({ setDarkMode }) => {
             document.getElementById("canvasDiv").style.width = parseInt(document.documentElement.clientWidth) * 0.76 + "px"
             document.getElementById("canvasDiv").style.height = `${parseInt(document.documentElement.clientWidth) * 0.76}px`
         }
+
+        setSearchHistory(getLocalStorage("historialDeCerca", []))
     }, [])
+
+    useEffect(() => {
+        setLocalStorage("historialDeCerca", searchHistory)
+        console.log("writing to local storage")
+        console.log("Search values", searchHistory)
+    }, [searchHistory])
+
+    const addHistory = (newValue) => {
+        if (!searchHistory.includes(newValue)) {
+            setSearchHistory([...searchHistory, newValue])
+            console.log("adding history")
+        }
+    }
+
+    const removeFromHistory = (value) => {
+        if (searchHistory.indexOf(value) > -1) {
+            setSearchHistory(searchHistory.filter((item) => {
+                return item !== value
+            }))
+        }
+    }
 
     const resetValues = (e) => {
         e.preventDefault()
         setLineAngle(DEFAULT_ANGLE)
         setLineLength(LINE_LENGTH)
         setLineWidth(LINE_WIDTH)
+        setDoubleBondSpacing(DOUBLE_BOND_SPACING)
 
         CANVAS = document.getElementById("mainOrganicCanvas")
         CTX = CANVAS.getContext("2d")
@@ -90,6 +116,7 @@ export const OrganicaPage = ({ setDarkMode }) => {
         setInputValue(e.target[0].value)
         let result = organicProcessor(e.target[0].value)
 
+        addHistory(e.target[0].value)
         setMoleculeData(result)
         drawMolecule(result)
         generateSMILES(result)
@@ -562,6 +589,19 @@ export const OrganicaPage = ({ setDarkMode }) => {
                     <StyledForm empty={inputEmpty} data-text={inputValue} onSubmit={handleSubmit}>
                         <label htmlFor="formula" className='form_label' id='inorganica_label'>Nom</label>
                         <InputText type="text" onChange={handleInputChange} placeholder={"2,3-dimetilpent-2-è"} />
+                        <InputDropdown>
+                            {searchHistory.filter(item => {
+                                const searchTerm = inputValue.toLowerCase()
+                                const molecule = item.toLowerCase()
+
+                                return searchTerm && searchTerm !== molecule && molecule.startsWith(searchTerm)
+                            }).map((item) => (
+                                <div>
+                                    <button onClick={() => setInputValue(item)}>{item}</button>
+                                    <button onClick={() => removeFromHistory(item)}>x</button>
+                                </div>
+                            ))}
+                        </InputDropdown>
                         <input type="submit" value="Executar"></input>
                     </StyledForm>
                     {SMILES !== "" ? <RangeSliderContainer>
