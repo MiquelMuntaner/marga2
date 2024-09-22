@@ -11,7 +11,7 @@ export const InfoContainer = styled.div`
     @media only screen and (max-width: 480px) {
         font-size: 15px;
         width: auto;
-        padding: 0% 14% 0% 14%;
+        padding: 0% 10% 0% 10%;
     }
 
     & > p {

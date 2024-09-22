@@ -6,6 +6,7 @@ import { ExercicisPage } from './pages/ExercicisPage';
 import { useEffect, useState } from 'react';
 import { ThemeProvider } from 'styled-components';
 import { InformacioPage } from './pages/InformacioPage';
+import CacheBuster from 'react-cache-buster'
 import PageTitle from './components/PageTitle';
 /*
 import { ReactGAImplementation } from 'react-ga4';
@@ -16,6 +17,7 @@ ReactGAImplementation.initialize(TRACKING_ID)
 */
 function App() {
     const [darkMode, setDarkMode] = useState(true)
+    const isProduction = process.env.NODE_ENV === 'production';
 
     const theme = {
         bg: "white",

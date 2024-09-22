@@ -23,6 +23,7 @@ export const calcEntitatHomoatomica = (formula, addInstructions) => {
 }
 
 export const calcOxoacids = (formula) => {
+    console.log(formula, "oxosal")
     let valenceMiddleElement = -(formula[0].atomCount + (formula[2].atomCount * -2))
 
     let valencesWithoutNegatives = formula[1].valences.map((x) => {
@@ -30,6 +31,12 @@ export const calcOxoacids = (formula) => {
     }).filter((x) => {
         if (x !== undefined) { return x }
     })
+
+    if (formula[1].name == "manganès") {
+        if (valencesWithoutNegatives.indexOf(2) > -1) {
+            valencesWithoutNegatives.splice(valencesWithoutNegatives.indexOf(2), 1)
+        }
+    }
 
     // Excepcions dels oxoàcids
     if (["B", "P", "As", "Sb", "Si"].includes(formula[1].letters)) {

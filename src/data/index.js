@@ -98,6 +98,7 @@ export const data = {
         "isMetall": true,
         "plusUrName": "",
         "oxoAcidNames": ["hipocromós", "cromós", "cròmic"],
+        "oxoSalNames": ["hipocromit", "cromit", "cromat", "percromat"],
         "molarMass": 51.9961
     },
     "Mn": {
@@ -105,6 +106,8 @@ export const data = {
         "valences": [2, 3, 4, 6, 7],
         "isMetall": true,
         "plusUrName": "",
+        "oxoAcidNames": ["hipomanganós", "manganós", "mangònic", "permangònic"],
+        "oxoSalNames": ["hipomanganit", "manganit", "manganat", "permanganat"],
         "molarMass": 54.9380
     },
     "Fe": {
@@ -335,6 +338,7 @@ export const data = {
         "isMetall": false,
         "plusUrName": "bromur",
         "oxoAcidNames": ["hipobromós", "bromós", "bròmic", "perbròmic"],
+        "oxoSalNames": ["hipobromit", "bromit", "bromat", "perbromat"],
         "molarMass": 79.904
     },
     "I": {

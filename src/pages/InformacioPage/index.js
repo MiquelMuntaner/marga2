@@ -5,6 +5,11 @@ import { getLocalStorage, setLocalStorage } from '../../tools/storageHelper'
 
 const VERSIONS = [
     {
+        "version": "0.0.5",
+        "date": "22/09/2024",
+        "info": ["Solucionats errors amb les oxisals i els oxoàcids del Manganès.", "Solucionats alguns errors d'accentuació als compostos inorgànics.", "Millorat el disseny per a mòbils d'aquest apartat de la pàgina."]
+    },
+    {
         "version": "0.0.4",
         "date": "15/09/2024",
         "info": ["Correccions d'errors menors.", "Historial de cerca local afegit a l'orgànica."]
