@@ -323,7 +323,7 @@ export const OrganicaPage = ({ setDarkMode }) => {
         CTX.fillRect(x0, y0, rectangle_width, rectangle_height)
 
         // Drawing text
-        CTX.font = "bold 35px Roboto"
+        CTX.font = "bold 35px 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif";
         CTX.fillStyle = "black"
         CTX.fillText(text, x - textWidth / 2, y + textHeight / 2)
     }
@@ -387,7 +387,7 @@ export const OrganicaPage = ({ setDarkMode }) => {
             if (data[0].acidCarboxilic == true) {
                 drawText(oxigen_coord[0], oxigen_coord[1], "HO")
             } else {
-                drawText(oxigen_coord[0], oxigen_coord[1], "H₂N")
+                drawText(oxigen_coord[0], oxigen_coord[1], "NH₂")
             }
 
             let angle_ramificacio = (data[0].ciclo == true) ?
@@ -551,7 +551,7 @@ export const OrganicaPage = ({ setDarkMode }) => {
 
     const drawWaterMark = () => {
         var text = "Nocions.cat"
-        CTX.font = "bold 35px Roboto"
+        CTX.font = "bold 35px 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif";
         CTX.fillStyle = "#3A4B4C"
         CTX.fillText(text, 200, 1000)
 

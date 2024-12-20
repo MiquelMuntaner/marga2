@@ -3,6 +3,7 @@ import './App.css';
 import { InorganicaPage } from './pages/InorganicaPage';
 import { OrganicaPage } from './pages/OrganicaPage';
 import { ExercicisPage } from './pages/ExercicisPage';
+import { IniciPage } from './pages/IniciPage';
 import { useEffect, useState } from 'react';
 import { ThemeProvider } from 'styled-components';
 import { InformacioPage } from './pages/InformacioPage';
@@ -20,7 +21,7 @@ function App() {
     const isProduction = process.env.NODE_ENV === 'production';
 
     const theme = {
-        bg: "white",
+        bg: "#F2F3F4",
         text: "#333333",
         // main: "#3E0F4A",
         main: "#3E0F4A",
@@ -56,8 +57,8 @@ function App() {
                 <Routes>
                     <Route path='/' element={(
                         <>
-                            <PageTitle title="Nocions - Inorgànica" />
-                            <InorganicaPage setDarkMode={setDarkMode} />
+                            <PageTitle title="Nocions - Inici" />
+                            <IniciPage setDarkMode={setDarkMode} />
                         </>
                     )} />
                     <Route path='/inorganica' element={

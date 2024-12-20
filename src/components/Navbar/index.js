@@ -16,6 +16,11 @@ export const Navbar = ({ setDarkMode }) => {
             </div>
             <ul>
                 <li>
+                    <NavLink activeClassName="active" to="/">
+                        Inici
+                    </NavLink>
+                </li>
+                <li>
                     <NavLink activeClassName="active" to="/inorganica">
                         Inorgànica
                     </NavLink>

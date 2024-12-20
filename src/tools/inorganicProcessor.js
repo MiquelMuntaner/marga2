@@ -271,7 +271,7 @@ export const calcPrefixosMultiplicadors = (formula, addInstructions) => {
         + prefixos[formula[0].atomCount - 1]
         + formula[0].name
 
-    addInstructions(`Per tant, invertim la posició dels compostos i apliquem el prefix, obtenint el següent resultat: <b>${result}</b>.`)
+    addInstructions(`Per tant, invertim la posició dels elements i apliquem el prefix, obtenint el següent resultat: <b>${result}</b>.`)
 
     return result
 }
