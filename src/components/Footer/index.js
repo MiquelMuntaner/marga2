@@ -6,7 +6,7 @@ export const Footer = () => {
     const { hash, pathname, search } = useLocation()
 
     useEffect(() => {
-        if ((pathname == "/inorganica" || pathname == "/") && !window.matchMedia("(max-width: 480px)").matches) {
+        if ((pathname == "/inorganica") && !window.matchMedia("(max-width: 480px)").matches) {
             console.log("pathname", pathname)
             document.getElementById("footerDiv").style.position = "absolute"
         }

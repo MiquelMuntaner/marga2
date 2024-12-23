@@ -1,11 +1,24 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { PageLayout } from '../../components/PageLayout'
-import { MainContainer, HeaderContainer, FalseInputContainer, OrganicaContainer } from './styles'
+import { MainContainer, HeaderContainer, FalseInputContainer, OrganicaContainer, InorganicaContainer } from './styles'
 import { useNavigate } from 'react-router'
 import { Parallax, ParallaxLayer } from '@react-spring/parallax'
 import { Navbar } from '../../components/Navbar'
 import { useInView } from 'react-intersection-observer'
 import { Footer } from '../../components/Footer'
+import {ReactTyped} from 'react-typed'
+
+
+const images = [
+    { src: "./assets/etanoat-de-butil.png", duration: 2920 },
+    { src: "./assets/benze.png", duration: 3000 },
+    { src: "./assets/acid-octanoic.png", duration: 3880 }, 
+];
+
+const compostos = [
+    ["NaCl", "Sal binària", "058,4428"],
+    ["Dihidrogenfosfat de calci", "Sal àcida", "137,0652"]
+]
 
 
 export const IniciPage = ({ setDarkMode }) => {
@@ -21,44 +34,132 @@ export const IniciPage = ({ setDarkMode }) => {
         navigate("/organica")
     }
 
-    return (
-        <MainContainer>
-            <Parallax pages={3} style={{ top: '0', left: '0' }}>
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
+    const [currentInorganicaIndex, setCurrentInorganicaIndex] = useState(0)
+    const [fade, setFade] = useState(false);
+    const [inorganicaFade, setInorganicaFade] = useState(false)
+    let animationHasStarted = false
+    let inorganicaHasStarted = false
 
-                <ParallaxLayer offset={0} speed={0.1}>
+    const switchImage = () => {
+        if (animationHasStarted) {
+            setFade(true); // Start fade-out
+            setTimeout(() => {
+                setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
+                setFade(false); // Start fade-in
+            }, 500); // This timeout matches the CSS fade duration
+        } else {
+            animationHasStarted = true
+            setFade(false)
+        }
+    };
+
+    useEffect(() => {
+        setFade(true)
+        setInorganicaFade(true)
+    }, [])
+
+
+    const switchInorganica = () => {
+        if (inorganicaHasStarted) {
+            setInorganicaFade(true); // Start fade-out
+            setTimeout(() => {
+                setCurrentInorganicaIndex((prevIndex) => (prevIndex + 1) % compostos.length);
+                setInorganicaFade(false); // Start fade-in
+            }, 500); // This timeout matches the CSS fade duration
+        } else {
+            inorganicaHasStarted = true
+            setInorganicaFade(false)
+        }
+    }
+
+    return (
+        <PageLayout setDarkMode={setDarkMode}>
+            <MainContainer>
                     <HeaderContainer>
-                        <h1>La formulació humanitzada, <b>Nocions.cat</b></h1>
+                        <h1>La formulació humanitzada,<br></br> <b><ReactTyped
+                                    strings={[
+                                        "Nocions.cat"
+                                    ]}
+                                    startDelay={0}
+                                    typeSpeed={100}
+                                /></b></h1>
                         <h2>La primera plataforma en català que automatitza tot el procés de formulació química.</h2>
                         <div>
                             <button type='button' onClick={onInorganicaClick} ><span>Formulació</span> Inorgànica</button>
                             <button type='button' onClick={onOrganicaClick}><span>Formulació</span> Orgànica</button>
                         </div>
                     </HeaderContainer>
-                </ParallaxLayer>
-                <ParallaxLayer offset={0} factor={0.3} speed={0}>
-                    <Navbar setDarkMode={setDarkMode} style={{ position: "realtive", zIndex: '1000' }} />
-                </ParallaxLayer>
-
-                <ParallaxLayer offset={0.8} speed={0.000000005}>
                     <OrganicaContainer>
-                        <img src='./assets/etanoat-de-butil.png'  className={`${inView ? 'visible' : ''}`}></img>
+                        <div>
+                            <h2>Formulació orgànica</h2>
+                            <p>Formula fàcilment qualsevol compost orgànic del temari de primer de batxillerat, genera imatges professionals per a exercicis i explora totes les opcions de personalització que s'adapten a les teves necessitats.</p>
+                            <button type='button' onClick={onOrganicaClick}><span>Formulació</span> Orgànica</button>
+                        </div>
+                        <div>
+                            <p>
+                                <ReactTyped
+                                    strings={[
+                                        "Etanoat de butil",
+                                        "Benzè",
+                                        "Àcid octanoic"
+                                    ]}
+                                    startDelay={0}
+                                    typeSpeed={100}
+                                    backDelay={1400}
+                                    backSpeed={60}
+                                    fadeOutDelay={0}
+                                    onStringTyped={() => switchImage()}
+                                    loop
+                                />
+                            </p>
+                            <img src={images[currentImageIndex].src} className={fade ? "fade" : ""}></img>
+                            <img className='blankImage' src='./assets/blank.png'></img>
+                        </div>     
                     </OrganicaContainer>
-                </ParallaxLayer>
-                <ParallaxLayer offset={0.9} speed={0.5}>
-                    <FalseInputContainer>
-                            <h2>Orgànica</h2>
+                    <InorganicaContainer>
+                        <div>
+                            <p>
+                                <ReactTyped
+                                    strings={[
+                                        "Clorur de sodi",
+                                        "Ca(H₂PO₄)₂",
+                                    ]}
+                                    startDelay={0}
+                                    typeSpeed={100}
+                                    backDelay={1400}
+                                    backSpeed={60}
+                                    fadeOutDelay={0}
+                                    onStringTyped={() => switchInorganica()}
+                                    loop
+                                />
+                            </p>
+                            <div>
+                                <p>Resultat: <span className={inorganicaFade ? "inorganicaFade" : ""}>{compostos[currentInorganicaIndex][0]}</span></p>
+                                <p>Tipus: <span className={inorganicaFade ? "inorganicaFade" : ""}>{compostos[currentInorganicaIndex][1]}</span></p>
+                                <p>Massa molar: <span className={inorganicaFade ? "inorganicaFade" : ""}>{compostos[currentInorganicaIndex][2]}</span></p>
+                            </div>
+                        </div>
+                        <div>
+                            <h2>
+                                Formulació inorgànica
+                            </h2>
+                            <p>Formula compostos inorgànics de manera totalment automàtica o obté la seva composició a partir del nom formulat, tot mentre reps instruccions detallades del procés per aprendre'n de manera efectiva.</p>
+                            <button type='button' onClick={onInorganicaClick} ><span>Formulació</span> Inorgànica</button>
+                        </div>
+                    </InorganicaContainer>
+                    {/*<FalseInputContainer>
+                        <div></div>
                         <div>
                             <p
                                 ref={organicaRef}
                                 className={`${inView ? 'visible' : ''}`}
                             >Etanoat de butil</p>
                         </div>
-                    </FalseInputContainer>
-                </ParallaxLayer>
-                <ParallaxLayer factor={0.2} offset={2.8} speed={0}>
-                    <Footer />
-                </ParallaxLayer>
-            </Parallax>
-        </MainContainer>
+                        <img src='./assets/etanoat-de-butil.png'></img>
+                    </FalseInputContainer>*/}
+
+            </MainContainer>
+        </PageLayout>
     )
 }

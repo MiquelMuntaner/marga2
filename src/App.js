@@ -9,6 +9,7 @@ import { ThemeProvider } from 'styled-components';
 import { InformacioPage } from './pages/InformacioPage';
 import CacheBuster from 'react-cache-buster'
 import PageTitle from './components/PageTitle';
+import { Page404 } from './pages/404Page';
 /*
 import { ReactGAImplementation } from 'react-ga4';
 
@@ -55,6 +56,12 @@ function App() {
         <div className="App">
             <ThemeProvider theme={theme}>
                 <Routes>
+                    <Route path='*' element={(
+                        <>
+                            <PageTitle title="Nocions - Error 404" />
+                            <Page404 setDarkMode={setDarkMode} />
+                        </>
+                    )} />
                     <Route path='/' element={(
                         <>
                             <PageTitle title="Nocions - Inici" />

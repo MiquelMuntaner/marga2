@@ -17,6 +17,11 @@ export const NavbarContainer = styled.div`
         height: 46px;
         margin-top: 7px;
         margin-left: 40px;
+        transition: all 300ms;
+    }
+
+    & > div > img:hover {
+        transform: scale(1.2);
     }
 
     & > div {
@@ -91,7 +96,7 @@ export const NavbarContainer = styled.div`
         align-items: center;
         justify-content: center;
 
-        font-size: 15px;
+        font-size: 13px;
 
         & > ul {
             padding: 0;

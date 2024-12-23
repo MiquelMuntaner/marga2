@@ -23,7 +23,7 @@ export const OrganicaPage = ({ setDarkMode }) => {
     let CTX // Context del canvas
     const DOUBLE_BOND_SPACING = 12 // Espai entra la línia princpial i la línia del doble enllaç (px)
     const LINE_LENGTH = 110 // Longitud de la línia que representa els carbonis (px)
-    const DEFAULT_ANGLE = Math.PI / 5 // Angle per defecta entre les línies (menys en cas de raminificacions) (rad)
+    const DEFAULT_ANGLE = 0.5235 // Angle per defecta entre les línies (menys en cas de raminificacions) (rad)
     const PLACEHOLDER = "2,3-dimetilpent-2-è"
 
     const [lineAngle, setLineAngle] = useState(DEFAULT_ANGLE)

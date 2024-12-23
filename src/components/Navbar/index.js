@@ -1,18 +1,23 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { NavbarContainer, ToggleDarkMode } from './styles'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 
 export const Navbar = ({ setDarkMode }) => {
     const checkboxRef = useRef()
+    const navigate = useNavigate()
 
     const handleCheckboxChange = (e) => {
         setDarkMode(checkboxRef.current.checked)
     }
 
+    const logoClicked = () => {
+        navigate("/")
+    }
+
     return (
         <NavbarContainer>
             <div>
-                <img src="./assets/logo.png" alt="" />
+                <img src="./assets/logo.png" onClick={logoClicked} alt="" />
             </div>
             <ul>
                 <li>
