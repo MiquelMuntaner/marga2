@@ -12,6 +12,10 @@ export const calcMassaMolar = (formula) => {
     return round(finalMolarMass, 4)
 }
 
+const primerLletraMajuscula = (val) => (
+    String(val).charAt(0).toUpperCase() + String(val).slice(1)
+)
+
 export const calcEntitatHomoatomica = (formula, addInstructions) => {
     const prefixos = ["", "di", "tri", "tetra", "penta", "hexa", "hepta", "octa", "nona", "deca"]
     let result = prefixos[formula[0].atomCount - 1]
@@ -22,9 +26,10 @@ export const calcEntitatHomoatomica = (formula, addInstructions) => {
     return result
 }
 
-export const calcOxoacids = (formula) => {
+export const calcOxoacids = (formula, addInstructions) => {
     console.log(formula, "oxosal")
     let valenceMiddleElement = -(formula[0].atomCount + (formula[2].atomCount * -2))
+    addInstructions(`Si la fórmula té l'estructura <b>H<sub>a</sub>X<sub>b</sub>O<sub>c</sub></b>, <b>és un oxoàcid</b>. Sabent que l'oxigen té valència -2 i l'hidrogen +1, calculem el nombre d'oxidació de l'element central (X) perquè <b>la càrrega total sigui 0</b>, resultant en <b>${formula[1].atomCount == 2 ? valenceMiddleElement/2 : valenceMiddleElement}</b>.`)
 
     let valencesWithoutNegatives = formula[1].valences.map((x) => {
         if (x >= 0) { return x }
@@ -38,10 +43,14 @@ export const calcOxoacids = (formula) => {
         }
     }
 
+    addInstructions(`Un cop determinat el nombre d'oxidació de l'element central, segons <a target=”_blank” href="./assets/Taula-oxids-no-metàl·lics.png">la taula</a> obtenim el compost formulat. Aquest, com que es tracta d'un oxoàcid, <b>comença amb "Àcid"</b>, seguit del nom específic segons el nombre d'oxidació (en aquest cas: <b>${formula[1].atomCount == 2 ? formula[1].oxoAcidNames[valencesWithoutNegatives.indexOf(valenceMiddleElement / 2)] : formula[1].oxoAcidNames[valencesWithoutNegatives.indexOf(valenceMiddleElement)]}</b>).`)
+    
     // Excepcions dels oxoàcids
     if (["B", "P", "As", "Sb", "Si"].includes(formula[1].letters)) {
         // Crea l'oxoacid i després mira si es el mateix,
         // en el cas que no sigui el mateix asumeix que s'hi han afegit tres aigues
+
+        addInstructions(`Com que es tracta del ${formula[1].name}, cal considerar que <b>és una excepció</b>, ja que els seus oxoàcids <b>poden formar-se afegint una o ${["B", "Si"].includes(formula[1].letters) ? "dues" : "tres"}</b> molècules d'aigua. Per tant, comprovem si és possible formar l'àcid que se'ns presenta afegint només una molècula d'aigua.`)
 
         //Afegim oxigens
         let atomCountNewOxoacid = [0, 2, valenceMiddleElement]
@@ -62,8 +71,14 @@ export const calcOxoacids = (formula) => {
         }
 
         if (JSON.stringify(atomCountInputOxoacid) === JSON.stringify(atomCountNewOxoacid)) {
-            return `àcid meta${formula[1].oxoAcidNames[valencesWithoutNegatives.indexOf(valenceMiddleElement) - 1]}`
+            addInstructions(`Com que no és el cas <b>hem d'afegir el prefix "meta"</b> a l'inici, indicant que és l'excepció.`)
+            return `àcid meta${formula[1].oxoAcidNames[valencesWithoutNegatives.indexOf(valenceMiddleElement)]}`
         }
+        addInstructions(`Com que és el cas podem <b>no afegir cap prefix o afegir el prefix "orto"</b>, indicant que només se li ha afegit una molècula d'aigua.`)
+    }
+
+    if (formula[1].atomCount == 2) {
+        addInstructions(`En aquest cas veiem que hi ha dos àtoms de ${formula[1].name}, per tant, <b>l'àcid està dimeritzat</b>. Per indicar-ho afegim el <b>prefix "di"</b>.`)
     }
 
     // Verificam si l'àcid está dimeritzat i tornam el resultat
@@ -73,7 +88,7 @@ export const calcOxoacids = (formula) => {
             `${formula[1].oxoAcidNames[valencesWithoutNegatives.indexOf(valenceMiddleElement)]}`)
 }
 
-export const calcOxosals = (formula) => {
+export const calcOxosals = (formula, addInstructions) => {
     let possibleAtomCountOxigen = []
     let possibleAtomCountHidrogen = []
     let possibleAtomCountHidrogenException = []
@@ -177,7 +192,7 @@ export const calcOxosals = (formula) => {
             console.log("aquiiii alots")
         }
 
-        hidrogenAtomCount = (formula.length === 5 ? hidrogenAtomCount - formula[1] : hidrogenAtomCount)
+        hidrogenAtomCount = (formula.length === 5 ? hidrogenAtomCount - formula[1].atomCount : hidrogenAtomCount)
 
         console.log("HOOOLAAA", usedFormula[2])
         console.log("dos", possibleAtomCountOxigenException.indexOf(usedFormula[2].atomCount))
@@ -191,6 +206,26 @@ export const calcOxosals = (formula) => {
         if (["ós", "ic"].includes(oxoAcidName.slice(-2))) {
             oxoAcidName = oxoAcidName.replace("ós", "it").replace("ic", "at")
         }
+
+        let oxoAcidOriginal = `H<sub>${formula.length !== 5 ? (hidrogenAtomCount != 1 ? hidrogenAtomCount : ""): (hidrogenAtomCount != 1 ? hidrogenAtomCount : "")}</sub>${formula.length !== 5 ? formula[1].letters : formula[2].letters}<sub>${formula.length !== 5 ? (formula[1].atomCount != 1 ? formula[1].atomCount : "") : (formula[2].atomCount != 1 ? formula[2].atomCount : "")}</sub>O<sub>${formula.length === 5 ? (formula[3].atomCount != 1 ? formula[3].atomCount : "") : (formula[2].atomCount != 1 ? formula[2].atomCount : "")}</sub>`
+        addInstructions(`A diferència dels oxoàcids, les oxosals tenen un altre element ocupant el lloc dels hidrògens. ${formula.length !== 5 ? "Per tant, identifiquem que <b>es tracta d'una oxosal</b>" : "A més en aquest cas no ha perdut tots els hidrogens l'oxoàcid, per tant, <b>es tracta d'una sal àcida</b>."}. El primer pas és determinar de quin oxoàcid deriva; en aquest cas, <b>l'origen és ${oxoAcidOriginal}</b>.`)
+
+        addInstructions(`A partir de l'oxoàcid ${oxoAcidOriginal}, <b>determinem la valència del ${formula[1].name}</b> i consultem <a target=”_blank” href="./assets/Taula-oxosals.png">la taula per a les oxosals</a> per identificar com s'ha de nomenar el ${formula[1].name} en l'oxosal (<b>en aquest cas "${oxoAcidName}"</b>).`)
+
+        if (valenciesSenseNegatiu.length === 1) {
+            addInstructions(`Determinem l'estat d'oxidació del metall (${formula[0].name}), que en aquest cas és <b>${hidrogenAtomCount}</b>. Com que només té un estat d'oxidació possible, <b>no cal indicar-lo</b>. Per tant tenim: <b>"${primerLletraMajuscula(oxoAcidName)} de ${usedFormula[0].name}"</b>.`)
+        } else {
+            addInstructions(`Determinem l'estat d'oxidació del metall (${formula[0].name}), que en aquest cas és <b>${hidrogenAtomCount}</b>. Com que té més d'un estat d'oxidació possible, <b>l'indiquem entre parèntesis</b> amb nombres romans. Per tant tenim: <b>"${primerLletraMajuscula(oxoAcidName)} de ${usedFormula[0].name}(${intToRoman(hidrogenAtomCount.toString())})"</b>`)
+        }
+
+        if (formula.length === 5) {
+            addInstructions(`Com que no s'han perdut tots els hidrògens, <b>afegim el prefix "Hidrogen"</b> per indicar que es tracta d'una sal àcida.`)
+            if (usedFormula[1].atomCount === 2) {
+                addInstructions(`A més, com que queden dos hidrògens, <b>afegim també el prefix "di"</b>.`)
+            }
+        }
+
+        addInstructions(`Cal destacar que com que el ${formula.length === 5 ? formula[2].name : formula[1].name} <b>es tracta d'una excepció</b> hem de revisar si es pot formar l'oxoàcid del qual prové emprant només una molècula d'aigua. Com que si és el cas <b>no és necessari afegir cap prefix</b>.`)
 
         return (formula.length === 5 ? `${prefixos[formula[1].atomCount - 1]}hidrogen` : "")
             + `${oxoAcidName} de ${usedFormula[0].name}`
@@ -207,7 +242,11 @@ export const calcOxosals = (formula) => {
         oxoAcidName = usedFormula[1].oxoAcidNames[possibleAtomCountOxigen.indexOf(usedFormula[2].atomCount)]
     }
 
-    hidrogenAtomCount = (formula.length === 5 ? hidrogenAtomCount - formula[1] : hidrogenAtomCount)
+    hidrogenAtomCount = (formula.length === 5 ? hidrogenAtomCount - formula[1].atomCount : hidrogenAtomCount)
+    console.log("hidrogenatomcount", hidrogenAtomCount)
+
+    let oxoAcidOriginal = `H<sub>${formula.length !== 5 ? (hidrogenAtomCount != 1 ? hidrogenAtomCount : ""): (hidrogenAtomCount+formula[1].atomCount != 1 ? hidrogenAtomCount+formula[1].atomCount : "")}</sub>${formula.length !== 5 ? formula[1].letters : formula[2].letters}<sub>${formula.length !== 5 ? (formula[1].atomCount != 1 ? formula[1].atomCount : "") : (formula[2].atomCount != 1 ? formula[2].atomCount : "")}</sub>O<sub>${formula.length === 5 ? (formula[3].atomCount != 1 ? formula[3].atomCount : "") : (formula[2].atomCount != 1 ? formula[2].atomCount : "")}</sub>`
+    addInstructions(`A diferència dels oxoàcids, les oxosals tenen un altre element ocupant el lloc dels hidrògens. ${formula.length !== 5 ? "Per tant, identifiquem que <b>es tracta d'una oxosal</b>" : "A més en aquest cas no ha perdut tots els hidrogens l'oxoàcid, per tant, <b>es tracta d'una sal àcida</b>."}. El primer pas és determinar de quin oxoàcid deriva; en aquest cas, <b>l'origen és ${oxoAcidOriginal}</b>.`)
 
     oxoAcidName = oxoAcidName.replace("urós", "it")
     oxoAcidName = oxoAcidName.replace("uric", "at")
@@ -224,6 +263,25 @@ export const calcOxosals = (formula) => {
         oxoAcidName = usedFormula[1].oxoSalNames[possibleAtomCountOxigen.indexOf(usedFormula[2].atomCount)]
     }
 
+    addInstructions(`A partir de l'oxoàcid ${oxoAcidOriginal}, <b>determinem la valència del ${formula[1].name}</b> i consultem <a target=”_blank” href="./assets/Taula-oxosals.png">la taula per a les oxosals</a> per identificar com s'ha de nomenar el ${formula[1].name} en l'oxosal (<b>en aquest cas "${oxoAcidName}"</b>).`)
+
+    if (valenciesSenseNegatiu.length === 1) {
+        addInstructions(`Determinem l'estat d'oxidació del metall (${formula[0].name}), que en aquest cas és <b>${hidrogenAtomCount}</b>. Com que només té un estat d'oxidació possible, <b>no cal indicar-lo</b>. Per tant tenim: <b>"${primerLletraMajuscula(oxoAcidName)} de ${usedFormula[0].name}"</b>.`)
+    } else {
+        addInstructions(`Determinem l'estat d'oxidació del metall (${formula[0].name}), que en aquest cas és <b>${hidrogenAtomCount}</b>. Com que té més d'un estat d'oxidació possible, <b>l'indiquem entre parèntesis</b> amb nombres romans. Per tant tenim: <b>"${primerLletraMajuscula(oxoAcidName)} de ${usedFormula[0].name}(${intToRoman(hidrogenAtomCount.toString())})"</b>`)
+    }
+
+    if (formula.length === 5) {
+        addInstructions(`Com que no s'han perdut tots els hidrògens, <b>afegim el prefix "Hidrogen"</b> per indicar que es tracta d'una sal àcida.`)
+        if (usedFormula[1].atomCount === 2) {
+            addInstructions(`A més, com que queden dos hidrògens, <b>afegim també el prefix "di"</b>.`)
+        }
+    }
+
+    if (["B", "P", "As", "Sb", "Si"].includes(usedFormula[1].letters)) {
+        addInstructions(`Com que el ${formula[1].name} <b>es tracta d'una excepció</b> hem de revisar si es pot formar l'oxoàcid del qual prové emprant només una molècula d'aigua. Com que no és el cas <b>afegim el prefix "meta"</b>.`)
+    }
+
     return (formula.length === 5 ? `${prefixos[formula[1].atomCount - 1]}hidrogen` : "")
         + (usedFormula[1].atomCount === 2 ? "di" : "")
         + (["B", "P", "As", "Sb", "Si"].includes(usedFormula[1].letters) ? "meta" : "")
@@ -232,7 +290,16 @@ export const calcOxosals = (formula) => {
 
 }
 
-export const calcHidrursNoMetalics = (formula) => {
+export const calcHidrursNoMetalics = (formula, addInstructions) => {
+    addInstructions("Quan l'hidrur es combina amb un no-metall, aquest últim actua amb la seva valència negativa, mentre que <b>l'hidrogen adopta la valència positiva</b>.")
+    
+    if (formula[1].valences[0] == -2) {
+        addInstructions(`En aquest cas el <b>${formula[1].name}</b> té una valència de -2, per tant, <b>es necessiten dos hidrògens</b>.`)
+    } else {
+        addInstructions(`En aquest cas el <b>${formula[1].name}</b> té una valència de -1, per tant, <b>és suficient un hidrogen</b>.`)
+    }
+
+    addInstructions(`Aquest els escrivim emprant la <b>nomenclatura dels nombres d'oxidacions</b>, per tant, la posició dels elements del compost serà l'oposada en el compost formulat, deixant com a resultat: <b>${formula[1].plusUrName} d'hidrogen</b>`)
     return `${formula[1].plusUrName} d'hidrogen`
 }
 
@@ -283,7 +350,7 @@ export const calcNombreOxidacio = (formula, addInstructions) => {
     formula[1].valences.forEach(num => {
         if (num < 0) { valence2nElement = num }
     })
-    addInstructions(`Per a determinar la valència del ${formula[0].name}, multipliquem el nombre d'àtoms del ${formula[1].name} per la seva valencià negativa: <b>${formula[1].atomCount}*${valence2nElement}=${formula[1].atomCount * valence2nElement}</b>.`)
+    addInstructions(`Per a determinar la valència del ${formula[0].name}, multipliquem el nombre d'àtoms del ${formula[1].name} per la seva valencia negativa: <b>${formula[1].atomCount}*${valence2nElement}=${formula[1].atomCount * valence2nElement}</b>.`)
 
     let valenceMetall = (formula[1].atomCount * -1 * valence2nElement) / formula[0].atomCount
 

@@ -8,7 +8,7 @@ export const InputText = styled.input`
         transition: background-color 5000s;
         -webkit-text-fill-color: transparent !important;
     }
-    z-index: 10000;
+    z-index: 100;
     width: 400px;
     font-family: inherit;
     width: 100%;

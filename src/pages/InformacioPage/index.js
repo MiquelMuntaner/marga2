@@ -5,6 +5,21 @@ import { getLocalStorage, setLocalStorage } from '../../tools/storageHelper'
 
 const VERSIONS = [
     {
+        "version": "1.0.0",
+        "date": "28/12/2024",
+        "info": [
+            "Primera versió estable de Nocions.cat, l'única plataforma de formulació química automatitzada en català.",
+            `Nova pàgina d'inici ("landing page").`,
+            "Desenvolupades animacions per a la pàgina d'inici",
+            "Nova pàgina d'error 404.",
+            "Solucionats errors de la inorgànica en relació amb els èsters, les amines i les amides.",
+            `Nova barra de desplaçament ("scrollbar") personalitzada.`,
+            "Nou sistema de detecció d'errors per a la formulació inorgànica.",
+            "Nova advertència a l'hora de modificar l'angle dels compostos orgànics, per a recordar a l'usuari les normes de la IUPAC.",
+            "Incorporats al sistema d'explicació de procediments de la inorgànica els hidrurs no-metàl·lics, els oxoàcids i les oxisals, completant així el sistema (només partint de la fórmula, partint del compost es troba en procés).",
+        ]
+    },
+    {
         "version": "0.0.5",
         "date": "22/09/2024",
         "info": ["Solucionats errors amb les oxisals i els oxoàcids del Manganès.", "Solucionats alguns errors d'accentuació als compostos inorgànics.", "Millorat el disseny per a mòbils d'aquest apartat de la pàgina."]

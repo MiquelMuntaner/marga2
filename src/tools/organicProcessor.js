@@ -8,8 +8,10 @@ const replaceList = (str, list) => {
         console.log("output: ", output, list[i])
         if (["di", "tri", "tetra", "penta", "hexa"].includes(list[i])) {
             if (!str.includes(list[i] + "l")) {
+                if (!str.includes("pentamida")) {
+                    output = replaceAll(output, list[i], "")
+                }
                 console.log("dimarts", list[i] + "l")
-                output = replaceAll(output, list[i], "")
             }
         } else {
             output = replaceAll(output, list[i], "")
@@ -138,10 +140,10 @@ export const organicProcessor = (nom) => {
                 case "amina":
                     if (tempNumber.length !== 0) {
                         for (let k in tempNumber) {
-                            outputData[0].extra.push(["N", tempNumber[k]])
+                            outputData[0].extra.push(["NH₂", tempNumber[k]])
                         }
                     } else {
-                        outputData[0].extra.push(["N", 1])
+                        outputData[0].extra.push(["NH₂", 1])
                     }
                     outputData[0].carbons = tempPrefix
                     buffer = ""
@@ -176,6 +178,7 @@ export const organicProcessor = (nom) => {
                     break
                 case "amida":
                     if (i == nom.length - 1) {
+                        console.log("aquiii alots ")
                         outputData[0].carbons = tempPrefix
                         outputData[0].amida = true
                     }

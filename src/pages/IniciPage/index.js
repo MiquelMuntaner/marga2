@@ -16,8 +16,9 @@ const images = [
 ];
 
 const compostos = [
+    ["Nitrat de cobalt(III)", "Oxisal", "120,9381"],
     ["NaCl", "Sal binària", "058,4428"],
-    ["Dihidrogenfosfat de calci", "Sal àcida", "137,0652"]
+    ["Dihidrogenfosfat de calci", "Sal àcida", "137,0652"],
 ]
 
 
@@ -56,7 +57,7 @@ export const IniciPage = ({ setDarkMode }) => {
 
     useEffect(() => {
         setFade(true)
-        setInorganicaFade(true)
+            setInorganicaFade(true)
     }, [])
 
 
@@ -102,7 +103,7 @@ export const IniciPage = ({ setDarkMode }) => {
                                     strings={[
                                         "Etanoat de butil",
                                         "Benzè",
-                                        "Àcid octanoic"
+                                        "Àcid octanoic",
                                     ]}
                                     startDelay={0}
                                     typeSpeed={100}
@@ -122,6 +123,7 @@ export const IniciPage = ({ setDarkMode }) => {
                             <p>
                                 <ReactTyped
                                     strings={[
+                                        "Co(NO₃)₃",
                                         "Clorur de sodi",
                                         "Ca(H₂PO₄)₂",
                                     ]}

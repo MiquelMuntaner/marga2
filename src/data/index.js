@@ -222,7 +222,7 @@ export const data = {
         "valences": [-4, 2, 4],
         "isMetall": false,
         "plusUrName": "silicur",
-        "oxoAcidNames": ["siliciós", "silícic"],
+        "oxoAcidNames": ["siliciós", "silíric"],
         "molarMass": 28.0855
     },
     "Ge": {

@@ -159,7 +159,7 @@ export const InputText = styled.input`
         -webkit-text-fill-color: transparent !important;
     }
     */
-    z-index: 10000;
+    z-index: 50;
     width: 400px;
     font-family: inherit;
     width: 100%;
@@ -292,7 +292,7 @@ export const InputDropdown = styled.div`
     color: black;
     background-color: #F2F3F4;
     box-shadow: -5px 0px 9px #FDFDFD, 5px 5px 7px #5e687949;
-    z-index: 100000;
+    z-index: 100;
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 20px; 
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { PageLayout } from '../../components/PageLayout'
 import { ContainerDiv, InputText, StyledForm, Canvas, DownloadButton, ResetButton, RangeSliderLabel, RangeSliderContainer, InputDropdown } from './styles'
 import { Header } from '../../components/Header'
@@ -6,6 +6,7 @@ import { organicProcessor } from '../../tools/organicProcessor'
 import { RangeSlider } from '../../components/RangeSlider'
 import { CookieBanner } from '../../components/CookieBanner'
 import { getLocalStorage, setLocalStorage } from '../../tools/storageHelper'
+import Swal from 'sweetalert2'
 
 export const OrganicaPage = ({ setDarkMode }) => {
     const [moleculeData, setMoleculeData] = useState("")
@@ -30,6 +31,13 @@ export const OrganicaPage = ({ setDarkMode }) => {
     const [lineLength, setLineLength] = useState(LINE_LENGTH)
     const [lineWidth, setLineWidth] = useState(LINE_WIDTH)
     const [doubleBondSpacing, setDoubleBondSpacing] = useState(DOUBLE_BOND_SPACING)
+    const [acceptChangeAngle, setAcceptChangeAngle] = useState(false)
+    const [firstLoad, setFirstLoad] = useState(true)
+    const angleSliderRef = useRef(null)
+
+
+    // Variable emprada per a descarregar png transparent
+    let transparentBackground = false
 
 
 
@@ -332,8 +340,12 @@ export const OrganicaPage = ({ setDarkMode }) => {
         // CTX.clearRect(0, 0, 1080, 1080)
         CANVAS = document.getElementById("mainOrganicCanvas")
         CTX = CANVAS.getContext("2d")
-        CTX.fillStyle = "#F2F3F4";
-        CTX.fillRect(0, 0, CANVAS.width, CANVAS.height);
+        CTX.clearRect(0, 0, CANVAS.width, CANVAS.height);
+
+        if (transparentBackground == false) {
+            CTX.fillStyle = "#F2F3F4";
+            CTX.fillRect(0, 0, CANVAS.width, CANVAS.height);
+        }
 
         let TOTAL_LENGTH = Math.cos(lineAngle) * lineLength * (data[0].carbons - 1)
         if (data[0].eter !== null || data[0].ester !== null) {
@@ -422,6 +434,7 @@ export const OrganicaPage = ({ setDarkMode }) => {
             }
 
             if (data[0].ester == i) {
+                console.warn("Drawing ester")
                 drawText(oxigen_coord[0], oxigen_coord[1], "O")
             }
 
@@ -430,7 +443,7 @@ export const OrganicaPage = ({ setDarkMode }) => {
                 if (data[0].extra[element][1] == i + 1) {
 
                     // Hidrocarburs halogenats
-                    if (["Cl", "Br", "I", "F", "OH", "N"].includes(data[0].extra[element][0])) {
+                    if (["Cl", "Br", "I", "F", "OH", "N", "NH₂"].includes(data[0].extra[element][0])) {
                         let angle_ramificacio = (data[0].ciclo == true) ?
                             ciclo_angle_acumulated - 2 * CICLO_ANGLE : // Angle de la ramificació si és un cicle
                             (angle <= 0 ? Math.PI / 2 : -Math.PI / 2) // Angle de la ramificiació si no és un cicle
@@ -532,6 +545,11 @@ export const OrganicaPage = ({ setDarkMode }) => {
                 (data[0].ciclo == true ? CICLO_ANGLE : 0))
         }
 
+        // Solucionant propblema +oat de metil
+        if (data[0].carbons - data[0].ester == 1) {
+            drawText(oxigen_coord[0], oxigen_coord[1], "O")
+        }
+
         /*
         for (let i in all_coordinates) {
             for (let j in data[0].fluor) {
@@ -546,7 +564,9 @@ export const OrganicaPage = ({ setDarkMode }) => {
             */
 
 
-        drawWaterMark()
+        if (transparentBackground == false) {
+            drawWaterMark()
+        }
     }
 
     const drawWaterMark = () => {
@@ -576,12 +596,17 @@ export const OrganicaPage = ({ setDarkMode }) => {
 
 
     const downloadButtonPressed = () => {
+        transparentBackground = true
+        drawMolecule(organicProcessor(inputValue))
         CANVAS = document.getElementById("mainOrganicCanvas")
         CTX = CANVAS.getContext("2d")
         var link = document.createElement('a');
         link.download = `${inputValue}.png`;
         link.href = CANVAS.toDataURL()
         link.click();
+
+        transparentBackground = false
+        drawMolecule(organicProcessor(inputValue))
     }
 
     const handleInputChange = (e) => {
@@ -594,6 +619,41 @@ export const OrganicaPage = ({ setDarkMode }) => {
         }
     }
 
+    useEffect(() => {
+        if (firstLoad == true) {
+            setFirstLoad(false)
+        } else {
+            if (acceptChangeAngle == false) {
+                if (angleSliderRef.current) {
+                    angleSliderRef.current.style.pointerEvents = 'none'; // Disable slider interaction
+                  }
+              
+                  // Re-enable slider interaction after a second
+                  setTimeout(() => {
+                    if (angleSliderRef.current) {
+                      angleSliderRef.current.style.pointerEvents = 'auto';
+                    }
+                  }, 1000)
+                Swal.fire({
+                    title: 'Advertència',
+                    text: `L'angle configurat per defecte en aquesta pàgina segueix l'estàndard establert per la IUPAC (International Union of Pure and Applied Chemistry). Si modifiques aquest valor, el compost resultant podria no complir les regulacions oficials de la IUPAC.`,
+                    icon: 'warning',
+                    allowOutsideClick: false,
+                    focusConfirm: true,
+                    confirmButtonText: 'Continua',
+                    showCancelButton: true,
+                    cancelButtonText: "Cancel·la",
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        setAcceptChangeAngle(true)
+                    } else if (result.isDismissed) {
+                        setLineAngle(DEFAULT_ANGLE);
+                    }
+                  });
+            }
+        }
+    }, [lineAngle])
+
     const [testInputValue, setTestInputValue] = useState(0)
     return (
         <PageLayout setDarkMode={setDarkMode}>
@@ -602,7 +662,7 @@ export const OrganicaPage = ({ setDarkMode }) => {
                     <Header subheader="Orgànica" />
                     <StyledForm empty={inputEmpty} data-text={inputValue} onSubmit={handleSubmit}>
                         <label htmlFor="formula" className='form_label' id='inorganica_label'>Nom</label>
-                        <InputText id="inputText" type="text" onChange={handleInputChange} placeholder={"2,3-dimetilpent-2-è"} />
+                        <InputText autoComplete="off" id="inputText" type="text" onChange={handleInputChange} placeholder={"2,3-dimetilpent-2-è"} />
                         <InputDropdown>
                             {searchHistory.filter(item => {
                                 const searchTerm = inputValue.toLowerCase()
@@ -621,7 +681,7 @@ export const OrganicaPage = ({ setDarkMode }) => {
                     {SMILES !== "" ? <RangeSliderContainer>
                         <div>
                             <RangeSliderLabel>Angle</RangeSliderLabel>
-                            <RangeSlider max={1.57} min={0} inputValue={lineAngle} step={0.01} setInputValue={setLineAngle} />
+                            <RangeSlider ref={angleSliderRef} max={1.57} min={0} inputValue={lineAngle} step={0.01} setInputValue={setLineAngle} />
                             <RangeSliderLabel>Longitud de línia</RangeSliderLabel>
                             <RangeSlider max={200} min={0} inputValue={lineLength} step={1} setInputValue={setLineLength} />
                         </div>
