@@ -1,9 +1,7 @@
-# Marga2
+# Nocions.cat
+### L'única plataforma de formulació química automatitzada en català
+Un treball de recerca de l'IES Felanitx.
 
-Copyright (c), 2016
-THIS IS NOT OPEN SOURCE
+Tot i que el codi estigui disponible de forma pública, perquè el tribunal que avalua aquest projecte ho pugui veure, actualment tots els drets estan reservats.
 
-Lila: #6B0F82
-"gris": #4F4350
-verd oscur: #00534E
-verd clar: #00887F
+©​Nocions, 2024
