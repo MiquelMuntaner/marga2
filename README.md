@@ -1,6 +1,4 @@
-# Nocions.cat
-
-### L'única plataforma de formulació química automatitzada en català
+# Nocions.cat: L'única plataforma de formulació química automatitzada en català
 
 Un treball de recerca de l'IES Felanitx.
 
