@@ -5,6 +5,11 @@ import { getLocalStorage, setLocalStorage } from '../../tools/storageHelper'
 
 const VERSIONS = [
     {
+        "version": "1.0.1",
+        "date": "04/01/2025",
+        "info": ["Correccions d'errors menors a la inorgànica.", "Afegides unitats a la massa molar."]
+    },
+    {
         "version": "1.0.0",
         "date": "28/12/2024",
         "info": [

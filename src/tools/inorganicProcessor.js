@@ -82,7 +82,7 @@ export const calcOxoacids = (formula, addInstructions) => {
     }
 
     // Verificam si l'àcid está dimeritzat i tornam el resultat
-    return "acid " +
+    return "àcid " +
         (formula[1].atomCount == 2 ?
             `di${formula[1].oxoAcidNames[valencesWithoutNegatives.indexOf(valenceMiddleElement / 2)]}` :
             `${formula[1].oxoAcidNames[valencesWithoutNegatives.indexOf(valenceMiddleElement)]}`)
@@ -192,7 +192,7 @@ export const calcOxosals = (formula, addInstructions) => {
             console.log("aquiiii alots")
         }
 
-        hidrogenAtomCount = (formula.length === 5 ? hidrogenAtomCount - formula[1].atomCount : hidrogenAtomCount)
+        hidrogenAtomCount = (formula.length === 5 ? hidrogenAtomCount -  formula[1].atomCount : hidrogenAtomCount)
 
         console.log("HOOOLAAA", usedFormula[2])
         console.log("dos", possibleAtomCountOxigenException.indexOf(usedFormula[2].atomCount))
@@ -333,7 +333,7 @@ export const calcPrefixosMultiplicadors = (formula, addInstructions) => {
     })
 
     let result = ((formula[1].atomCount == 1) && (valencesWithoutNegatives.length > 1) ? "mon" : prefixos[formula[1].atomCount - 1])
-        + formula[1].plusUrName
+        + formula[1].plusUrName.replace("oxid", "òxid")
         + " de "
         + prefixos[formula[0].atomCount - 1]
         + formula[0].name
@@ -365,7 +365,7 @@ export const calcNombreOxidacio = (formula, addInstructions) => {
         if (x >= 0) { return x }
     })
 
-    let result = formula[1].plusUrName
+    let result = formula[1].plusUrName.replace("oxid", "òxid")
         + " de "
         + formula[0].name
         + (valencesWithoutNegatives.length !== 1 ? `(${intToRoman(valenceMetall.toString())})` : "")

@@ -42,6 +42,16 @@ export const Form = () => {
         setInstructions(instructions => [...instructions, newInstruction])
     }
 
+
+
+    function inverse(obj){ 
+        var retobj = {}; 
+        for(var key in obj){ 
+            retobj[obj[key]] = key; 
+        } 
+        return retobj; 
+    } 
+
     const handleSubmit = (e) => {
         e.preventDefault()
         setShowMolecularMassDiv(false)
@@ -134,6 +144,7 @@ export const Form = () => {
                 }
     
                 if (returnValue[1] !== 0) {
+                    addInstructions(`Observem que estem multiplicant per ${resultValue[1]} molècules d'aigua, per tant, el compost es troba <b>hidratat</b> i ho indiquem amb la nomenclatura corresponent: <b>${resultValue}―aigua (1/${returnValue[1]})</b>`)
                     setResult([`${resultValue}―aigua (1/${returnValue[1]})`])
                 }
     
@@ -156,31 +167,39 @@ export const Form = () => {
                 }
             } else if (e.target[0].value !== "") {
     
-                let splitedName = nameSplitter(e.target[0].value)
-    
+                
                 let finalHtmlText = ""
                 let currentValue = ""
-    
-                if (splitedName[splitedName.length - 1].isAcid == true) {
-                    currentValue = calcOxoacisFormula(splitedName)
-                    setTypeOfFormula("Oxoàcid")
-                } else if (splitedName[0].oxoSalNumber !== null || splitedName[splitedName.length - 1].isSalAcida == true) {
-                    currentValue = calcOxoSalsFormula(splitedName)
-                    setTypeOfFormula("Oxisal")
-    
-                } else if (splitedName[splitedName.length - 1].isHidroxid == true) {
-                    currentValue = calcHidroxidsFormula(splitedName)
-                    setTypeOfFormula("Hidròxid (la nomenclatura preferent és la dels nombres d'oxidació)")
-    
-                } else if (splitedName[0].isMetall === false && splitedName[1].isMetall === true) {
-                    currentValue = calcNombreOxidacioFormula(splitedName)
-                    setTypeOfFormula("Sal binària (la nomenclatura preferent és la dels nombres d'oxidació)")
-    
-                } else if (splitedName[0].isMetall === false && splitedName[1].isMetall === false) {
-                    currentValue = calcPrefixesMultiplicadorsFormula(splitedName)
-                    setTypeOfFormula("Combinació entre no-metalls (la nomenclatura preferent és la dels prefixos multiplicadors)")
-    
+                let newExceptions = inverse(exceptions)
+                
+                if (e.target[0].value in newExceptions) {
+                    currentValue = newExceptions[e.target[0].value]
+                    setTypeOfFormula("Excepció")
+                } else {
+                    let splitedName = nameSplitter(e.target[0].value)
+        
+                    if (splitedName[splitedName.length - 1].isAcid == true) {
+                        currentValue = calcOxoacisFormula(splitedName)
+                        setTypeOfFormula("Oxoàcid")
+                    } else if (splitedName[0].oxoSalNumber !== null || splitedName[splitedName.length - 1].isSalAcida == true) {
+                        currentValue = calcOxoSalsFormula(splitedName)
+                        setTypeOfFormula("Oxisal")
+        
+                    } else if (splitedName[splitedName.length - 1].isHidroxid == true) {
+                        currentValue = calcHidroxidsFormula(splitedName)
+                        setTypeOfFormula("Hidròxid (la nomenclatura preferent és la dels nombres d'oxidació)")
+        
+                    } else if (splitedName[0].isMetall === false && splitedName[1].isMetall === true) {
+                        currentValue = calcNombreOxidacioFormula(splitedName)
+                        setTypeOfFormula("Sal binària (la nomenclatura preferent és la dels nombres d'oxidació)")
+        
+                    } else if (splitedName[0].isMetall === false && splitedName[1].isMetall === false) {
+                        currentValue = calcPrefixesMultiplicadorsFormula(splitedName)
+                        setTypeOfFormula("Combinació entre no-metalls (la nomenclatura preferent és la dels prefixos multiplicadors)")
+        
+                    }
                 }
+
     
                 // Creant els nombres en subindex
                 const hasNumber = /\d/;
@@ -447,7 +466,7 @@ export const Form = () => {
                 {
                     molarMass !== 0 ?
                         <div>
-                            Massa molar:&nbsp; <span>{molarMass.toString().replace(".", ",")}</span>
+                            Massa molar:&nbsp; <span>{molarMass.toString().replace(".", ",")}</span>&nbsp;g/mol
                             <QuestionMarkButton onClick={handleQuestionMarkButtonClick}>?</QuestionMarkButton>
                             {showMolecularMassDiv ?
                                 <MoleculalMassDiv>

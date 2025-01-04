@@ -636,7 +636,7 @@ export const OrganicaPage = ({ setDarkMode }) => {
                   }, 1000)
                 Swal.fire({
                     title: 'Advertència',
-                    text: `L'angle configurat per defecte en aquesta pàgina segueix l'estàndard establert per la IUPAC (International Union of Pure and Applied Chemistry). Si modifiques aquest valor, el compost resultant podria no complir les regulacions oficials de la IUPAC.`,
+                    text: `L'angle configurat per defecte en aquesta pàgina segueix l'estàndard establert per la Unió Internacional de Química Pura i Aplicada (IUPAC). Si modifiques aquest valor, el compost resultant podria no complir les regulacions oficials de la IUPAC.`,
                     icon: 'warning',
                     allowOutsideClick: false,
                     focusConfirm: true,
