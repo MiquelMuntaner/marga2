@@ -35,8 +35,8 @@ export const ContainerDiv = styled.div`
 
     & > div:first-child > button {
         width: 120px;
-        height: 40px;
-        border-radius: 25px;
+        height: 37px;
+        border-radius: 10px;
         background-color: ${props => props.theme.main};
         color: white;
         font-weight: bold;
@@ -101,6 +101,7 @@ export const StyledForm = styled.form`
         position: absolute;
         top: 0;
         display: block;
+        font-weight: normal;
         transition: 0.2s;
         font-size: 1.15rem;
         color: #9b9b9b;
@@ -108,9 +109,10 @@ export const StyledForm = styled.form`
 
     & > input[type="submit"] {
         margin-left: 20px;
+        margin-top: auto;
         width: 120px;
-        height: auto;
-        border-radius: 25px;
+        height: 37px;
+        border-radius: 10px;
         background-color: ${props => props.theme.main};
         color: white;
         font-weight: bold;

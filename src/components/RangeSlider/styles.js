@@ -6,7 +6,7 @@ export const Range = styled.div`
     place-items: center;
     height: 50px;
     //width: 300px;
-    width: calc(100% - 65px - 45px);
+    //width: calc(100% - 65px - 45px);
     border-radius: 10px;
     box-shadow: -5px -5px 9px #FDFDFD, 5px 5px 7px #5e687949;
     padding: 0 65px 0 45px;
@@ -89,11 +89,11 @@ export const Range = styled.div`
     }
 
     & > div:nth-child(2) > div:first-child {
-        left: -25px;
+        left: -20px;
     }
 
     & > div:nth-child(2) > div:last-child {
-        right: -35px;
+        right: -40px;
     }
 
     @media only screen and (max-width: 480px) {

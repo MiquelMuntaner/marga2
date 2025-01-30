@@ -5,6 +5,14 @@ import { getLocalStorage, setLocalStorage } from '../../tools/storageHelper'
 
 const VERSIONS = [
     {
+        "version": "1.0.3",
+        "date": "30/01/2025",
+        "info": [
+            `Canviat el temps verbal del botó "Descarregar" a l'infinitiu per tal de concordar amb la resta de botons de la pàgina, seguint la recomanació del tribunal que avalua el projecte.`,
+            `Modificats alguns aspectes de disseny per mantenir la consistència: l'etiqueta superior de l'entrada de text ja no es mostra en negreta i els radis i l'altura dels botons de la pàgina de l'orgànica s'han ajustat per concordar amb els de la pàgina de la inorgànica.`
+        ]
+    },
+    {
         "version": "1.0.2",
         "date": "27/01/2025",
         "info": ["Diverses correccions d'errors menors a la inorgànica."]
