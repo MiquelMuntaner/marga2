@@ -697,7 +697,7 @@ export const OrganicaPage = ({ setDarkMode }) => {
                         <>{SMILES !== "" ?
                             <>
                                 {/*<p style={{ fontWeight: "normal" }}>Nomenclatura SMILES: <b>{SMILES}</b></p>*/}
-                                <DownloadButton onClick={downloadButtonPressed}>Descarrega</DownloadButton>
+                                <DownloadButton onClick={downloadButtonPressed}>Descarregar</DownloadButton>
                                 <ResetButton onClick={resetValues}>Restaurar</ResetButton>
                             </>
                             : <div style={{ height: "91px" }} />

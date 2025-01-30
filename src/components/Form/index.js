@@ -182,8 +182,13 @@ export const Form = () => {
                         currentValue = calcOxoacisFormula(splitedName)
                         setTypeOfFormula("Oxoàcid")
                     } else if (splitedName[0].oxoSalNumber !== null || splitedName[splitedName.length - 1].isSalAcida == true) {
-                        currentValue = calcOxoSalsFormula(splitedName)
-                        setTypeOfFormula("Oxisal")
+                        let output = calcOxoSalsFormula(splitedName)
+                        currentValue = output[1]
+                        if (output[0]) {
+                            setTypeOfFormula("Sal àcida")                            
+                        } else {
+                            setTypeOfFormula("Oxisal")
+                        }
         
                     } else if (splitedName[splitedName.length - 1].isHidroxid == true) {
                         currentValue = calcHidroxidsFormula(splitedName)
@@ -333,7 +338,7 @@ export const Form = () => {
             numberOfAtomsOfTheSecondElement = numberOfAtomsOfTheSecondElement / 2
         }
 
-        return splitedName[1].chemicalSymbol
+        return [numberOfHidrogens != 0 ? true : false, splitedName[1].chemicalSymbol
             + (numberOfAtomsOfTheFirstElement !== 1 ? numberOfAtomsOfTheFirstElement : "")
             + (numberOfAtomsOfTheSecondElement !== 1 ? "(" : "")
             + (numberOfHidrogens !== 0 ? "H" : "")
@@ -343,7 +348,7 @@ export const Form = () => {
             + "O"
             + (newOxoacid[2] !== 1 ? newOxoacid[2] : "")
             + (numberOfAtomsOfTheSecondElement !== 1 ? ")" : "")
-            + (numberOfAtomsOfTheSecondElement !== 1 ? numberOfAtomsOfTheSecondElement : "")
+            + (numberOfAtomsOfTheSecondElement !== 1 ? numberOfAtomsOfTheSecondElement : "")]
     }
 
     const calcHidroxidsFormula = (splitedName) => {
